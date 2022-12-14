@@ -10,10 +10,10 @@ Content-Type: application/json
 }
 
 ### LOGIN
-POST http://localhost:5141/api/auth/login
+POST http://192.168.0.4:5141/api/auth/login
 Content-Type: application/json
 
 {
-    "username": "Ogge",
+    "username": "oscar2",
     "password": "Test123!"
 }
