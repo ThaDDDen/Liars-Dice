@@ -19,13 +19,10 @@ const registerValidationSchema = yup.object<RegisterYupObject>({
 });
 
 const Register = () => {
-  const PORT = 5141;
-  const LOCAL_IP = "192.168.0.4";
-
   const postRegisterModel = (registerModel: RegisterModel) => {
     //TODO catch errors
 
-    fetch(`http://${LOCAL_IP}:${PORT}/api/auth/register`, {
+    fetch(`http://10.0.2.2:5141/api/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(registerModel),

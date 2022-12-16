@@ -1,5 +1,10 @@
+import ConnectionProvider from "./contexts/ConnectionContext";
 import Navigation from "./navigation";
 
 export default function App() {
-  return <Navigation />;
+  return (
+    <ConnectionProvider>
+      <Navigation />
+    </ConnectionProvider>
+  );
 }
