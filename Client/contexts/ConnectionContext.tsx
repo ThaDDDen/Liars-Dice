@@ -1,5 +1,6 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { createContext, ReactNode, useContext, useState } from "react";
+import { useUser } from "./UserContext";
 
 interface ConnectionContext {
   connection: HubConnection;
@@ -19,11 +20,12 @@ interface Props {
 
 function ConnectionProvider({ children }: Props) {
   const [connection, setConnection] = useState<HubConnection>({} as HubConnection);
+  const { currentUser, setMessages } = useUser();
 
   const joinLobby = async (accessToken: string) => {
     try {
       const connection = new HubConnectionBuilder()
-        .withUrl("http://10.0.2.2:5141/hubs/lobby", {
+        .withUrl("http://192.168.1.100:5141/hubs/lobby", {
           accessTokenFactory: () => {
             return accessToken;
           },
@@ -36,7 +38,7 @@ function ConnectionProvider({ children }: Props) {
 
       connection.on("ReceiveMessage", (user: string, message: string) => {
         // change this to store message in state array
-        console.log("message received" + user + ": " + message);
+        setMessages((prev) => [...prev, { username: user, message: message }]);
       });
 
       connection.on("AlreadyConnected", (user: string, message: string) => {
