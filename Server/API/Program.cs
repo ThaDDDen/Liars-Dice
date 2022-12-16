@@ -64,7 +64,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
-            builder.WithOrigins("http://192.168.0.4:19000")
+            builder.WithOrigins("http://127.0.0.1:19000")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials());
@@ -82,19 +82,19 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseRouting();
 app.UseCors();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapHub<LobbyHub>("/hubs/lobby");
-});
 
 app.UseHttpsRedirection();
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<LobbyHub>("/hubs/lobby");
+});
 
 app.Run();

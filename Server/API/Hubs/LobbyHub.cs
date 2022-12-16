@@ -31,8 +31,8 @@ public class LobbyHub: Hub
         await Groups.AddToGroupAsync(Context.ConnectionId, "Lobby");
 
         _connections.AddConnection(new UserConnection { User = user, Room = "Lobby" });
-        
-        await Clients.Group("Lobby").SendAsync("RecueveMessage", _bot, $"{user} has joined the lobby.");
+
+        await Clients.Group("Lobby").SendAsync("ReceiveMessage", _bot, $"{user} has joined the lobby.");
 
     }
     

@@ -16,7 +16,7 @@ export type RootStackParams = {
 export const RootStack = createNativeStackNavigator<RootStackParams>();
 
 const RootNavigation = () => {
-  const [currentUser, setCurrentUser] = useState<User | undefined>({ username: "oscar", token: "sometoken" }); // just to try, will make userContext to set currentUser
+  const [currentUser, setCurrentUser] = useState<User | undefined>(); // just to try, will make userContext to set currentUser
 
   return (
     <RootStack.Navigator initialRouteName="Home">
