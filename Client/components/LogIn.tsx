@@ -1,9 +1,10 @@
 import { Formik } from "formik";
-import React, { useState } from "react";
+import React from "react";
 import { Text, View } from "react-native";
 import styled from "styled-components/native";
 import * as yup from "yup";
 import { useConnection } from "../contexts/ConnectionContext";
+import { useUser } from "../contexts/UserContext";
 
 interface LogInModel {
   username: string;
@@ -23,21 +24,22 @@ const loginValidationSchema = yup.object<LogInYupObject>({
 });
 
 const LogIn = () => {
-  const [tempToken, setTempToken] = useState("");
+  const { setCurrentUser } = useUser();
   const { joinLobby } = useConnection();
 
   const postLogInModel = (logInModel: LogInModel) => {
-    fetch(`http://10.0.2.2:5141/api/auth/login`, {
+    fetch(`http://192.168.1.100:5141/api/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(logInModel),
     }).then((response) => {
       if (response.status === 200) {
         response.json().then((deserializedResponse) => {
-          //TODO set token to current user, maybe save it in asyncstorage too?
-          console.log(deserializedResponse.token);
-          setTempToken(deserializedResponse.token);
-          joinLobby(tempToken);
+          setCurrentUser((prev) => ({
+            ...prev,
+            username: logInModel.username,
+            token: deserializedResponse.token,
+          }));
         });
       }
 
