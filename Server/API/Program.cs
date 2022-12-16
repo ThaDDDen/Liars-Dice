@@ -1,6 +1,8 @@
 using System.Text;
 using API.Auth;
 using API.Auth.Models;
+using API.Hubs;
+using API.Hubs.HubServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -39,6 +41,24 @@ builder.Services.AddAuthentication(options =>
         ValidIssuer = configuration["JWT:ValidIssuer"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
     };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+
+            // If the request is for our hub...
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) &&
+                (path.StartsWithSegments("/hubs/lobby")))
+            {
+                // Read the token out of the query string
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
+    };
 });
 
 builder.Services.AddCors(options =>
@@ -50,7 +70,9 @@ builder.Services.AddCors(options =>
             .AllowCredentials());
 });
 
+builder.Services.AddSignalR();
 
+builder.Services.AddSingleton<ConnectionRepository>();
 
 var app = builder.Build();
 
@@ -60,10 +82,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<LobbyHub>("/hubs/lobby");
+});
+
+app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
