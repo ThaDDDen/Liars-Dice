@@ -26,7 +26,7 @@ const RootNavigation = () => {
           <RootStack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
         </>
       ) : (
-        <RootStack.Screen name="BottomTabStack" component={BottomTabStack} />
+        <RootStack.Screen name="BottomTabStack" component={BottomTabStack} options={{ headerShown: false }} />
       )}
     </RootStack.Navigator>
   );
