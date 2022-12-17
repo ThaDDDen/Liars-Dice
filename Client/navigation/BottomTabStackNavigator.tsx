@@ -1,3 +1,4 @@
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import GameScreen from "../screens/GameScreen";
@@ -14,10 +15,32 @@ const TabStack = createBottomTabNavigator<BottomTabStackParams>();
 
 const BottomTabStack = () => {
   return (
+    // TODO Check posibility to use more colorful images instead of Icons in the bottomtab
     <TabStack.Navigator initialRouteName="Lobby">
-      <TabStack.Screen name="Lobby" component={LobbyScreen} />
-      <TabStack.Screen name="Game" component={GameScreen} />
-      <TabStack.Screen name="Profile" component={ProfileScreen} />
+      <TabStack.Screen
+        name="Lobby"
+        component={LobbyScreen}
+        options={{
+          headerTitleAlign: "center",
+          tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="chat-outline" size={size} color={color} />,
+        }}
+      />
+      <TabStack.Screen
+        name="Game"
+        component={GameScreen}
+        options={{
+          headerTitleAlign: "center",
+          tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="dice-5-outline" size={size} color={color} />,
+        }}
+      />
+      <TabStack.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          headerTitleAlign: "center",
+          tabBarIcon: ({ color, size }) => <MaterialIcons name="person-outline" size={size} color={color} />,
+        }}
+      />
     </TabStack.Navigator>
   );
 };
