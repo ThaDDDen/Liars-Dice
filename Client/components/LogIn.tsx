@@ -3,13 +3,14 @@ import React from "react";
 import { Pressable, Text, View } from "react-native";
 import styled from "styled-components/native";
 import * as yup from "yup";
+import { postLogInModel } from "../authUtils/authFunctions";
 import { useConnection } from "../contexts/ConnectionContext";
 import { useUser } from "../contexts/UserContext";
 import { HomeNavProps } from "../screens/HomeScreen";
 import Background from "./layout/Background";
 import Logo from "./layout/Logo";
 
-interface LogInModel {
+export interface LogInModel {
   username: string;
   password: string;
 }
@@ -30,29 +31,6 @@ const LogIn = ({ navigation }: HomeNavProps) => {
   const { setCurrentUser } = useUser();
   const { joinLobby } = useConnection();
 
-  const postLogInModel = (logInModel: LogInModel) => {
-    fetch(`http://192.168.0.4:5141/api/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(logInModel),
-    }).then((response) => {
-      if (response.status === 200) {
-        response.json().then((deserializedResponse) => {
-          setCurrentUser((prev) => ({
-            ...prev,
-            username: logInModel.username,
-            token: deserializedResponse.token,
-          }));
-        });
-      }
-
-      if (response.status === 401) {
-        console.log("Unauthorized");
-        return;
-      }
-    });
-  };
-
   return (
     <Background>
       <Logo size={"medium"} />
@@ -60,8 +38,11 @@ const LogIn = ({ navigation }: HomeNavProps) => {
         <Formik
           initialValues={{ username: "", password: "" }}
           validationSchema={loginValidationSchema}
-          onSubmit={(values) => {
-            postLogInModel({ username: values.username, password: values.password });
+          onSubmit={async (values) => {
+            var response = await postLogInModel({ username: values.username, password: values.password });
+            if (response.token) {
+              setCurrentUser(response as User);
+            }
           }}
         >
           {({ handleChange, handleSubmit, values, errors }) => {
