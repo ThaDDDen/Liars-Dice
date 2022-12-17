@@ -8,3 +8,8 @@ export type UserMessage = {
   message: string;
   time: string;
 };
+
+export type UserConnection = {
+  user: string;
+  room: string;
+};

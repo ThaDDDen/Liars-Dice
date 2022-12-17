@@ -28,6 +28,11 @@ public class ConnectionRepository
         _connections.Remove(_connections.FirstOrDefault(x => x.User == username) ?? throw new ArgumentNullException("cant find userconnection"));
     }
 
+    public List<UserConnection> ConnectedUsers()
+    {
+        return _connections;
+    }
+
     public bool AlreadyConnected(string user, string room)
     {
         return _connections.Any(c => c.User == user && c.Room == room);
