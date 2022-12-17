@@ -1,10 +1,13 @@
+import { gestureHandlerRootHOC } from "react-native-gesture-handler";
 import ThemeProvider from "./contexts/ThemeContext";
 import Main from "./Main";
 
-export default function App() {
+const App = () => {
   return (
     <ThemeProvider>
       <Main />
     </ThemeProvider>
   );
-}
+};
+
+export default gestureHandlerRootHOC(App);

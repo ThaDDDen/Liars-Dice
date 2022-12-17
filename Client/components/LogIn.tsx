@@ -41,7 +41,8 @@ const LogIn = ({ navigation }: HomeNavProps) => {
           onSubmit={async (values) => {
             var response = await postLogInModel({ username: values.username, password: values.password });
             if (response.token) {
-              setCurrentUser(response as User);
+              console.log(response);
+              setCurrentUser({ username: values.username, token: response.token });
             }
           }}
         >
