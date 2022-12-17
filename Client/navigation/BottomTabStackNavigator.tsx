@@ -31,6 +31,7 @@ const BottomTabStack = () => {
         component={LobbyScreen}
         options={{
           headerTitleAlign: "center",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="chat-outline" size={size} color={color} />,
         }}
       />
