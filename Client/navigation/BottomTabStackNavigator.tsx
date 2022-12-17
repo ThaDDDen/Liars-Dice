@@ -1,6 +1,7 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
+import { useTheme } from "react-native-paper";
 import GameScreen from "../screens/GameScreen";
 import LobbyScreen from "../screens/LobbyScreen";
 import ProfileScreen from "../screens/ProfileScreen";
@@ -14,9 +15,17 @@ export type BottomTabStackParams = {
 const TabStack = createBottomTabNavigator<BottomTabStackParams>();
 
 const BottomTabStack = () => {
+  const { colors } = useTheme();
   return (
     // TODO Check posibility to use more colorful images instead of Icons in the bottomtab
-    <TabStack.Navigator initialRouteName="Lobby">
+    <TabStack.Navigator
+      initialRouteName="Lobby"
+      screenOptions={{
+        tabBarActiveBackgroundColor: colors.primaryContainer,
+        tabBarActiveTintColor: colors.onPrimaryContainer,
+        tabBarInactiveBackgroundColor: colors.background,
+      }}
+    >
       <TabStack.Screen
         name="Lobby"
         component={LobbyScreen}

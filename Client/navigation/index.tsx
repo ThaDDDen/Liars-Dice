@@ -1,10 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
+import { ColorSchemeName } from "react-native";
+import { getTheme } from "../theme";
 import RootNavigation from "./RootStackNavigator";
 
-const Navigation = () => {
+const Navigation = ({ colorScheme }: { colorScheme: ColorSchemeName }) => {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={getTheme(colorScheme)}>
       <RootNavigation />
     </NavigationContainer>
   );
