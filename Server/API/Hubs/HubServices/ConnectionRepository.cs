@@ -16,18 +16,20 @@ public class ConnectionRepository
         if (!_connections.Any(c => c.User == userConnection.User && c.Room == userConnection.Room))
         {
             _connections.Add(userConnection);
-
         }
-        else 
+        else
         {
             // run AlreadyConnected();
         }
+    }
+
+    public void RemoveConnection(string username)
+    {
+        _connections.Remove(_connections.FirstOrDefault(x => x.User == username) ?? throw new ArgumentNullException("cant find userconnection"));
     }
 
     public bool AlreadyConnected(string user, string room)
     {
         return _connections.Any(c => c.User == user && c.Room == room);
     }
-            
-        
 }

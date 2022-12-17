@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.SignalR;
 namespace API.Hubs;
 
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class LobbyHub: Hub
+public class LobbyHub : Hub
 {
     private readonly string _bot;
     private readonly ConnectionRepository _connections;
@@ -35,5 +35,14 @@ public class LobbyHub: Hub
         await Clients.Group("Lobby").SendAsync("ReceiveMessage", _bot, $"{user} has joined the lobby.");
 
     }
-    
+
+    public override Task OnDisconnectedAsync(Exception? exception)
+    {
+        var user = Context.User.Identity.Name;
+        _connections.RemoveConnection(user);
+
+        Clients.Group("Lobby").SendAsync("ReceiveMessage", _bot, $"{user} has left the lobby.");
+
+        return base.OnDisconnectedAsync(exception);
+    }
 }

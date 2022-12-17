@@ -1,6 +1,6 @@
 
 #### REGISTER
-POST http://localhost:5141/api/auth/register
+POST http://192.168.0.4:5141/api/auth/register
 Content-Type: application/json
 
 {

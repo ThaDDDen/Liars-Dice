@@ -28,7 +28,7 @@ const LogIn = () => {
   const { joinLobby } = useConnection();
 
   const postLogInModel = (logInModel: LogInModel) => {
-    fetch(`http://192.168.1.100:5141/api/auth/login`, {
+    fetch(`http://192.168.0.4:5141/api/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(logInModel),

@@ -25,7 +25,7 @@ function ConnectionProvider({ children }: Props) {
   const joinLobby = async (accessToken: string) => {
     try {
       const connection = new HubConnectionBuilder()
-        .withUrl("http://192.168.1.100:5141/hubs/lobby", {
+        .withUrl("http://192.168.0.4:5141/hubs/lobby", {
           accessTokenFactory: () => {
             return accessToken;
           },
