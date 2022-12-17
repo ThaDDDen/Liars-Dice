@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { View } from "react-native";
-import { IconButton } from "react-native-paper";
+import { IconButton, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 
 const MessageForm = () => {
   const [message, setMessage] = useState("");
   const { connection } = useConnection();
+  const { colors } = useTheme();
 
   const handleSendMessage = () => {
     connection.invoke("SendMessage", message);
@@ -16,7 +17,7 @@ const MessageForm = () => {
   return (
     <View style={{ width: "100%", paddingHorizontal: 10, flexDirection: "row", justifyContent: "center" }}>
       <Input placeholder="Type something.." value={message} onChangeText={(message) => setMessage(message)} />
-      <IconButton icon="send" iconColor="#2ec4b6" size={25} onPress={() => handleSendMessage()} />
+      <IconButton icon="send" iconColor={colors.primary} size={25} onPress={() => handleSendMessage()} />
     </View>
   );
 };
