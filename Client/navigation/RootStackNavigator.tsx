@@ -21,9 +21,9 @@ const RootNavigation = () => {
     <RootStack.Navigator initialRouteName="Home">
       {currentUser === initialUserState ? (
         <>
-          <RootStack.Screen name="Home" component={HomeScreen} />
-          <RootStack.Screen name="LogIn" component={LogInScreen} />
-          <RootStack.Screen name="Register" component={RegisterScreen} />
+          <RootStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+          <RootStack.Screen name="LogIn" component={LogInScreen} options={{ headerShown: false }} />
+          <RootStack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
         </>
       ) : (
         <RootStack.Screen name="BottomTabStack" component={BottomTabStack} options={{ headerShown: false }} />
