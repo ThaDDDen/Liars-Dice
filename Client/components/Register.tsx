@@ -3,10 +3,13 @@ import React from "react";
 import { Text } from "react-native";
 import styled from "styled-components/native";
 import * as yup from "yup";
+import { postLogInModel, postRegisterModel } from "../authUtils/authFunctions";
+import { useUser } from "../contexts/UserContext";
 import Background from "./layout/Background";
 import Logo from "./layout/Logo";
+import { User } from "./LogIn";
 
-interface RegisterModel {
+export interface RegisterModel {
   email: string;
   username: string;
   password: string;
@@ -21,22 +24,7 @@ const registerValidationSchema = yup.object<RegisterYupObject>({
 });
 
 const Register = () => {
-  const postRegisterModel = (registerModel: RegisterModel) => {
-    //TODO catch errors
-
-    fetch(`http://192.168.0.4:5141/api/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(registerModel),
-    }).then((response) => {
-      if (response.status === 200) {
-        response.json().then((deserializedResponse) => {
-          console.log(deserializedResponse.message);
-        });
-      }
-    });
-  };
-
+  const { setCurrentUser } = useUser();
   return (
     <Background>
       <Logo size={"medium"} />
@@ -44,8 +32,16 @@ const Register = () => {
         <Formik
           validationSchema={registerValidationSchema}
           initialValues={{ email: "", username: "", password: "" }}
-          onSubmit={(values) => {
-            postRegisterModel({ email: values.email, username: values.username, password: values.password });
+          onSubmit={async (values) => {
+            var registerResponse = await postRegisterModel({ email: values.email, username: values.username, password: values.password });
+
+            if (registerResponse.status === "Success") {
+              var loginResponse = await postLogInModel({ username: values.username, password: values.password });
+              setCurrentUser(loginResponse as User);
+            }
+            if (registerResponse.status == "Error") {
+              //TODO user regisisterResponse.message to display on client side.
+            }
           }}
         >
           {({ handleChange, handleBlur, touched, handleSubmit, values, errors }) => {

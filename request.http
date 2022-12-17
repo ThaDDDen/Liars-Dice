@@ -4,7 +4,7 @@ POST http://192.168.0.4:5141/api/auth/register
 Content-Type: application/json
 
 {
-    "username": "Ogge",
+    "username": "Ogge6",
     "email": "Ogge@mail.com",
     "password": "Test123!"
 }
@@ -15,5 +15,5 @@ Content-Type: application/json
 
 {
     "username": "oscar2",
-    "password": "Test123!"
+    "password": "Test12!"
 }
