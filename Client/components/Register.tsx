@@ -22,7 +22,7 @@ const Register = () => {
   const postRegisterModel = (registerModel: RegisterModel) => {
     //TODO catch errors
 
-    fetch(`http://10.0.2.2:5141/api/auth/register`, {
+    fetch(`http://192.168.0.4:5141/api/auth/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(registerModel),
