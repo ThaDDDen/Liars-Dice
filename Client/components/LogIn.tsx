@@ -1,10 +1,13 @@
 import { Formik } from "formik";
 import React from "react";
-import { Text, View } from "react-native";
+import { Pressable, Text, View } from "react-native";
 import styled from "styled-components/native";
 import * as yup from "yup";
 import { useConnection } from "../contexts/ConnectionContext";
 import { useUser } from "../contexts/UserContext";
+import { HomeNavProps } from "../screens/HomeScreen";
+import Background from "./layout/Background";
+import Logo from "./layout/Logo";
 
 interface LogInModel {
   username: string;
@@ -23,7 +26,7 @@ const loginValidationSchema = yup.object<LogInYupObject>({
   password: yup.string().required(),
 });
 
-const LogIn = () => {
+const LogIn = ({ navigation }: HomeNavProps) => {
   const { setCurrentUser } = useUser();
   const { joinLobby } = useConnection();
 
@@ -51,31 +54,45 @@ const LogIn = () => {
   };
 
   return (
-    <View>
-      <Text>Log In</Text>
-      <Formik
-        initialValues={{ username: "", password: "" }}
-        validationSchema={loginValidationSchema}
-        onSubmit={(values) => {
-          postLogInModel({ username: values.username, password: values.password });
-        }}
-      >
-        {({ handleChange, handleSubmit, values, errors }) => {
-          return (
-            <>
-              <Input placeholder="username" value={values.username} onChangeText={handleChange("username")} />
-              <Input placeholder="password" value={values.password} onChangeText={handleChange("password")} secureTextEntry={true} />
-              <LoginButton
-                title={"Log in"}
-                onPress={() => {
-                  handleSubmit();
-                }}
-              />
-            </>
-          );
-        }}
-      </Formik>
-    </View>
+    <Background>
+      <Logo size={"medium"} />
+      <FormContainer>
+        <Formik
+          initialValues={{ username: "", password: "" }}
+          validationSchema={loginValidationSchema}
+          onSubmit={(values) => {
+            postLogInModel({ username: values.username, password: values.password });
+          }}
+        >
+          {({ handleChange, handleSubmit, values, errors }) => {
+            return (
+              <>
+                <Input placeholder="username" value={values.username} onChangeText={handleChange("username")} />
+                <Input placeholder="password" value={values.password} onChangeText={handleChange("password")} secureTextEntry={true} />
+                <LoginButton
+                  onPress={() => {
+                    handleSubmit();
+                  }}
+                >
+                  <Text style={{ color: "white" }}>Log In</Text>
+                </LoginButton>
+              </>
+            );
+          }}
+        </Formik>
+        <View style={{ flexDirection: "row" }}>
+          <Text style={{ color: "white", fontSize: 12 }}>Dont have a user yet? please </Text>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Register");
+            }}
+            style={{ justifyContent: "flex-end" }}
+          >
+            <Text style={{ color: "#ffd42a", fontSize: 12 }}>register here!</Text>
+          </Pressable>
+        </View>
+      </FormContainer>
+    </Background>
   );
 };
 
@@ -83,11 +100,23 @@ export default LogIn;
 
 const Input = styled.TextInput`
   color: black;
+  background-color: white;
   font-size: 16px;
   border: 1px solid black;
   border-radius: 5px;
-  padding: 10px;
-  margin: 10px 20px;
+  padding: 8px;
+  margin-bottom: 10px;
 `;
 
-const LoginButton = styled.Button``;
+const FormContainer = styled.View`
+  justify-content: center;
+  width: 100%;
+  padding: 50px 50px;
+`;
+const LoginButton = styled.Pressable`
+  background-color: #087e8b;
+  border-radius: 5px;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 20px;
+`;
