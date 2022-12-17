@@ -6,4 +6,5 @@ export type User = {
 export type UserMessage = {
   username: string;
   message: string;
+  time: string;
 };

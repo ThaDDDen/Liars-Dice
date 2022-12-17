@@ -32,8 +32,15 @@ public class LobbyHub : Hub
 
         _connections.AddConnection(new UserConnection { User = user, Room = "Lobby" });
 
-        await Clients.Group("Lobby").SendAsync("ReceiveMessage", _bot, $"{user} has joined the lobby.");
+        await Clients.Group("Lobby").SendAsync("ReceiveMessage", _bot, $"{user} has joined the lobby.", DateTime.Now.ToString("HH:mm"));
 
+    }
+
+    public async Task SendMessage(string message)
+    {
+        var user = Context.User.Identity.Name;
+
+        await Clients.Group("Lobby").SendAsync("ReceiveMessage", user, message, DateTime.Now.ToString("HH:mm"));
     }
 
     public override Task OnDisconnectedAsync(Exception? exception)
@@ -41,7 +48,7 @@ public class LobbyHub : Hub
         var user = Context.User.Identity.Name;
         _connections.RemoveConnection(user);
 
-        Clients.Group("Lobby").SendAsync("ReceiveMessage", _bot, $"{user} has left the lobby.");
+        Clients.Group("Lobby").SendAsync("ReceiveMessage", _bot, $"{user} has left the lobby.", DateTime.Now.ToString("HH:mm"));
 
         return base.OnDisconnectedAsync(exception);
     }

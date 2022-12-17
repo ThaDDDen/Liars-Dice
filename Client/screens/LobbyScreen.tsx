@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
-import { Text, View } from "react-native";
 import { useTheme } from "react-native-paper";
-import LobbyChat from "../components/LobbyChat";
+import LobbyChat from "../components/Lobby/LobbyChat";
 import { useConnection } from "../contexts/ConnectionContext";
 import { useUser } from "../contexts/UserContext";
 
@@ -16,10 +15,9 @@ const LobbyScreen = () => {
   }, []);
 
   return (
-    <View>
+    <>
       <LobbyChat />
-      <Text>test</Text>
-    </View>
+    </>
   );
 };
 
