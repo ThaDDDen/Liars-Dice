@@ -1,17 +1,20 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { createContext, ReactNode, useContext, useState } from "react";
+import { UserConnection } from "../types/types";
 import { useUser } from "./UserContext";
 
 interface ConnectionContext {
   connection: HubConnection;
   closeConnection: () => void;
   joinLobby: (accessToken: string) => void;
+  connectedUsers: UserConnection[];
 }
 
 const ConnectionContext = createContext<ConnectionContext>({
   connection: {} as HubConnection,
   closeConnection: () => console.warn("No provider for closing connection was found"),
   joinLobby: () => console.warn("No provider found."),
+  connectedUsers: [],
 });
 
 interface Props {
@@ -21,6 +24,7 @@ interface Props {
 function ConnectionProvider({ children }: Props) {
   const [connection, setConnection] = useState<HubConnection>({} as HubConnection);
   const { currentUser, setMessages } = useUser();
+  const [connectedUsers, setConnectedUsers] = useState<UserConnection[]>([]);
 
   const joinLobby = async (accessToken: string) => {
     try {
@@ -46,6 +50,10 @@ function ConnectionProvider({ children }: Props) {
         console.log(user + ": " + message);
       });
 
+      connection.on("ConnectedUsers", (connectedUsers: UserConnection[]) => {
+        setConnectedUsers(connectedUsers);
+      });
+
       await connection.start();
 
       await connection.invoke("JoinLobby");
@@ -63,7 +71,7 @@ function ConnectionProvider({ children }: Props) {
     }
   };
 
-  return <ConnectionContext.Provider value={{ connection, closeConnection, joinLobby }}>{children}</ConnectionContext.Provider>;
+  return <ConnectionContext.Provider value={{ connection, closeConnection, joinLobby, connectedUsers }}>{children}</ConnectionContext.Provider>;
 }
 
 export const useConnection = () => useContext(ConnectionContext);
