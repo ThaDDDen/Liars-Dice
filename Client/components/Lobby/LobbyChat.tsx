@@ -1,6 +1,7 @@
 import { useRef } from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import styled from "styled-components/native";
+import { useConnection } from "../../contexts/ConnectionContext";
 import { useUser } from "../../contexts/UserContext";
 import Background from "../layout/Background";
 import ChatMessage from "./ChatMessage";
@@ -8,11 +9,16 @@ import MessageForm from "./MessageForm";
 
 const LobbyChat = () => {
   const { messages } = useUser();
+  const { connectedUsers } = useConnection();
 
   const scrollViewRef = useRef<ScrollView | null>(null);
 
   return (
     <Background>
+      {connectedUsers.map((user, index) => (
+        <Text key={index}>{user.user}</Text>
+      ))}
+      <Text>Users online: {connectedUsers.length}</Text>
       <ChatContainer>
         <ChatWindow ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}>
           {messages.map((userMessage, index) => (
