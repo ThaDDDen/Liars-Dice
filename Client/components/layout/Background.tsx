@@ -16,4 +16,5 @@ const AppBackground = styled.ImageBackground`
   background-color: #0f4553;
   align-items: center;
   justify-content: center;
+  padding: 0px;
 `;
