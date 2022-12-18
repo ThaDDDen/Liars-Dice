@@ -28,7 +28,7 @@ const loginValidationSchema = yup.object<LogInYupObject>({
 });
 
 const LogIn = ({ navigation }: HomeNavProps) => {
-  const { setCurrentUser } = useUser();
+  const { setCurrentUser, setToken } = useUser();
   const { joinLobby } = useConnection();
 
   return (
@@ -43,6 +43,7 @@ const LogIn = ({ navigation }: HomeNavProps) => {
             if (response.token) {
               console.log(response);
               setCurrentUser({ username: values.username, token: response.token });
+              setToken(response.token);
             }
           }}
         >
