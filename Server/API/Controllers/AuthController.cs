@@ -76,6 +76,13 @@ public class AuthController : ControllerBase
         return Unauthorized();
     }
 
+    [HttpGet]
+    [Route("IsAuthenticated")]
+    public IActionResult IsAuthenticated()
+    {
+        return Ok(User.Identity?.Name);
+    }
+
 
     private JwtSecurityToken GetToken(List<Claim> authClaims)
     {
@@ -84,7 +91,7 @@ public class AuthController : ControllerBase
         var token = new JwtSecurityToken(
             issuer: _configuration["JWT:ValidIssuer"],
             audience: _configuration["JWT:ValidAudience"],
-            expires: DateTime.Now.AddHours(3),
+            expires: DateTime.Now.AddYears(1),
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
             );
