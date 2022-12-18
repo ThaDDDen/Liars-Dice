@@ -8,7 +8,7 @@ import { RootStackParams } from "../navigation/RootStackNavigator";
 type NavigationProps = NativeStackScreenProps<RootStackParams>;
 
 const ProfileScreen = ({ navigation }: NavigationProps) => {
-  const { currentUser, logout, messages } = useUser();
+  const { currentUser, logout, messages, setToken } = useUser();
   const { closeConnection } = useConnection();
 
   return (
@@ -19,6 +19,7 @@ const ProfileScreen = ({ navigation }: NavigationProps) => {
         title="Log out"
         onPress={() => {
           logout();
+          setToken("");
           closeConnection();
         }}
       />
