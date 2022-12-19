@@ -40,9 +40,8 @@ function ConnectionProvider({ children }: Props) {
         .configureLogging(LogLevel.Information)
         .build();
 
-      connection.on("ReceiveMessage", (user: string, message: string, time: string) => {
-        // change this to store message in state array
-        setMessages((prev) => [...prev, { username: user, message: message, time: time }]);
+      connection.on("ReceiveMessage", (user: string, avatarCode: string, message: string, time: string) => {
+        setMessages((prev) => [...prev, { username: user, avatarCode: avatarCode, message: message, time: time }]);
       });
 
       connection.on("AlreadyConnected", (user: string, message: string) => {

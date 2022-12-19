@@ -70,17 +70,42 @@ public class AuthController : ControllerBase
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo
+                expiration = token.ValidTo,
+                avatarCode = user.AvatarCode
             });
         }
         return Unauthorized();
     }
 
+    [HttpPut]
+    [Route("UpdateAvatar")]
+    public async Task<IActionResult> UpdateAvatar([FromBody] string avatarCode)
+    {
+        var user = await _userManager.FindByNameAsync(User.Identity?.Name);
+
+        if (user != null)
+        {
+            user.AvatarCode = avatarCode;
+            var result = await _userManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return Ok(new ResponseModel { Status = "Success", Message = "Avatar updated successfully!" });
+            }
+        }
+        return StatusCode(StatusCodes.Status500InternalServerError, new ResponseModel { Status = "Error", Message = "Avatar update failed! Please try again." });
+    }
+
     [HttpGet]
     [Route("IsAuthenticated")]
-    public IActionResult IsAuthenticated()
+    public async Task<IActionResult> IsAuthenticated()
     {
-        return Ok(User.Identity?.Name);
+        var user = await _userManager.FindByNameAsync(User.Identity?.Name);
+        
+        return Ok(new 
+        {
+            username = User.Identity?.Name,
+            avatarCode = user.AvatarCode
+        });
     }
 
 

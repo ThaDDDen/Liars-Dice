@@ -2,6 +2,6 @@ namespace API.Hubs.HubModels;
 
     public class UserConnection
     {
-        public string User { get; set; }
+        public UserConnectionUser User { get; set; }
         public string Room { get; set; }
     }

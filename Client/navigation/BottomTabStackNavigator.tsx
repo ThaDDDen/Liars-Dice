@@ -48,6 +48,7 @@ const BottomTabStack = () => {
         component={ProfileScreen}
         options={{
           headerTitleAlign: "center",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => <MaterialIcons name="person-outline" size={size} color={color} />,
         }}
       />

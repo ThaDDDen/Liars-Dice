@@ -5,15 +5,9 @@ import styled from "styled-components/native";
 import * as yup from "yup";
 import { postLogInModel, postRegisterModel } from "../authUtils/authFunctions";
 import { useUser } from "../contexts/UserContext";
+import { RegisterModel, User } from "../types/types";
 import Background from "./layout/Background";
 import Logo from "./layout/Logo";
-import { User } from "./LogIn";
-
-export interface RegisterModel {
-  email: string;
-  username: string;
-  password: string;
-}
 
 type RegisterYupObject = Record<keyof RegisterModel, yup.AnySchema>;
 
