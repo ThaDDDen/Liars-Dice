@@ -1,5 +1,4 @@
-import { LogInModel } from "../components/LogIn";
-import { RegisterModel } from "../components/Register";
+import { LogInModel, RegisterModel } from "../types/types";
 
 export const postLogInModel = async (logInModel: LogInModel) => {
   var response = await fetch(`http://192.168.0.4:5141/api/auth/login`, {
@@ -23,6 +22,16 @@ export const postRegisterModel = async (registerModel: RegisterModel) => {
   var deserializedResponse = await HandleRegisterResponse(response);
 
   return deserializedResponse;
+};
+
+export const putSaveAvatar = async (avatarCode: string, token: string) => {
+  const response = await fetch(`http://192.168.0.4:5141/api/auth/updateavatar`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify(avatarCode),
+  });
+
+  return response.status === 200;
 };
 
 export const HandleLogInResponse = async (response: Response) => {

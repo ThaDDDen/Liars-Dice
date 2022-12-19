@@ -5,7 +5,7 @@ import styled from "styled-components/native";
 import * as yup from "yup";
 import { postLogInModel, postRegisterModel } from "../authUtils/authFunctions";
 import { useUser } from "../contexts/UserContext";
-import { RegisterModel, User } from "../types/types";
+import { RegisterModel } from "../types/types";
 import Background from "./layout/Background";
 import Logo from "./layout/Logo";
 
@@ -31,7 +31,7 @@ const Register = () => {
 
             if (registerResponse.status === "Success") {
               var loginResponse = await postLogInModel({ username: values.username, password: values.password });
-              setCurrentUser(loginResponse as User);
+              setCurrentUser({ username: values.username, token: loginResponse.token, avatarCode: loginResponse.avatarCode });
             }
             if (registerResponse.status == "Error") {
               //TODO user regisisterResponse.message to display on client side.
