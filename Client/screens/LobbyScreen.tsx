@@ -7,11 +7,11 @@ import { useUser } from "../contexts/UserContext";
 const LobbyScreen = () => {
   // move joinlobby to component later
   const { joinLobby } = useConnection();
-  const { currentUser } = useUser();
+  const { token } = useUser();
   const theme = useTheme();
 
   useEffect(() => {
-    joinLobby(currentUser.token);
+    joinLobby(token);
   }, []);
 
   return (

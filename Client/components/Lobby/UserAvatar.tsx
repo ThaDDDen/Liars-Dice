@@ -1,7 +1,6 @@
 import multiavatar from "@multiavatar/multiavatar";
 import { Avatar } from "react-native-paper";
 import { SvgXml } from "react-native-svg";
-import { UserMessage } from "../../types/types";
 
 interface Props {
   avatarCode: string;

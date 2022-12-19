@@ -17,7 +17,7 @@ const Home = ({ navigation }: HomeNavProps) => {
       });
       if (response.status === 200) {
         const deserializedResponse = await response.json();
-        setCurrentUser({ username: deserializedResponse, token: token, avatarCode: deserializedResponse.avatarCode });
+        setCurrentUser({ userName: deserializedResponse.username, avatarCode: deserializedResponse.avatarCode, gameHost: false, dice: [] });
       }
     }
   };

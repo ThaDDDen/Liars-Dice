@@ -18,7 +18,7 @@ const OnlineUserCard = ({ userConnection }: Props) => {
       <UserAvatar avatarCode={userConnection.user.avatarCode} />
       <UserName>{userConnection.user.userName}</UserName>
 
-      {currentUser.username !== userConnection.user.userName && (
+      {currentUser.userName !== userConnection.user.userName && (
         <MaterialCommunityIcons
           name="plus-circle"
           size={24}
