@@ -34,11 +34,28 @@ public class LobbyHub : Hub
 
         await Groups.AddToGroupAsync(Context.ConnectionId, "Lobby");
 
-        _connections.AddConnection(new UserConnection { User = new UserConnectionUser() { UserName = user.UserName, AvatarCode = user.AvatarCode }, Room = "Lobby" });
+        _connections.AddConnection(new UserConnection 
+        { 
+            User = new HubUser() 
+            { 
+                UserName = user.UserName, 
+                AvatarCode = user.AvatarCode 
+            }, 
+            Room = "Lobby" 
+        });
 
         await SendConnectedUsers();
 
-        await Clients.Group("Lobby").SendAsync("ReceiveMessage", _bot, "BotAvatar", $"{user} has joined the lobby.", DateTime.Now.ToString("HH:mm"));
+        await Clients.Group("Lobby").SendAsync("ReceiveMessage", new UserMessage()
+        {
+            User = new HubUser()
+            {
+                UserName = _bot,
+                AvatarCode = "BotAvatar"
+            },
+            Message = $"{user} has joined the lobby.",
+            Time = DateTime.Now.ToString("HH:mm")
+        });
     }
 
     public async Task SendMessage(string message)
@@ -46,7 +63,16 @@ public class LobbyHub : Hub
         var user = await _userManager.FindByNameAsync(Context.User.Identity.Name);
 
 
-        await Clients.Group("Lobby").SendAsync("ReceiveMessage", user.UserName, user.AvatarCode, message, DateTime.Now.ToString("HH:mm"));
+        await Clients.Group("Lobby").SendAsync("ReceiveMessage", new UserMessage()
+        {
+            User = new HubUser()
+            {
+                UserName = user.UserName,
+                AvatarCode = user.AvatarCode
+            },
+            Message = message,
+            Time = DateTime.Now.ToString("HH:mm")
+        });
     }
 
     public async Task SendConnectedUsers()
@@ -58,32 +84,28 @@ public class LobbyHub : Hub
         await Clients.Group("Lobby").SendAsync("ConnectedUsers", usersInLobby);
     }
 
-    public async Task CreateGame(string gameName, int numberOfDice)
+    public async Task CreateGame(GameSettings gameSettings)
     {
         var diceList = new List<int>();
-        for (int i = 0; i < numberOfDice; i++)
+        for (int i = 0; i < gameSettings.DiceCount; i++)
         {
             diceList.Add(1);
         }
-        await Groups.AddToGroupAsync(Context.ConnectionId, gameName);
-
+        await Groups.AddToGroupAsync(Context.ConnectionId, gameSettings.GameName);
 
         var user = await _userManager.FindByNameAsync(Context.User.Identity.Name);
 
-        var userConnection = new
+        await Clients.Group(gameSettings.GameName).SendAsync("CreateGame", new UserConnection()
         {
-            user = new UserConnectionUser
+            User = new HubUser
             {
                 UserName = user.UserName,
                 AvatarCode = user.AvatarCode,
                 GameHost = true,
                 Dice = diceList
-
             },
-            room = gameName
-        };
-
-        await Clients.Group(gameName).SendAsync("CreateGame", userConnection);
+            Room = gameSettings.GameName
+        });
     }
 
     public override Task OnDisconnectedAsync(Exception? exception)

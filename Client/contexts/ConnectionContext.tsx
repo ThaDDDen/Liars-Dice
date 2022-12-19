@@ -1,6 +1,6 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { createContext, ReactNode, useContext, useState } from "react";
-import { UserConnection } from "../types/types";
+import { UserConnection, UserMessage } from "../types/types";
 import { useUser } from "./UserContext";
 
 interface ConnectionContext {
@@ -40,8 +40,8 @@ function ConnectionProvider({ children }: Props) {
         .configureLogging(LogLevel.Information)
         .build();
 
-      connection.on("ReceiveMessage", (user: string, avatarCode: string, message: string, time: string) => {
-        setMessages((prev) => [...prev, { username: user, avatarCode: avatarCode, message: message, time: time }]);
+      connection.on("ReceiveMessage", (userMessage: UserMessage) => {
+        setMessages((prev) => [...prev, userMessage]);
       });
 
       connection.on("AlreadyConnected", (user: string, message: string) => {

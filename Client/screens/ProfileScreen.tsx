@@ -31,7 +31,7 @@ const ProfileScreen = ({ navigation }: NavigationProps) => {
       <Container>
         <Header>
           <HeaderTitle variant="headlineSmall" color={colors.secondaryContainer}>
-            {currentUser.username}
+            {currentUser.userName}
           </HeaderTitle>
         </Header>
         <Content>

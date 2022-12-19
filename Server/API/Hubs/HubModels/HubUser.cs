@@ -1,6 +1,6 @@
 namespace API.Hubs.HubModels;
 
-public class UserConnectionUser
+public class HubUser
 {
     public string UserName { get; set; }
     public string AvatarCode { get; set; }

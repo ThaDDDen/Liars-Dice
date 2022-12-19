@@ -1,23 +1,24 @@
 export type User = {
-  username: string;
-  token: string;
+  userName: string;
   avatarCode: string;
+  gameHost: boolean;
+  dice: number[];
+};
+
+export type GameSettings = {
+  gameName: string;
+  diceCount: number;
+  playerCount: number;
 };
 
 export type UserMessage = {
-  username: string;
-  avatarCode: string;
+  user: User;
   message: string;
   time: string;
 };
 
 export type UserConnection = {
-  user: {
-    userName: string;
-    avatarCode: string;
-    gameHost: boolean;
-    dice: number[];
-  };
+  user: User;
   room: string;
 };
 

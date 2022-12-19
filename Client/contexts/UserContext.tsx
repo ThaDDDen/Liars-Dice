@@ -27,9 +27,10 @@ interface Props {
 }
 
 export const initialUserState = {
-  username: "",
-  token: "",
+  userName: "",
   avatarCode: "",
+  gameHost: false,
+  dice: [],
 };
 
 function UserProvider({ children }: Props) {

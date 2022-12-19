@@ -33,7 +33,7 @@ const LogIn = ({ navigation }: HomeNavProps) => {
             var response = await postLogInModel({ username: values.username, password: values.password });
             if (response.token) {
               console.log(response);
-              setCurrentUser({ username: values.username, token: response.token, avatarCode: response.avatarCode });
+              setCurrentUser({ userName: values.username, avatarCode: response.avatarCode, gameHost: false, dice: [] });
               setToken(response.token);
             }
           }}

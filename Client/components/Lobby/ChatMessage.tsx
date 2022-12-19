@@ -14,11 +14,11 @@ const ChatMessage = ({ userMessage, latestMessage }: Props) => {
   return (
     <MessageContainer latestMessage={latestMessage}>
       <AvatarContainer>
-        <UserAvatar avatarCode={userMessage.avatarCode} />
+        <UserAvatar avatarCode={userMessage.user.avatarCode} />
       </AvatarContainer>
       <View style={{ flexGrow: 1, flex: 1 }}>
         <Text variant="bodyMedium">
-          {userMessage.username} {userMessage.time}
+          {userMessage.user.userName} {userMessage.time}
         </Text>
         <Text>{userMessage.message}</Text>
       </View>

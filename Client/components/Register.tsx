@@ -31,7 +31,7 @@ const Register = () => {
 
             if (registerResponse.status === "Success") {
               var loginResponse = await postLogInModel({ username: values.username, password: values.password });
-              setCurrentUser({ username: values.username, token: loginResponse.token, avatarCode: loginResponse.avatarCode });
+              setCurrentUser({ userName: values.username, avatarCode: loginResponse.avatarCode, gameHost: false, dice: [] });
             }
             if (registerResponse.status == "Error") {
               //TODO user regisisterResponse.message to display on client side.
