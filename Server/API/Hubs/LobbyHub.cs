@@ -114,8 +114,17 @@ public class LobbyHub : Hub
         _connections.RemoveConnection(user);
 
         SendConnectedUsers();
-
-        Clients.Group("Lobby").SendAsync("ReceiveMessage", _bot, "BotAvatar", $"{user} has left the lobby.", DateTime.Now.ToString("HH:mm"));
+        
+        Clients.Group("Lobby").SendAsync("ReceiveMessage", new UserMessage()
+        {
+            User = new HubUser()
+            {
+                UserName = _bot,
+                AvatarCode = "BotAvatar"
+            },
+            Message = $"{user} has left the lobby.",
+            Time = DateTime.Now.ToString("HH:mm")
+        });
 
         return base.OnDisconnectedAsync(exception);
     }

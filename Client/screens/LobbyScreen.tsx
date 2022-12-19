@@ -11,8 +11,8 @@ const LobbyScreen = () => {
   const theme = useTheme();
 
   useEffect(() => {
-    joinLobby(token);
-  }, []);
+    if (token) joinLobby(token);
+  }, [token]);
 
   return (
     <>
