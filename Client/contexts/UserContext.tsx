@@ -29,6 +29,7 @@ interface Props {
 export const initialUserState = {
   username: "",
   token: "",
+  avatarCode: "",
 };
 
 function UserProvider({ children }: Props) {
@@ -41,9 +42,7 @@ function UserProvider({ children }: Props) {
   };
 
   return (
-    <UserContext.Provider value={{ currentUser, setCurrentUser, logout, messages, setMessages, token, setToken }}>
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={{ currentUser, setCurrentUser, logout, messages, setMessages, token, setToken }}>{children}</UserContext.Provider>
   );
 }
 

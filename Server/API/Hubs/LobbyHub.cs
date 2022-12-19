@@ -1,7 +1,9 @@
+using API.Auth.Models;
 using API.Hubs.HubModels;
 using API.Hubs.HubServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 
 namespace API.Hubs;
@@ -11,18 +13,20 @@ public class LobbyHub : Hub
 {
     private readonly string _bot;
     private readonly ConnectionRepository _connections;
+    private readonly UserManager<AppUser> _userManager;
 
-    public LobbyHub(ConnectionRepository connections)
+    public LobbyHub(ConnectionRepository connections, UserManager<AppUser> userManager)
     {
+        _userManager = userManager;
         _connections = connections;
         _bot = "LobbyBot";
     }
 
     public async Task JoinLobby()
     {
-        var user = Context.User.Identity.Name;
+        var user = await _userManager.FindByNameAsync(Context.User.Identity.Name);
 
-        if (_connections.AlreadyConnected(user, "Lobby"))
+        if (_connections.AlreadyConnected(user.UserName, "Lobby"))
         {
             await Clients.Caller.SendAsync("AlreadyConnected", _bot, "You are already connected to the lobby.");
             return;
@@ -30,25 +34,27 @@ public class LobbyHub : Hub
 
         await Groups.AddToGroupAsync(Context.ConnectionId, "Lobby");
 
-        _connections.AddConnection(new UserConnection { User = user, Room = "Lobby" });
+        _connections.AddConnection(new UserConnection { User = new UserConnectionUser(){ UserName = user.UserName, AvatarCode = user.AvatarCode}, Room = "Lobby" });
 
         await SendConnectedUsers();
 
-        await Clients.Group("Lobby").SendAsync("ReceiveMessage", _bot, $"{user} has joined the lobby.", DateTime.Now.ToString("HH:mm"));
+        await Clients.Group("Lobby").SendAsync("ReceiveMessage", _bot, "BotAvatar", $"{user} has joined the lobby.", DateTime.Now.ToString("HH:mm"));
 
     }
 
     public async Task SendMessage(string message)
     {
-        var user = Context.User.Identity.Name;
+        var user = await _userManager.FindByNameAsync(Context.User.Identity.Name) ;
+    
 
-        await Clients.Group("Lobby").SendAsync("ReceiveMessage", user, message, DateTime.Now.ToString("HH:mm"));
+        await Clients.Group("Lobby").SendAsync("ReceiveMessage", user.UserName, user.AvatarCode, message, DateTime.Now.ToString("HH:mm"));
     }
 
     public async Task SendConnectedUsers()
     {
 
         var usersInLobby = _connections.ConnectedUsers().Where(x => x.Room == "Lobby");
+
 
         await Clients.Group("Lobby").SendAsync("ConnectedUsers", usersInLobby);
     }
@@ -60,7 +66,7 @@ public class LobbyHub : Hub
 
         SendConnectedUsers();
 
-        Clients.Group("Lobby").SendAsync("ReceiveMessage", _bot, $"{user} has left the lobby.", DateTime.Now.ToString("HH:mm"));
+        Clients.Group("Lobby").SendAsync("ReceiveMessage", _bot, "BotAvatar", $"{user} has left the lobby.", DateTime.Now.ToString("HH:mm"));
 
 
         return base.OnDisconnectedAsync(exception);

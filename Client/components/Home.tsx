@@ -16,8 +16,8 @@ const Home = ({ navigation }: HomeNavProps) => {
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });
       if (response.status === 200) {
-        const deserializedResponse = await response.text();
-        setCurrentUser({ username: deserializedResponse, token: token });
+        const deserializedResponse = await response.json();
+        setCurrentUser({ username: deserializedResponse, token: token, avatarCode: deserializedResponse.avatarCode });
       }
     }
   };

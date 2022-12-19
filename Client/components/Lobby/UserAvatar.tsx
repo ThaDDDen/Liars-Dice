@@ -1,16 +1,19 @@
+import multiavatar from "@multiavatar/multiavatar";
 import { Avatar } from "react-native-paper";
+import { SvgXml } from "react-native-svg";
+import { UserMessage } from "../../types/types";
 
 interface Props {
-  username: string;
+  avatarCode: string;
 }
 
-const UserAvatar = ({ username }: Props) => {
+const UserAvatar = ({ avatarCode }: Props) => {
   return (
     <>
-      {username === "LobbyBot" ? (
+      {avatarCode === "BotAvatar" ? (
         <Avatar.Icon size={30} icon="robot-happy-outline" />
       ) : (
-        <Avatar.Text size={30} label={username.slice(0, 2).toUpperCase()} />
+        <SvgXml xml={multiavatar(avatarCode)} width={30} height={30} />
       )}
     </>
   );

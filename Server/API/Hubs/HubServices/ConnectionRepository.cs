@@ -25,7 +25,7 @@ public class ConnectionRepository
 
     public void RemoveConnection(string username)
     {
-        _connections.Remove(_connections.FirstOrDefault(x => x.User == username) ?? throw new ArgumentNullException("cant find userconnection"));
+        _connections.Remove(_connections.FirstOrDefault(x => x.User.UserName == username) ?? throw new ArgumentNullException("cant find userconnection"));
     }
 
     public List<UserConnection> ConnectedUsers()
@@ -35,6 +35,6 @@ public class ConnectionRepository
 
     public bool AlreadyConnected(string user, string room)
     {
-        return _connections.Any(c => c.User == user && c.Room == room);
+        return _connections.Any(c => c.User.UserName == user && c.Room == room);
     }
 }

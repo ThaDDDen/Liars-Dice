@@ -15,16 +15,16 @@ const OnlineUserCard = ({ userConnection }: Props) => {
   const { colors } = useTheme();
   return (
     <OnlineUserContainer>
-      <UserAvatar username={userConnection.user} />
-      <UserName>{userConnection.user}</UserName>
+      <UserAvatar avatarCode={userConnection.user.avatarCode} />
+      <UserName>{userConnection.user.userName}</UserName>
 
-      {currentUser.username !== userConnection.user && (
+      {currentUser.username !== userConnection.user.userName && (
         <MaterialCommunityIcons
           name="plus-circle"
           size={24}
           color={colors.primary}
           style={{ marginRight: 10 }}
-          onPress={() => console.log(`invite ${userConnection.user} to your game lobby`)}
+          onPress={() => console.log(`invite ${userConnection.user.userName} to your game lobby`)}
         />
       )}
     </OnlineUserContainer>

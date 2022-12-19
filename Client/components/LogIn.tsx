@@ -7,18 +7,9 @@ import { postLogInModel } from "../authUtils/authFunctions";
 import { useConnection } from "../contexts/ConnectionContext";
 import { useUser } from "../contexts/UserContext";
 import { HomeNavProps } from "../screens/HomeScreen";
+import { LogInModel } from "../types/types";
 import Background from "./layout/Background";
 import Logo from "./layout/Logo";
-
-export interface LogInModel {
-  username: string;
-  password: string;
-}
-
-export interface User {
-  username: string;
-  token: string;
-}
 
 type LogInYupObject = Record<keyof LogInModel, yup.AnySchema>;
 
@@ -42,7 +33,7 @@ const LogIn = ({ navigation }: HomeNavProps) => {
             var response = await postLogInModel({ username: values.username, password: values.password });
             if (response.token) {
               console.log(response);
-              setCurrentUser({ username: values.username, token: response.token });
+              setCurrentUser({ username: values.username, token: response.token, avatarCode: response.avatarCode });
               setToken(response.token);
             }
           }}
