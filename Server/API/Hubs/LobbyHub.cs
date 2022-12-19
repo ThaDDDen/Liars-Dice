@@ -13,12 +13,14 @@ public class LobbyHub : Hub
 {
     private readonly string _bot;
     private readonly ConnectionRepository _connections;
+    private readonly GameRepository _games;
     private readonly UserManager<AppUser> _userManager;
 
-    public LobbyHub(ConnectionRepository connections, UserManager<AppUser> userManager)
+    public LobbyHub(ConnectionRepository connections, GameRepository games, UserManager<AppUser> userManager)
     {
-        _userManager = userManager;
         _connections = connections;
+        _games = games;
+        _userManager = userManager;
         _bot = "LobbyBot";
     }
 
@@ -84,7 +86,7 @@ public class LobbyHub : Hub
         await Clients.Group("Lobby").SendAsync("ConnectedUsers", usersInLobby);
     }
 
-    public async Task CreateGame(GameSettings gameSettings)
+    public async Task CreateGame(GameSettings gameSettings, HubUser gameHost)
     {
         var diceList = new List<int>();
         for (int i = 0; i < gameSettings.DiceCount; i++)
@@ -95,20 +97,58 @@ public class LobbyHub : Hub
 
         var user = await _userManager.FindByNameAsync(Context.User.Identity.Name);
 
-        await Clients.Group(gameSettings.GameName).SendAsync("CreateGame", new UserConnection()
-        {
-            User = new HubUser
-            {
-                UserName = user.UserName,
-                AvatarCode = user.AvatarCode,
-                GameHost = true,
-                Dice = diceList
-            },
-            Room = gameSettings.GameName
-        });
+        gameHost.GameHost = true;
+        gameHost.Dice = diceList;
+
+        var game = new Game(gameSettings, gameHost);
+
+        _games.AddGame(game);
+
+        await Clients.Caller.SendAsync("GameCreated", game);
     }
 
-    public override Task OnDisconnectedAsync(Exception? exception)
+    public async Task JoinGame(HubUser hubUser, string gameName)
+    {
+
+        var game = _games.GetGameByName(gameName);
+
+        if (game == null)
+        {
+            await Clients.Caller.SendAsync("NoGameWithThatName", new UserMessage()
+            {
+                User = new HubUser()
+                {
+                    UserName = _bot,
+                    AvatarCode = "BotAvatar"
+                },
+                Message = $"There is no game named {gameName} to join",
+                Time = DateTime.Now.ToString("HH:mm")
+            });
+        }
+
+        var success = game.AddPlayerToGame(hubUser);
+
+        if(!success)
+        {
+            await Clients.Caller.SendAsync("GameFullOrAlreadyJoined", new UserMessage()
+            {
+                User = new HubUser()
+                {
+                    UserName = _bot,
+                    AvatarCode = "BotAvatar"
+                },
+                Message = $"The game {gameName} is full or you have already joined.",
+                Time = DateTime.Now.ToString("HH:mm")
+            });
+        }
+        else 
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, gameName);
+            await Clients.Group(gameName).SendAsync("ReceiveGame", game);
+        }
+    }
+
+    public override Task OnDisconnectedAsync(Exception exception)
     {
         var user = Context.User.Identity.Name;
         _connections.RemoveConnection(user);

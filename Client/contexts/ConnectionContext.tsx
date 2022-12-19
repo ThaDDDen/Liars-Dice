@@ -1,6 +1,6 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { createContext, ReactNode, useContext, useState } from "react";
-import { UserConnection, UserMessage } from "../types/types";
+import { Game, UserConnection, UserMessage } from "../types/types";
 import { useUser } from "./UserContext";
 
 interface ConnectionContext {
@@ -53,8 +53,13 @@ function ConnectionProvider({ children }: Props) {
         setConnectedUsers(connectedUsers);
       });
 
-      connection.on("CreateGame", (userConnection: UserConnection) => {
-        console.log(userConnection.user);
+      connection.on("ReceiveGame", (game: Game) => {
+        console.log(game);
+        console.log(game.players[1].dice.length);
+      });
+
+      connection.on("GameCreated", (game: Game) => {
+        console.log(game);
       });
 
       await connection.start();
