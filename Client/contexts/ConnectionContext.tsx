@@ -53,6 +53,10 @@ function ConnectionProvider({ children }: Props) {
         setConnectedUsers(connectedUsers);
       });
 
+      connection.on("CreateGame", (userConnection: UserConnection) => {
+        console.log(userConnection.user);
+      });
+
       await connection.start();
 
       await connection.invoke("JoinLobby");
