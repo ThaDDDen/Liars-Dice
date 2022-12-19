@@ -15,6 +15,8 @@ export type UserConnection = {
   user: {
     userName: string;
     avatarCode: string;
+    gameHost: boolean;
+    dice: number[];
   };
   room: string;
 };

@@ -1,5 +1,4 @@
-import { LogInModel } from "../components/LogIn";
-import { RegisterModel } from "../components/Register";
+import { LogInModel, RegisterModel } from "../types/types";
 
 export const postLogInModel = async (logInModel: LogInModel) => {
   var response = await fetch(`http://192.168.0.4:5141/api/auth/login`, {

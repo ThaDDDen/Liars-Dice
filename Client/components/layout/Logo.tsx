@@ -7,7 +7,7 @@ interface Props {
 }
 
 const Logo = ({ size }: Props) => {
-  return <HomeLogo size={size} source={logo} />;
+  return <HomeLogo size={size} source={logo} style={{ alignSelf: "center" }} />;
 };
 
 export default Logo;

@@ -1,12 +1,8 @@
 import React from "react";
-import { Text, View } from "react-native";
+import Game from "../components/game/Game";
 
 const GameScreen = () => {
-  return (
-    <View>
-      <Text>GameScreen</Text>
-    </View>
-  );
+  return <Game />;
 };
 
 export default GameScreen;
