@@ -73,6 +73,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddSignalR();
 
 builder.Services.AddSingleton<ConnectionRepository>();
+builder.Services.AddSingleton<GameRepository>();
 
 var app = builder.Build();
 

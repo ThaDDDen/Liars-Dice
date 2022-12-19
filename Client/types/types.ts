@@ -22,6 +22,14 @@ export type UserConnection = {
   room: string;
 };
 
+export type Game = {
+  gameHost: User;
+  gameName: string;
+  diceCount: number;
+  playerCount: number;
+  players: User[];
+};
+
 export interface LogInModel {
   username: string;
   password: string;

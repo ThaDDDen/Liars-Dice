@@ -4,6 +4,7 @@ import { Text, View } from "react-native";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useUser } from "../../contexts/UserContext";
+import { GameSettings } from "../../types/types";
 import Background from "../layout/Background";
 import SmallDice from "./SmallDice";
 
@@ -37,13 +38,13 @@ const Game = () => {
           <Formik
             initialValues={{ GameName: "", dice: 6 }}
             onSubmit={(values) => {
-              connection.invoke("CreateGame", { gameName: values.GameName, diceCount: diceAmount, playerCount: 5 });
+              connection.invoke("CreateGame", { gameName: values.GameName, diceCount: diceAmount, playerCount: 5 } as GameSettings, currentUser);
             }}
           >
             {({ handleChange, handleSubmit, values, errors }) => {
               return (
                 <>
-                  <Input placeholder="Game name" onChangeText={handleChange} />
+                  <Input placeholder="Game name" value={values.GameName} onChangeText={handleChange("GameName")} />
 
                   <DiceSettings>
                     <RemoveDiceButton onPress={() => diceAmount !== 1 && setDiceAmount((prev) => prev - 1)}>
@@ -74,16 +75,16 @@ const Game = () => {
         <View>
           <Text>JoinGame</Text>
           <Formik
-            initialValues={{ GameName: "", dice: 6 }}
+            initialValues={{ GameName: "" }}
             onSubmit={(values) => {
-              //TODO invoke joinGame on hub;
+              connection.invoke("JoinGame", currentUser, values.GameName);
             }}
           >
             {({ handleChange, handleSubmit, values, errors }) => {
               return (
                 <>
-                  <Input placeholder="Game name" onChangeText={handleChange} />
-                  <CreateGameButton onPress={() => handleSubmit}>
+                  <Input placeholder="Game name" value={values.GameName} onChangeText={handleChange("GameName")} />
+                  <CreateGameButton onPress={() => handleSubmit()}>
                     <Text>Join Game</Text>
                   </CreateGameButton>
                 </>
