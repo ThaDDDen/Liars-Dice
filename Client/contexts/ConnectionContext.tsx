@@ -1,6 +1,7 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { createContext, ReactNode, useContext, useState } from "react";
 import { Game, UserConnection, UserMessage } from "../types/types";
+import { useGame } from "./GameContext";
 import { useUser } from "./UserContext";
 
 interface ConnectionContext {
@@ -25,6 +26,7 @@ function ConnectionProvider({ children }: Props) {
   const [connection, setConnection] = useState<HubConnection>({} as HubConnection);
   const { currentUser, setMessages } = useUser();
   const [connectedUsers, setConnectedUsers] = useState<UserConnection[]>([]);
+  const { game, setGame } = useGame();
 
   const joinLobby = async (accessToken: string) => {
     try {
@@ -60,6 +62,7 @@ function ConnectionProvider({ children }: Props) {
 
       connection.on("GameCreated", (game: Game) => {
         console.log(game);
+        setGame(game);
       });
 
       await connection.start();

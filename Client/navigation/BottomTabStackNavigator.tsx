@@ -1,14 +1,15 @@
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigatorScreenParams } from "@react-navigation/native";
 import React from "react";
 import { useTheme } from "react-native-paper";
-import GameScreen from "../screens/GameScreen";
 import LobbyScreen from "../screens/LobbyScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import GameStack, { GameStackParams } from "./GameStackNavigator";
 
 export type BottomTabStackParams = {
   Lobby: undefined;
-  Game: undefined;
+  Game: NavigatorScreenParams<GameStackParams>;
   Profile: undefined;
 };
 
@@ -37,7 +38,7 @@ const BottomTabStack = () => {
       />
       <TabStack.Screen
         name="Game"
-        component={GameScreen}
+        component={GameStack}
         options={{
           headerTitleAlign: "center",
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="dice-5-outline" size={size} color={color} />,
