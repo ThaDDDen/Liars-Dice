@@ -100,14 +100,13 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> IsAuthenticated()
     {
         var user = await _userManager.FindByNameAsync(User.Identity?.Name);
-        
-        return Ok(new 
+
+        return Ok(new
         {
             username = User.Identity?.Name,
             avatarCode = user.AvatarCode
         });
     }
-
 
     private JwtSecurityToken GetToken(List<Claim> authClaims)
     {
@@ -123,6 +122,4 @@ public class AuthController : ControllerBase
 
         return token;
     }
-
-
 }
