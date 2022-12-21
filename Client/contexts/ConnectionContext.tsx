@@ -60,7 +60,6 @@ function ConnectionProvider({ children }: Props) {
       });
 
       connection.on("GameCreated", (game: Game) => {
-        console.log(game);
         setGame(game);
       });
 

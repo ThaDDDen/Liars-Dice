@@ -4,13 +4,15 @@ namespace API.Hubs.HubServices;
 
 public class Game
 {
-    public HubUser GameHost { get ; set;}
+    private readonly Random _random;
+    public HubUser GameHost { get; set; }
     public string GameName { get; set; }
     public int DiceCount { get; set; }
-    public int PlayerCount {get; set;}
+    public int PlayerCount { get; set; }
     public List<HubUser> Players { get; set; }
     public Game(GameSettings gameSettings, HubUser gameHost)
     {
+        _random = new();
         Players = new();
         GameName = gameSettings.GameName;
         DiceCount = gameSettings.DiceCount;
@@ -23,12 +25,12 @@ public class Game
     {
         if (Players.Count() != PlayerCount)
         {
-            if(Players.Any(p => p.UserName == newPlayer.UserName))
+            if (Players.Any(p => p.UserName == newPlayer.UserName))
             {
                 return false;
             }
 
-            if(!newPlayer.GameHost)
+            if (!newPlayer.GameHost)
             {
                 for (int i = 0; i < DiceCount; i++)
                 {
@@ -38,7 +40,7 @@ public class Game
 
             Players.Add(newPlayer);
             return true;
-        }        
+        }
 
         return false;
     }
@@ -46,6 +48,11 @@ public class Game
     public void RemovePlayerFromGame(string playerToRemove)
     {
         Players.Remove(Players.FirstOrDefault(p => p.UserName == playerToRemove));
+    }
+
+    public void RollDice(HubUser user)
+    {
+        user.Dice = Players.FirstOrDefault(x => x.UserName == user.UserName).Dice.Select(y => y = _random.Next(1, 7)).ToList();
     }
 
 

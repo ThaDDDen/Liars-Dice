@@ -1,15 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions, ImageBackground, View } from "react-native";
-import { Text } from "react-native-paper";
+import { Button as PaperButton, Text } from "react-native-paper";
 import styled from "styled-components/native";
 import table from "../../assets/images/table.png";
+import { useConnection } from "../../contexts/ConnectionContext";
 import { useGame } from "../../contexts/GameContext";
+import { useUser } from "../../contexts/UserContext";
 import { EIGHT_SEAT_TABLE, FOUR_SEAT_TABLE, SIX_SEAT_TABLE } from "../../utils/constants";
 import UserAvatar from "../Lobby/UserAvatar";
 import PlayerCard from "./PlayerCard";
 
 const GameLobby = () => {
   const { game } = useGame();
+  const { currentUser } = useUser();
+  const [userDice, setUserDice] = useState<number[] | undefined>();
+  const { connection } = useConnection();
+
+  useEffect(() => {
+    setUserDice(game.players.find((x) => x.userName === currentUser.userName)?.dice);
+  }, []);
 
   // STÄDA KODEN FÖR HELVETE TOMMY! DET SER UT SOM FAAN
   const tableHeight = game.playerCount > 6 ? 0.6 : game.playerCount > 4 ? 0.4 : 0.35;
@@ -55,6 +64,27 @@ const GameLobby = () => {
           {placeHolderAvatars}
         </TableOverlay>
       </View>
+      <View style={{ backgroundColor: "red" }}>
+        <View style={{ flexDirection: "row" }}>
+          <View>
+            <RollButton
+              mode="contained"
+              onPress={() => {
+                connection.invoke("DiceRolled", currentUser);
+              }}
+            >
+              Roll
+            </RollButton>
+          </View>
+          {game.players
+            .find((x) => x.userName === currentUser.userName)
+            ?.dice.map((dice, index) => (
+              <View key={index}>
+                <Text>{dice}</Text>
+              </View>
+            ))}
+        </View>
+      </View>
     </>
   );
 };
@@ -76,3 +106,5 @@ const TableOverlay = styled.View<{ width: number; height: number }>`
   width: ${({ width }) => width}px;
   height: ${({ height }) => height}px;
 `;
+
+const RollButton = styled(PaperButton)``;
