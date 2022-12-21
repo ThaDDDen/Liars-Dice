@@ -40,7 +40,11 @@ const CreateGame = () => {
         <Formik
           initialValues={{ GameName: "", dice: 6 }}
           onSubmit={(values) => {
-            connection.invoke("CreateGame", { gameName: values.GameName, diceCount: diceAmount, playerCount: 5 } as GameSettings, currentUser);
+            connection.invoke(
+              "CreateGame",
+              { gameName: values.GameName, diceCount: diceAmount, playerCount: playerCount } as GameSettings,
+              currentUser
+            );
           }}
         >
           {({ handleChange, handleSubmit, values, errors }) => {
@@ -63,7 +67,7 @@ const CreateGame = () => {
                     <DiceContainer>
                       <>
                         {Array.from({ length: diceAmount }, (value, key) => (
-                          <SmallDice key={key} />
+                          <SmallDice size={"medium"} key={key} />
                         ))}
                       </>
                     </DiceContainer>
