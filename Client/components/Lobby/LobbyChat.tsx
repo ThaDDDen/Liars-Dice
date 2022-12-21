@@ -10,7 +10,7 @@ import ChatMessage from "./ChatMessage";
 import MessageForm from "./MessageForm";
 import OnlineUserCard from "./OnlineUserCard";
 const LobbyChat = () => {
-  const { messages } = useUser();
+  const { lobbyMessages } = useUser();
   const { colors } = useTheme();
   const { connectedUsers } = useConnection();
 
@@ -40,14 +40,14 @@ const LobbyChat = () => {
           onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}
           bg={colors.secondaryContainer}
         >
-          {messages.map((userMessage, index) => (
+          {lobbyMessages.map((userMessage, index) => (
             <View key={index}>
-              <ChatMessage userMessage={userMessage} latestMessage={messages.length === index + 1} />
+              <ChatMessage userMessage={userMessage} latestMessage={lobbyMessages.length === index + 1} />
             </View>
           ))}
         </ChatWindow>
       </ChatContainer>
-      <MessageForm />
+      <MessageForm chatName="Lobby" />
 
       <Modalize ref={usersOnlineModalize} rootStyle={{}} modalStyle={{ backgroundColor: colors.surface, padding: 5 }} adjustToContentHeight>
         <OnlinePlayersText variant="titleMedium">Players online:</OnlinePlayersText>

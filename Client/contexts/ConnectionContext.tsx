@@ -25,8 +25,8 @@ interface Props {
 
 function ConnectionProvider({ children }: Props) {
   const [connection, setConnection] = useState<HubConnection>({} as HubConnection);
-  const { setMessages } = useUser();
   const { setResponseMessage } = useSnackBar();
+  const { currentUser, setLobbyMessages, setGameMessages } = useUser();
   const [connectedUsers, setConnectedUsers] = useState<UserConnection[]>([]);
   const { setGame } = useGame();
 
@@ -44,8 +44,8 @@ function ConnectionProvider({ children }: Props) {
         .configureLogging(LogLevel.Information)
         .build();
 
-      connection.on("ReceiveMessage", (userMessage: UserMessage) => {
-        setMessages((prev) => [...prev, userMessage]);
+      connection.on("ReceiveMessage", (userMessage: UserMessage, room: string) => {
+        room === "Lobby" ? setLobbyMessages((prev) => [...prev, userMessage]) : setGameMessages((prev) => [...prev, userMessage]);
       });
 
       connection.on("AlreadyConnected", (user: string, message: string) => {

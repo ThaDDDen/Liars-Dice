@@ -14,7 +14,7 @@ import { RootStackParams } from "../navigation/RootStackNavigator";
 type NavigationProps = NativeStackScreenProps<RootStackParams>;
 
 const ProfileScreen = ({ navigation }: NavigationProps) => {
-  const { logout, setToken, setMessages, currentUser } = useUser();
+  const { logout, setToken, setLobbyMessages, currentUser } = useUser();
   const { setGame } = useGame();
   const { closeConnection } = useConnection();
   const { colors } = useTheme();
@@ -24,7 +24,7 @@ const ProfileScreen = ({ navigation }: NavigationProps) => {
   const handleLogout = () => {
     logout();
     setToken("");
-    setMessages([]);
+    setLobbyMessages([]);
     setGame(initialGameState);
     closeConnection();
   };
