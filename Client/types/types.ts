@@ -17,6 +17,11 @@ export type UserMessage = {
   time: string;
 };
 
+export type ResponseMessage = {
+  status: string;
+  message: string;
+};
+
 export type UserConnection = {
   user: User;
   room: string;

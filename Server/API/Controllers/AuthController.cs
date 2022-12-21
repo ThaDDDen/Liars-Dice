@@ -29,8 +29,11 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Register([FromBody] RegisterModel model)
     {
         var userExists = await _userManager.FindByNameAsync(model.Username);
+        var emailExists = await _userManager.FindByEmailAsync(model.Email);
         if (userExists != null)
             return StatusCode(StatusCodes.Status500InternalServerError, new ResponseModel { Status = "Error", Message = "User already exists!" });
+        if (emailExists != null)
+            return StatusCode(StatusCodes.Status500InternalServerError, new ResponseModel { Status = "Error", Message = "The Email provided is already in use!" });
 
         AppUser user = new()
         {
@@ -69,12 +72,13 @@ public class AuthController : ControllerBase
 
             return Ok(new
             {
+                status = "Success",
                 token = new JwtSecurityTokenHandler().WriteToken(token),
                 expiration = token.ValidTo,
                 avatarCode = user.AvatarCode
             });
         }
-        return Unauthorized();
+        return Unauthorized(new ResponseModel { Status = "Error", Message = "Couldn't log you in. Please check username and password and try again."});
     }
 
     [HttpPut]

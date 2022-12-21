@@ -4,8 +4,9 @@ import { Text } from "react-native";
 import styled from "styled-components/native";
 import * as yup from "yup";
 import { postLogInModel, postRegisterModel } from "../authUtils/authFunctions";
+import { useSnackBar } from "../contexts/SnackContext";
 import { useUser } from "../contexts/UserContext";
-import { RegisterModel } from "../types/types";
+import { RegisterModel, ResponseMessage } from "../types/types";
 import Background from "./layout/Background";
 import Logo from "./layout/Logo";
 
@@ -19,6 +20,7 @@ const registerValidationSchema = yup.object<RegisterYupObject>({
 
 const Register = () => {
   const { setCurrentUser } = useUser();
+  const { setResponseMessage } = useSnackBar();
   return (
     <Background>
       <Logo size={"medium"} />
@@ -32,9 +34,8 @@ const Register = () => {
             if (registerResponse.status === "Success") {
               var loginResponse = await postLogInModel({ username: values.username, password: values.password });
               setCurrentUser({ userName: values.username, avatarCode: loginResponse.avatarCode, gameHost: false, dice: [] });
-            }
-            if (registerResponse.status == "Error") {
-              //TODO user regisisterResponse.message to display on client side.
+            } else {
+              setResponseMessage(registerResponse as ResponseMessage);
             }
           }}
         >

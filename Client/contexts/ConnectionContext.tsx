@@ -1,7 +1,8 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { createContext, ReactNode, useContext, useState } from "react";
-import { Game, UserConnection, UserMessage } from "../types/types";
+import { Game, ResponseMessage, UserConnection, UserMessage } from "../types/types";
 import { useGame } from "./GameContext";
+import { useSnackBar } from "./SnackContext";
 import { useUser } from "./UserContext";
 
 interface ConnectionContext {
@@ -24,9 +25,10 @@ interface Props {
 
 function ConnectionProvider({ children }: Props) {
   const [connection, setConnection] = useState<HubConnection>({} as HubConnection);
-  const { currentUser, setMessages } = useUser();
+  const { setMessages } = useUser();
+  const { setResponseMessage } = useSnackBar();
   const [connectedUsers, setConnectedUsers] = useState<UserConnection[]>([]);
-  const { game, setGame } = useGame();
+  const { setGame } = useGame();
 
   const joinLobby = async (accessToken: string) => {
     try {
@@ -49,6 +51,10 @@ function ConnectionProvider({ children }: Props) {
       connection.on("AlreadyConnected", (user: string, message: string) => {
         // change this to prompt error (Snackbar?)
         console.log(user + ": " + message);
+      });
+
+      connection.on("NoGameWithThatName", (responseMessage: ResponseMessage) => {
+        setResponseMessage(responseMessage);
       });
 
       connection.on("ConnectedUsers", (connectedUsers: UserConnection[]) => {

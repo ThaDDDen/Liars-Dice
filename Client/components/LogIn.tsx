@@ -4,7 +4,7 @@ import { Pressable, Text, View } from "react-native";
 import styled from "styled-components/native";
 import * as yup from "yup";
 import { postLogInModel } from "../authUtils/authFunctions";
-import { useConnection } from "../contexts/ConnectionContext";
+import { useSnackBar } from "../contexts/SnackContext";
 import { useUser } from "../contexts/UserContext";
 import { HomeNavProps } from "../screens/HomeScreen";
 import { LogInModel } from "../types/types";
@@ -20,7 +20,7 @@ const loginValidationSchema = yup.object<LogInYupObject>({
 
 const LogIn = ({ navigation }: HomeNavProps) => {
   const { setCurrentUser, setToken } = useUser();
-  const { joinLobby } = useConnection();
+  const { setResponseMessage } = useSnackBar();
 
   return (
     <Background>
@@ -31,10 +31,12 @@ const LogIn = ({ navigation }: HomeNavProps) => {
           validationSchema={loginValidationSchema}
           onSubmit={async (values) => {
             var response = await postLogInModel({ username: values.username, password: values.password });
-            if (response.token) {
+            if (response.status === "Success") {
               console.log(response);
               setCurrentUser({ userName: values.username, avatarCode: response.avatarCode, gameHost: false, dice: [] });
               setToken(response.token);
+            } else {
+              setResponseMessage(response);
             }
           }}
         >
