@@ -36,14 +36,14 @@ public class LobbyHub : Hub
 
         await Groups.AddToGroupAsync(Context.ConnectionId, "Lobby");
 
-        _connections.AddConnection(new UserConnection 
-        { 
-            User = new HubUser() 
-            { 
-                UserName = user.UserName, 
-                AvatarCode = user.AvatarCode 
-            }, 
-            Room = "Lobby" 
+        _connections.AddConnection(new UserConnection
+        {
+            User = new HubUser()
+            {
+                UserName = user.UserName,
+                AvatarCode = user.AvatarCode
+            },
+            Room = "Lobby"
         });
 
         await SendConnectedUsers();
@@ -128,7 +128,7 @@ public class LobbyHub : Hub
 
         var success = game.AddPlayerToGame(hubUser);
 
-        if(!success)
+        if (!success)
         {
             await Clients.Caller.SendAsync("GameFullOrAlreadyJoined", new UserMessage()
             {
@@ -141,11 +141,20 @@ public class LobbyHub : Hub
                 Time = DateTime.Now.ToString("HH:mm")
             });
         }
-        else 
+        else
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, gameName);
             await Clients.Group(gameName).SendAsync("ReceiveGame", game);
         }
+    }
+
+    public async Task DiceRolled(HubUser user)
+    {
+        var game = _games.GetGameByPlayerName(user.UserName);
+
+        game.RollDice(game.Players.FirstOrDefault(x => x.UserName == user.UserName));
+
+        await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
     }
 
     public override Task OnDisconnectedAsync(Exception exception)
@@ -153,7 +162,7 @@ public class LobbyHub : Hub
         var user = Context.User.Identity.Name;
         _connections.RemoveConnection(user);
 
-        if(_games.GetGameByPlayerName(user) != null)
+        if (_games.GetGameByPlayerName(user) != null)
         {
             var game = _games.GetGameByPlayerName(user);
             game.RemovePlayerFromGame(user);
@@ -162,7 +171,7 @@ public class LobbyHub : Hub
         }
 
         SendConnectedUsers();
-        
+
         Clients.Group("Lobby").SendAsync("ReceiveMessage", new UserMessage()
         {
             User = new HubUser()
