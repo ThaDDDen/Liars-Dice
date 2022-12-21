@@ -1,21 +1,22 @@
 import React from "react";
-import { Text } from "react-native";
+import { View } from "react-native";
 import { useGame } from "../../contexts/GameContext";
+import SmallDice from "./SmallDice";
 
 interface Props {
   dice: number[];
+  size: "small" | "medium" | "large";
 }
 
-const PlayerHand = ({ dice }: Props) => {
+const PlayerHand = ({ dice, size }: Props) => {
   const { game } = useGame();
 
   return (
-    <>
-      <Text>PlayerHand</Text>
-      {dice.map((x) => (
-        <Text>{x}</Text>
+    <View style={{ flexDirection: "row" }}>
+      {dice.map((x, index) => (
+        <SmallDice key={index} size={size} />
       ))}
-    </>
+    </View>
   );
 };
 
