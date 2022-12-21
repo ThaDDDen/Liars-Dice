@@ -114,16 +114,12 @@ public class LobbyHub : Hub
 
         if (game == null)
         {
-            await Clients.Caller.SendAsync("NoGameWithThatName", new UserMessage()
+            await Clients.Caller.SendAsync("NoGameWithThatName", new ResponseModel()
             {
-                User = new HubUser()
-                {
-                    UserName = _bot,
-                    AvatarCode = "BotAvatar"
-                },
-                Message = $"There is no game named {gameName} to join",
-                Time = DateTime.Now.ToString("HH:mm")
+                Status = "Error",
+                Message = "There is no game with that name! Try again!"
             });
+            return;
         }
 
         var success = game.AddPlayerToGame(hubUser);

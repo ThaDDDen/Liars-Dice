@@ -39,7 +39,7 @@ export const HandleLogInResponse = async (response: Response) => {
     case 200:
       return await response.json();
     case 401:
-      return { token: null };
+      return await response.json();
   }
 };
 

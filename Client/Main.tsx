@@ -3,6 +3,7 @@ import { ColorSchemeName } from "react-native";
 import { Provider as PaperProvider } from "react-native-paper";
 import ConnectionProvider from "./contexts/ConnectionContext";
 import GameProvider from "./contexts/GameContext";
+import SnackProvider from "./contexts/SnackContext";
 import { useTheme } from "./contexts/ThemeContext";
 import UserProvider from "./contexts/UserContext";
 import useColorScheme from "./hooks/useColorScheme";
@@ -15,13 +16,15 @@ const Main = () => {
 
   return (
     <PaperProvider theme={getTheme(colorScheme)}>
-      <GameProvider>
-        <UserProvider>
-          <ConnectionProvider>
-            <Navigation colorScheme={colorScheme} />
-          </ConnectionProvider>
-        </UserProvider>
-      </GameProvider>
+      <SnackProvider>
+        <GameProvider>
+          <UserProvider>
+            <ConnectionProvider>
+              <Navigation colorScheme={colorScheme} />
+            </ConnectionProvider>
+          </UserProvider>
+        </GameProvider>
+      </SnackProvider>
     </PaperProvider>
   );
 };
