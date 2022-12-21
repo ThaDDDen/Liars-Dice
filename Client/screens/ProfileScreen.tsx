@@ -7,6 +7,7 @@ import ProfileAvatar from "../components/profile/ProfileAvatar";
 import ProfileSettings from "../components/profile/ProfileSettings";
 import ProfileStatistics from "../components/profile/ProfileStatistics";
 import { useConnection } from "../contexts/ConnectionContext";
+import { initialGameState, useGame } from "../contexts/GameContext";
 import { useUser } from "../contexts/UserContext";
 import { RootStackParams } from "../navigation/RootStackNavigator";
 
@@ -14,6 +15,7 @@ type NavigationProps = NativeStackScreenProps<RootStackParams>;
 
 const ProfileScreen = ({ navigation }: NavigationProps) => {
   const { logout, setToken, setMessages, currentUser } = useUser();
+  const { setGame } = useGame();
   const { closeConnection } = useConnection();
   const { colors } = useTheme();
 
@@ -23,6 +25,7 @@ const ProfileScreen = ({ navigation }: NavigationProps) => {
     logout();
     setToken("");
     setMessages([]);
+    setGame(initialGameState);
     closeConnection();
   };
 
