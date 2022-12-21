@@ -18,4 +18,9 @@ public class GameRepository
     {
         return _gameRepository.FirstOrDefault(g => g.GameName == gameName);
     }
+
+    public Game GetGameByPlayerName(string playerName)
+    {
+        return _gameRepository.FirstOrDefault(g => g.Players.Any(p => p.UserName == playerName));
+    }
 }

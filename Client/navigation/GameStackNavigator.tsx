@@ -25,7 +25,7 @@ const GameStack = () => {
         </>
       ) : (
         <>
-          <GameStackNavigator.Screen name="GameLobbyScreen" component={GameLobbyScreen} />
+          <GameStackNavigator.Screen name="GameLobbyScreen" component={GameLobbyScreen} options={{ headerShown: false }} />
           <GameStackNavigator.Screen name="GameScreen" component={GameScreen} />
         </>
       )}

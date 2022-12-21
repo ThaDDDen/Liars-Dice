@@ -40,7 +40,7 @@ const BottomTabStack = () => {
         name="Game"
         component={GameStack}
         options={{
-          headerTitleAlign: "center",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="dice-5-outline" size={size} color={color} />,
         }}
       />

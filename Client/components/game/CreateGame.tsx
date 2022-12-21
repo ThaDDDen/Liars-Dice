@@ -42,7 +42,7 @@ const CreateGame = () => {
           <Formik
             initialValues={{ GameName: "", dice: 6 }}
             onSubmit={(values) => {
-              connection.invoke("CreateGame", { gameName: values.GameName, diceCount: diceAmount, playerCount: 5 } as GameSettings, currentUser),
+              connection.invoke("CreateGame", { gameName: values.GameName, diceCount: diceAmount, playerCount: 8 } as GameSettings, currentUser),
                 setShowGame(true);
             }}
           >
