@@ -56,8 +56,7 @@ function ConnectionProvider({ children }: Props) {
       });
 
       connection.on("ReceiveGame", (game: Game) => {
-        console.log(game);
-        console.log(game.players[1].dice.length);
+        setGame(game);
       });
 
       connection.on("GameCreated", (game: Game) => {

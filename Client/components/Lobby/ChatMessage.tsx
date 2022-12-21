@@ -14,7 +14,7 @@ const ChatMessage = ({ userMessage, latestMessage }: Props) => {
   return (
     <MessageContainer latestMessage={latestMessage}>
       <AvatarContainer>
-        <UserAvatar avatarCode={userMessage.user.avatarCode} />
+        <UserAvatar size={30} avatarCode={userMessage.user.avatarCode} />
       </AvatarContainer>
       <View style={{ flexGrow: 1, flex: 1 }}>
         <Text variant="bodyMedium">

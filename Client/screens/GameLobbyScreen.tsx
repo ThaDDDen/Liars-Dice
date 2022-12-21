@@ -1,12 +1,8 @@
-import { View, Text } from "react-native";
 import React from "react";
+import GameLobby from "../components/game/GameLobby";
 
 const GameLobbyScreen = () => {
-  return (
-    <View>
-      <Text>GameLobbyScreen</Text>
-    </View>
-  );
+  return <GameLobby />;
 };
 
 export default GameLobbyScreen;

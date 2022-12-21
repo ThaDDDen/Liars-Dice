@@ -15,7 +15,7 @@ const OnlineUserCard = ({ userConnection }: Props) => {
   const { colors } = useTheme();
   return (
     <OnlineUserContainer>
-      <UserAvatar avatarCode={userConnection.user.avatarCode} />
+      <UserAvatar size={30} avatarCode={userConnection.user.avatarCode} />
       <UserName>{userConnection.user.userName}</UserName>
 
       {currentUser.userName !== userConnection.user.userName && (

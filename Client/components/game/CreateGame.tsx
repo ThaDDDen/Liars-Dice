@@ -122,8 +122,6 @@ const Input = styled.TextInput`
   border-radius: 5px;
   border: solid 1px black;
   padding: 8px;
-  margin-top: 10px;
-  font-size: 20px;
 `;
 
 const DiceSettings = styled.View`

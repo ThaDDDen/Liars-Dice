@@ -43,6 +43,12 @@ public class Game
         return false;
     }
 
+    public void RemovePlayerFromGame(string playerToRemove)
+    {
+        Players.Remove(Players.FirstOrDefault(p => p.UserName == playerToRemove));
+    }
+
+
     public bool GameOver()
     {
         int diceLeft = 0;

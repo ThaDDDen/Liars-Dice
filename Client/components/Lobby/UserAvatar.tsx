@@ -1,20 +1,25 @@
 import multiavatar from "@multiavatar/multiavatar";
-import { Avatar } from "react-native-paper";
+import { View } from "react-native";
+import { Avatar, useTheme } from "react-native-paper";
 import { SvgXml } from "react-native-svg";
 
 interface Props {
   avatarCode: string;
+  size: number;
 }
 
-const UserAvatar = ({ avatarCode }: Props) => {
+const UserAvatar = ({ avatarCode, size }: Props) => {
+  const { colors } = useTheme();
   return (
-    <>
+    <View>
       {avatarCode === "BotAvatar" ? (
-        <Avatar.Icon size={30} icon="robot-happy-outline" />
+        <Avatar.Icon size={size} icon="robot-happy-outline" />
+      ) : avatarCode === "PlaceHolder" ? (
+        <Avatar.Icon size={size} icon="account" style={{ backgroundColor: colors.tertiary }} />
       ) : (
-        <SvgXml xml={multiavatar(avatarCode)} width={30} height={30} />
+        <SvgXml xml={multiavatar(avatarCode)} width={size} height={size} />
       )}
-    </>
+    </View>
   );
 };
 

@@ -153,6 +153,14 @@ public class LobbyHub : Hub
         var user = Context.User.Identity.Name;
         _connections.RemoveConnection(user);
 
+        if(_games.GetGameByPlayerName(user) != null)
+        {
+            var game = _games.GetGameByPlayerName(user);
+            game.RemovePlayerFromGame(user);
+
+            Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
+        }
+
         SendConnectedUsers();
         
         Clients.Group("Lobby").SendAsync("ReceiveMessage", new UserMessage()
