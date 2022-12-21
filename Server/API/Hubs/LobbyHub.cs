@@ -11,7 +11,8 @@ namespace API.Hubs;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class LobbyHub : Hub
 {
-    private readonly string _bot;
+    private readonly string _lobbyBot;
+    private readonly string _gameBot;
     private readonly ConnectionRepository _connections;
     private readonly GameRepository _games;
     private readonly UserManager<AppUser> _userManager;
@@ -21,7 +22,8 @@ public class LobbyHub : Hub
         _connections = connections;
         _games = games;
         _userManager = userManager;
-        _bot = "LobbyBot";
+        _lobbyBot = "LobbyBot";
+        _gameBot = "GameBot";
     }
 
     public async Task JoinLobby()
@@ -30,7 +32,7 @@ public class LobbyHub : Hub
 
         if (_connections.AlreadyConnected(user.UserName, "Lobby"))
         {
-            await Clients.Caller.SendAsync("AlreadyConnected", _bot, "You are already connected to the lobby.");
+            await Clients.Caller.SendAsync("AlreadyConnected", _lobbyBot, "You are already connected to the lobby.");
             return;
         }
 
@@ -52,20 +54,20 @@ public class LobbyHub : Hub
         {
             User = new HubUser()
             {
-                UserName = _bot,
+                UserName = _lobbyBot,
                 AvatarCode = "BotAvatar"
             },
             Message = $"{user} has joined the lobby.",
             Time = DateTime.Now.ToString("HH:mm")
-        });
+        }, "Lobby");
     }
 
-    public async Task SendMessage(string message)
+    public async Task SendMessage(string room, string message)
     {
         var user = await _userManager.FindByNameAsync(Context.User.Identity.Name);
 
 
-        await Clients.Group("Lobby").SendAsync("ReceiveMessage", new UserMessage()
+        await Clients.Group(room).SendAsync("ReceiveMessage", new UserMessage()
         {
             User = new HubUser()
             {
@@ -74,7 +76,7 @@ public class LobbyHub : Hub
             },
             Message = message,
             Time = DateTime.Now.ToString("HH:mm")
-        });
+        }, room);
     }
 
     public async Task SendConnectedUsers()
@@ -105,6 +107,16 @@ public class LobbyHub : Hub
         _games.AddGame(game);
 
         await Clients.Caller.SendAsync("GameCreated", game);
+        await Clients.Group(gameSettings.GameName).SendAsync("ReceiveMessage", new UserMessage()
+        {
+            User = new HubUser()
+            {
+                UserName = _gameBot,
+                AvatarCode = "BotAvatar"
+            },
+            Message = $"{gameHost.UserName} has joined the game!",
+            Time = DateTime.Now.ToString("HH:mm")
+        }, gameSettings.GameName);
     }
 
     public async Task JoinGame(HubUser hubUser, string gameName)
@@ -130,7 +142,7 @@ public class LobbyHub : Hub
             {
                 User = new HubUser()
                 {
-                    UserName = _bot,
+                    UserName = _lobbyBot,
                     AvatarCode = "BotAvatar"
                 },
                 Message = $"The game {gameName} is full or you have already joined.",
@@ -141,6 +153,16 @@ public class LobbyHub : Hub
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, gameName);
             await Clients.Group(gameName).SendAsync("ReceiveGame", game);
+            await Clients.Group(gameName).SendAsync("ReceiveMessage", new UserMessage()
+            {
+                User = new HubUser()
+                {
+                    UserName = _gameBot,
+                    AvatarCode = "BotAvatar"
+                },
+                Message = $"{hubUser.UserName} has joined the game!",
+                Time = DateTime.Now.ToString("HH:mm")
+            }, gameName);
         }
     }
 
@@ -172,12 +194,12 @@ public class LobbyHub : Hub
         {
             User = new HubUser()
             {
-                UserName = _bot,
+                UserName = _lobbyBot,
                 AvatarCode = "BotAvatar"
             },
             Message = $"{user} has left the lobby.",
             Time = DateTime.Now.ToString("HH:mm")
-        });
+        }, "Lobby");
 
         return base.OnDisconnectedAsync(exception);
     }

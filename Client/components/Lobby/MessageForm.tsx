@@ -4,13 +4,17 @@ import { IconButton, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 
-const MessageForm = () => {
+interface Props {
+  chatName: string;
+}
+
+const MessageForm = ({ chatName }: Props) => {
   const [message, setMessage] = useState("");
   const { connection } = useConnection();
   const { colors } = useTheme();
 
   const handleSendMessage = () => {
-    connection.invoke("SendMessage", message);
+    connection.invoke("SendMessage", chatName, message);
     setMessage("");
   };
 
