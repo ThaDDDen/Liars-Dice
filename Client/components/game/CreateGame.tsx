@@ -22,6 +22,7 @@ const CreateGame = () => {
   const playerCountSelector = playerCountArray.map((number, index) => {
     return (
       <Text
+        key={index}
         variant={number === playerCount ? "headlineLarge" : "headlineMedium"}
         style={{ marginHorizontal: 8, color: number === playerCount ? colors.primary : colors.onSurface }}
       >
@@ -122,6 +123,7 @@ const Input = styled.TextInput`
   border-radius: 5px;
   border: solid 1px black;
   padding: 8px;
+  font-size: 18px;
 `;
 
 const DiceSettings = styled.View`
