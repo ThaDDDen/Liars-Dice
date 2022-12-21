@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { initialGameState, useGame } from "../contexts/GameContext";
 import CreateGameScreen from "../screens/CreateGameScreen";
+import GameHomeScreen from "../screens/GameHomeScreen";
 import GameLobbyScreen from "../screens/GameLobbyScreen";
 import GameScreen from "../screens/GameScreen";
 import JoinGameScreen from "../screens/JoinGameScreen";
@@ -20,13 +21,14 @@ const GameStack = () => {
     <GameStackNavigator.Navigator>
       {game === initialGameState ? (
         <>
+          <GameStackNavigator.Screen name="GameHomeScreen" component={GameHomeScreen} options={{ headerShown: false }} />
           <GameStackNavigator.Screen name="CreateGameScreen" component={CreateGameScreen} options={{ headerShown: false }} />
-          <GameStackNavigator.Screen name="JoinGameScreen" component={JoinGameScreen} />
+          <GameStackNavigator.Screen name="JoinGameScreen" component={JoinGameScreen} options={{ headerShown: false }} />
         </>
       ) : (
         <>
-          <GameStackNavigator.Screen name="GameLobbyScreen" component={GameLobbyScreen} />
-          <GameStackNavigator.Screen name="GameScreen" component={GameScreen} />
+          <GameStackNavigator.Screen name="GameLobbyScreen" component={GameLobbyScreen} options={{ headerShown: false }} />
+          <GameStackNavigator.Screen name="GameScreen" component={GameScreen} options={{ headerShown: false }} />
         </>
       )}
     </GameStackNavigator.Navigator>

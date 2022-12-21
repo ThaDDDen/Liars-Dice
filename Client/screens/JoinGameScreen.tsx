@@ -1,12 +1,8 @@
-import { View, Text } from "react-native";
 import React from "react";
+import JoinGame from "../components/game/JoinGame";
 
 const JoinGameScreen = () => {
-  return (
-    <View>
-      <Text>JoinGameScreen</Text>
-    </View>
-  );
+  return <JoinGame />;
 };
 
 export default JoinGameScreen;
