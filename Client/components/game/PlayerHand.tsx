@@ -8,7 +8,16 @@ interface Props {
 }
 
 const PlayerHand = ({ dice, size }: Props) => {
-  return <View style={{ flexDirection: "row" }}>{dice && dice.map((x, index) => <RandomDice size={size} />)}</View>;
+  return (
+    <View style={{ flexDirection: "row" }}>
+      {dice &&
+        dice.map((x, index) => (
+          <View key={index}>
+            <RandomDice size={size} />
+          </View>
+        ))}
+    </View>
+  );
 };
 
 export default PlayerHand;
