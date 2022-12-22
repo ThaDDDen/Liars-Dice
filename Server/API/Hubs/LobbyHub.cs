@@ -109,7 +109,7 @@ public class LobbyHub : Hub
 
         _games.AddGame(game);
 
-        await Clients.Caller.SendAsync("GameCreated", game);
+        await Clients.Caller.SendAsync("ReceiveGame", game);
         await Clients.Group(gameSettings.GameName).SendAsync("ReceiveMessage", new UserMessage()
         {
             User = new HubUser()
@@ -169,7 +169,22 @@ public class LobbyHub : Hub
         }
     }
 
-    public async Task DiceRolled(HubUser user)
+    public async Task UpdatePlayerOrder(List<HubUser> players)
+    {
+        var game = _games.GetGameByPlayerName(Context.User.Identity.Name);
+        game.Players = players;
+
+        await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
+    }
+
+    public async Task InvitePlayer(HubUser hubUser, string playerToInvite)
+    {
+        var game = _games.GetGameByPlayerName(hubUser.UserName);
+        var user = _connections.GetConnectionByName(playerToInvite);
+
+        await Clients.Client(user.User.ConnectionId).SendAsync("ReceiveGameInvitation", new GameInvitation {GameHost = hubUser.UserName, GameName = game.GameName});
+    }
+    public async Task RollDice(HubUser user)
     {
         var game = _games.GetGameByPlayerName(user.UserName);
 

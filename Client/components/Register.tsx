@@ -4,11 +4,11 @@ import { Pressable, Text, TextInput, View } from "react-native";
 import { IconButton, Tooltip } from "react-native-paper";
 import styled from "styled-components/native";
 import * as yup from "yup";
-import { postLogInModel, postRegisterModel } from "../authUtils/authFunctions";
 import { useSnackBar } from "../contexts/SnackContext";
 import { useUser } from "../contexts/UserContext";
 import { HomeNavProps } from "../screens/HomeScreen";
 import { ResponseMessage } from "../types/types";
+import { postLogInModel, postRegisterModel } from "../utils/authFunctions";
 import Background from "./layout/Background";
 import Logo from "./layout/Logo";
 
@@ -32,9 +32,6 @@ const Register = ({ navigation, route }: HomeNavProps) => {
   const passwordRef = useRef<TextInput>(null);
   const confirmPasswordRef = useRef<TextInput>(null);
 
-  const handleError = (responseMessage: ResponseMessage) => {
-    setResponseMessage(responseMessage);
-  };
   return (
     <Background>
       <Logo size={"medium"} />

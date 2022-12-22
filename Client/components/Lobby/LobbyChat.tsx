@@ -28,12 +28,11 @@ const LobbyChat = () => {
           <HeaderTitle variant="headlineSmall" color={colors.secondaryContainer}>
             Lobby
           </HeaderTitle>
-          {/* <TopButtons> */}
+
           <IconButton icon="account-multiple" iconColor={colors.secondaryContainer} size={30} onPress={() => openModal()} style={{ margin: 0 }} />
           <OnlineUsers visible={true} size={15}>
             {connectedUsers.length}
           </OnlineUsers>
-          {/* </TopButtons> */}
         </Header>
         <ChatWindow
           ref={scrollViewRef}

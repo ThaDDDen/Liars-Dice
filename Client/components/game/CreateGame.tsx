@@ -1,35 +1,23 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Button as PaperButton, IconButton, Surface, Text, useTheme } from "react-native-paper";
+import { Button as PaperButton, Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useUser } from "../../contexts/UserContext";
 import { GameSettings } from "../../types/types";
+import { INVOKE_CREATE_GAME } from "../../utils/constants";
 import Background from "../layout/Background";
+import ContentCard from "../layout/ContentCard";
 import SettingsHeader from "./assets/GameSettingsHeader";
-import SmallDice from "./SmallDice";
+import DicePicker from "./DicePicker";
+import PlayerPicker from "./PlayerPicker";
 
 const CreateGame = () => {
   const [diceAmount, setDiceAmount] = useState(6);
   const [playerCount, setPlayerCount] = useState(5);
   const { connection } = useConnection();
   const { currentUser } = useUser();
-  const { colors } = useTheme();
-
-  const playerCountArray = [1, 2, 3, 4, 5, 6, 7, 8];
-
-  const playerCountSelector = playerCountArray.map((number, index) => {
-    return (
-      <Text
-        key={index}
-        variant={number === playerCount ? "headlineLarge" : "headlineMedium"}
-        style={{ marginHorizontal: 8, color: number === playerCount ? colors.primary : colors.onSurface }}
-      >
-        {number}
-      </Text>
-    );
-  });
 
   return (
     <Background>
@@ -41,7 +29,7 @@ const CreateGame = () => {
           initialValues={{ GameName: "", dice: 6 }}
           onSubmit={(values) => {
             connection.invoke(
-              "CreateGame",
+              INVOKE_CREATE_GAME,
               { gameName: values.GameName, diceCount: diceAmount, playerCount: playerCount } as GameSettings,
               currentUser
             );
@@ -50,55 +38,17 @@ const CreateGame = () => {
           {({ handleChange, handleSubmit, values, errors }) => {
             return (
               <>
-                <Surface style={{ paddingHorizontal: 10, paddingVertical: 10, borderRadius: 10, marginBottom: 10 }}>
-                  <Text variant="labelLarge">Game name</Text>
+                <ContentCard title="Game name">
                   <Input value={values.GameName} onChangeText={handleChange("GameName")} />
-                </Surface>
+                </ContentCard>
 
-                <Surface style={{ paddingHorizontal: 10, paddingVertical: 10, borderRadius: 10, marginBottom: 10 }}>
-                  <Text variant="labelLarge">Dice count</Text>
-                  <DiceSettings>
-                    <IconButton
-                      style={{ borderRadius: 5, backgroundColor: colors.surfaceVariant }}
-                      icon="minus"
-                      size={20}
-                      onPress={() => diceAmount !== 1 && setDiceAmount((prev) => prev - 1)}
-                    />
-                    <DiceContainer>
-                      <>
-                        {Array.from({ length: diceAmount }, (value, key) => (
-                          <SmallDice size={"medium"} key={key} />
-                        ))}
-                      </>
-                    </DiceContainer>
-                    <IconButton
-                      style={{ borderRadius: 5, backgroundColor: colors.surfaceVariant }}
-                      icon="plus"
-                      size={20}
-                      onPress={() => diceAmount !== 6 && setDiceAmount((prev) => prev + 1)}
-                    />
-                  </DiceSettings>
-                </Surface>
-                <Surface style={{ paddingHorizontal: 10, paddingVertical: 10, borderRadius: 10, marginBottom: 10 }}>
-                  <View>
-                    <Text variant="labelLarge">Player count</Text>
-                  </View>
-                  <PlayerSetting>
-                    <IconButton
-                      style={{ borderRadius: 5, backgroundColor: colors.surfaceVariant }}
-                      icon="minus"
-                      size={20}
-                      onPress={() => playerCount !== 1 && setPlayerCount((prev) => prev - 1)}
-                    />
-                    <PlayerContainer>{playerCountSelector}</PlayerContainer>
-                    <IconButton
-                      style={{ borderRadius: 5, backgroundColor: colors.surfaceVariant }}
-                      icon="plus"
-                      size={20}
-                      onPress={() => playerCount !== 8 && setPlayerCount((prev) => prev + 1)}
-                    />
-                  </PlayerSetting>
-                </Surface>
+                <ContentCard title="Dice count">
+                  <DicePicker diceAmount={diceAmount} setDiceAmount={setDiceAmount} />
+                </ContentCard>
+
+                <ContentCard title="Player count">
+                  <PlayerPicker playerCount={playerCount} setPlayerCount={setPlayerCount} />
+                </ContentCard>
 
                 <CreateGameButton mode="contained" uppercase onPress={() => handleSubmit()}>
                   <Text>Create Game</Text>
@@ -128,28 +78,4 @@ const Input = styled.TextInput`
   border: solid 1px black;
   padding: 8px;
   font-size: 18px;
-`;
-
-const DiceSettings = styled.View`
-  margin-top: 10px;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const DiceContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-`;
-
-const PlayerSetting = styled.View`
-  margin-top: 10px;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const PlayerContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
 `;
