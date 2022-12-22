@@ -26,3 +26,29 @@ export const FOUR_SEAT_TABLE = [
   { position: "absolute", bottom: Dimensions.get("window").width * 0.05, right: 15, alignItems: "center" } as StyleProp<ViewStyle>,
   { position: "absolute", bottom: Dimensions.get("window").width * 0.05, left: 15, alignItems: "center" } as StyleProp<ViewStyle>,
 ];
+
+export const BASE_URL = "http://192.168.0.4:5141/";
+
+export const INVOKE_JOIN_LOBBY = "JoinLobby";
+
+export const INVOKE_CREATE_GAME = "CreateGame";
+
+export const INVOKE_JOIN_GAME = "JoinGame";
+
+export const INVOKE_SEND_MESSAGE = "SendMessage";
+
+export const INVOKE_INVITE_PLAYER = "InvitePlayer";
+
+export const INVOKE_ROLL_DICE = "RollDice";
+
+export const RECEIVE_MESSAGE = "ReceiveMessage";
+
+export const RECEIVE_GAME_INVITATION = "ReceiveGameInvitation";
+
+export const RECEIVE_ALREADY_CONNECTED = "AlreadyConnected";
+
+export const RECEIVE_NO_GAME_WITH_THAT_NAME = "NoGameWithThatName";
+
+export const RECEIVE_CONNECTED_USERS = "ConnectedUsers";
+
+export const RECEIVE_GAME = "ReceiveGame";

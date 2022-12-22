@@ -7,7 +7,7 @@ import table from "../../assets/images/table.png";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useGame } from "../../contexts/GameContext";
 import { useUser } from "../../contexts/UserContext";
-import { EIGHT_SEAT_TABLE, FOUR_SEAT_TABLE, SIX_SEAT_TABLE } from "../../utils/constants";
+import { EIGHT_SEAT_TABLE, FOUR_SEAT_TABLE, INVOKE_ROLL_DICE, SIX_SEAT_TABLE } from "../../utils/constants";
 import ChatMessage from "../Lobby/ChatMessage";
 import MessageForm from "../Lobby/MessageForm";
 import UserAvatar from "../Lobby/UserAvatar";
@@ -83,7 +83,7 @@ const GameLobby = () => {
         <RollButton
           mode="contained"
           onPress={() => {
-            connection.invoke("DiceRolled", currentUser);
+            connection.invoke(INVOKE_ROLL_DICE, currentUser);
           }}
         >
           Roll

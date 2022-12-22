@@ -3,11 +3,11 @@ import React from "react";
 import { Pressable, Text, View } from "react-native";
 import styled from "styled-components/native";
 import * as yup from "yup";
-import { postLogInModel } from "../authUtils/authFunctions";
 import { useSnackBar } from "../contexts/SnackContext";
 import { useUser } from "../contexts/UserContext";
 import { HomeNavProps } from "../screens/HomeScreen";
 import { LogInModel } from "../types/types";
+import { postLogInModel } from "../utils/authFunctions";
 import Background from "./layout/Background";
 import Logo from "./layout/Logo";
 

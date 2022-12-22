@@ -1,6 +1,5 @@
 import React from "react";
 import { Text } from "react-native";
-import { useGame } from "../../contexts/GameContext";
 import { User } from "../../types/types";
 import PlayerHand from "./PlayerHand";
 
@@ -9,12 +8,10 @@ interface Props {
 }
 
 const Player = ({ player }: Props) => {
-  const { game } = useGame();
-
   return (
     <>
       <Text>Player</Text>
-      <PlayerHand dice={player.dice} />
+      <PlayerHand size="small" dice={player.dice} />
     </>
   );
 };

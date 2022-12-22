@@ -4,8 +4,8 @@ import { View } from "react-native";
 import { Chip, Text, useTheme } from "react-native-paper";
 import { SvgXml } from "react-native-svg";
 import styled from "styled-components/native";
-import { putSaveAvatar } from "../../authUtils/authFunctions";
 import { useUser } from "../../contexts/UserContext";
+import { putSaveAvatar } from "../../utils/authFunctions";
 
 const ProfileAvatar = () => {
   const { currentUser, token, setCurrentUser } = useUser();

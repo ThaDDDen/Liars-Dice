@@ -3,9 +3,10 @@ import styled from "styled-components/native";
 import dice from "../../assets/images/small_dice.png";
 
 interface Props {
-  size: string;
+  size: "small" | "medium" | "large";
 }
 
+// rename to dice since size is dynamic?
 const SmallDice = ({ size }: Props) => {
   return <SmallDiceImg size={size} source={dice} />;
 };

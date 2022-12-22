@@ -3,10 +3,10 @@ import React from "react";
 import { Text } from "react-native";
 import styled from "styled-components/native";
 import * as yup from "yup";
-import { postLogInModel, postRegisterModel } from "../authUtils/authFunctions";
 import { useSnackBar } from "../contexts/SnackContext";
 import { useUser } from "../contexts/UserContext";
 import { RegisterModel, ResponseMessage } from "../types/types";
+import { postLogInModel, postRegisterModel } from "../utils/authFunctions";
 import Background from "./layout/Background";
 import Logo from "./layout/Logo";
 
