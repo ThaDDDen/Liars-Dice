@@ -23,4 +23,13 @@ public class GameRepository
     {
         return _gameRepository.FirstOrDefault(g => g.Players.Any(p => p.UserName == playerName));
     }
+
+    public Game UpdateGame(Game game)
+    {
+        var gameIndex = _gameRepository.FindIndex(g => g.GameName == game.GameName);
+
+        _gameRepository[gameIndex] = game;
+
+        return _gameRepository[gameIndex];
+    }
 }

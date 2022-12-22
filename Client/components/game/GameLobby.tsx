@@ -1,17 +1,19 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Dimensions, ImageBackground, ScrollView, View } from "react-native";
 import { Modalize } from "react-native-modalize";
-import { Button as PaperButton, IconButton, Text, useTheme } from "react-native-paper";
+import { Button, Button as PaperButton, IconButton, Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import table from "../../assets/images/table.png";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useGame } from "../../contexts/GameContext";
 import { useUser } from "../../contexts/UserContext";
+import { User } from "../../types/types";
 import { EIGHT_SEAT_TABLE, FOUR_SEAT_TABLE, INVOKE_ROLL_DICE, SIX_SEAT_TABLE } from "../../utils/constants";
 import ChatMessage from "../Lobby/ChatMessage";
 import MessageForm from "../Lobby/MessageForm";
 import UserAvatar from "../Lobby/UserAvatar";
 import PlayerCard from "./PlayerCard";
+import PlayOrderSorter from "./PlayOrderSorter";
 import UserHand from "./UserHand";
 
 const GameLobby = () => {
@@ -20,6 +22,11 @@ const GameLobby = () => {
   const { connection } = useConnection();
   const { colors } = useTheme();
   const { gameMessages } = useUser();
+  const [orderSorterVisible, setOrderSorterVisible] = useState(false);
+
+  const updatePlayerOrder = (players: User[]) => {
+    connection.invoke("UpdatePlayerOrder", players);
+  };
 
   const scrollViewRef = useRef<ScrollView | null>(null);
   const usersOnlineModalize = useRef<Modalize>(null);
@@ -66,6 +73,7 @@ const GameLobby = () => {
   return (
     <>
       <Text>{game.gameName}</Text>
+      {game.players.find((p) => p.userName == currentUser.userName)?.gameHost && <Button onPress={() => setOrderSorterVisible(true)}> open</Button>}
       <Table>
         <TableBackground
           source={table}
@@ -104,6 +112,8 @@ const GameLobby = () => {
         </ChatContainer>
         <MessageForm chatName={game.gameName} />
       </Modalize>
+
+      <PlayOrderSorter orderSorterVisible={orderSorterVisible} setOrderSorterVisible={setOrderSorterVisible} updatePlayerOrder={updatePlayerOrder} />
     </>
   );
 };

@@ -169,6 +169,14 @@ public class LobbyHub : Hub
         }
     }
 
+    public async Task UpdatePlayerOrder(List<HubUser> players)
+    {
+        var game = _games.GetGameByPlayerName(Context.User.Identity.Name);
+        game.Players = players;
+
+        await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
+    }
+
     public async Task InvitePlayer(HubUser hubUser, string playerToInvite)
     {
         var game = _games.GetGameByPlayerName(hubUser.UserName);
