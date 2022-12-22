@@ -3,9 +3,10 @@ import React from "react";
 import { Button, Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import Background from "../components/layout/Background";
-import ProfileAvatar from "../components/profile/ProfileAvatar";
-import ProfileSettings from "../components/profile/ProfileSettings";
-import ProfileStatistics from "../components/profile/ProfileStatistics";
+import ContentCard from "../components/layout/ContentCard";
+import AvatarPicker from "../components/profile/AvatarPicker";
+import Statistics from "../components/profile/Statistics";
+import ThemePicker from "../components/profile/ThemePicker";
 import { useConnection } from "../contexts/ConnectionContext";
 import { initialGameState, useGame } from "../contexts/GameContext";
 import { useUser } from "../contexts/UserContext";
@@ -38,9 +39,15 @@ const ProfileScreen = ({ navigation }: NavigationProps) => {
           </HeaderTitle>
         </Header>
         <Content>
-          <ProfileAvatar />
-          <ProfileSettings />
-          <ProfileStatistics />
+          <ContentCard title="Avatar">
+            <AvatarPicker />
+          </ContentCard>
+          <ContentCard title="Settings">
+            <ThemePicker />
+          </ContentCard>
+          <ContentCard title="Statistics">
+            <Statistics />
+          </ContentCard>
 
           <Button mode="contained" onPress={() => handleLogout()} style={{ marginTop: "auto", width: 150, alignSelf: "center" }}>
             Log out

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { IconButton, Text, useTheme } from "react-native-paper";
+import { View } from "react-native";
+import { IconButton, Text } from "react-native-paper";
 import { useTheme as contextTheme } from "../../contexts/ThemeContext";
 
 const ThemePicker = () => {
-  const { colors } = useTheme();
   const { theme, setTheme } = contextTheme();
   const [selectedTheme, setSelectedTheme] = useState(1);
 
@@ -16,13 +15,12 @@ const ThemePicker = () => {
   const themes = ["light", "dark"];
   return (
     <View>
-      <Text variant="labelLarge" style={{ color: colors.onPrimary, alignSelf: "center" }}>
+      <Text variant="labelLarge" style={{ alignSelf: "center" }}>
         Theme
       </Text>
       <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-around" }}>
         <IconButton
           icon="arrow-left-bold-circle-outline"
-          iconColor={colors.onPrimary}
           style={{ margin: 0 }}
           size={30}
           onPress={() => {
@@ -30,12 +28,9 @@ const ThemePicker = () => {
             setTheme(themes[selectedTheme]);
           }}
         />
-        <Text variant="titleLarge" style={{ color: colors.onPrimary }}>
-          {theme.charAt(0).toUpperCase() + theme.slice(1)}
-        </Text>
+        <Text variant="titleLarge">{theme.charAt(0).toUpperCase() + theme.slice(1)}</Text>
         <IconButton
           icon="arrow-right-bold-circle-outline"
-          iconColor={colors.onPrimary}
           style={{ margin: 0 }}
           size={30}
           onPress={() => {
@@ -49,5 +44,3 @@ const ThemePicker = () => {
 };
 
 export default ThemePicker;
-
-const styles = StyleSheet.create({});
