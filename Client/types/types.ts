@@ -3,12 +3,18 @@ export type User = {
   avatarCode: string;
   gameHost: boolean;
   dice: number[];
+  connectionId: string;
 };
 
 export type GameSettings = {
   gameName: string;
   diceCount: number;
   playerCount: number;
+};
+
+export type GameInvitation = {
+  gameHost: string;
+  gameName: string;
 };
 
 export type UserMessage = {

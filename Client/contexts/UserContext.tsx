@@ -35,6 +35,7 @@ export const initialUserState = {
   avatarCode: "",
   gameHost: false,
   dice: [],
+  connectionId: "",
 };
 
 function UserProvider({ children }: Props) {

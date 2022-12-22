@@ -37,4 +37,9 @@ public class ConnectionRepository
     {
         return _connections.Any(c => c.User.UserName == user && c.Room == room);
     }
+
+    public UserConnection GetConnectionByName(string name)
+    {
+        return _connections.FirstOrDefault(uc => uc.User.UserName == name);
+    }
 }

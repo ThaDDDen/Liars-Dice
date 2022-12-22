@@ -33,7 +33,13 @@ const Register = () => {
 
             if (registerResponse.status === "Success") {
               var loginResponse = await postLogInModel({ username: values.username, password: values.password });
-              setCurrentUser({ userName: values.username, avatarCode: loginResponse.avatarCode, gameHost: false, dice: [] });
+              setCurrentUser({
+                userName: values.username,
+                avatarCode: loginResponse.avatarCode,
+                gameHost: false,
+                dice: [],
+                connectionId: loginResponse.connectionId,
+              });
             } else {
               setResponseMessage(registerResponse as ResponseMessage);
             }

@@ -33,7 +33,13 @@ const LogIn = ({ navigation }: HomeNavProps) => {
             var response = await postLogInModel({ username: values.username, password: values.password });
             if (response.status === "Success") {
               console.log(response);
-              setCurrentUser({ userName: values.username, avatarCode: response.avatarCode, gameHost: false, dice: [] });
+              setCurrentUser({
+                userName: values.username,
+                avatarCode: response.avatarCode,
+                gameHost: false,
+                dice: [],
+                connectionId: response.connectionId,
+              });
               setToken(response.token);
             } else {
               setResponseMessage(response);

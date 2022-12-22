@@ -1,7 +1,8 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { Game, ResponseMessage, UserConnection, UserMessage } from "../types/types";
 import { useGame } from "./GameContext";
+import { useInvitation } from "./InvitationContext";
 import { useSnackBar } from "./SnackContext";
 import { useUser } from "./UserContext";
 
@@ -29,6 +30,12 @@ function ConnectionProvider({ children }: Props) {
   const { currentUser, setLobbyMessages, setGameMessages } = useUser();
   const [connectedUsers, setConnectedUsers] = useState<UserConnection[]>([]);
   const { setGame } = useGame();
+  const { invitation, invitationAccepted, setInvitation } = useInvitation();
+  const { currentUser } = useUser();
+
+  useEffect(() => {
+    if (invitationAccepted) connection.invoke("JoinGame", currentUser, invitation.gameName);
+  }, [invitationAccepted]);
 
   const joinLobby = async (accessToken: string) => {
     try {
@@ -46,6 +53,10 @@ function ConnectionProvider({ children }: Props) {
 
       connection.on("ReceiveMessage", (userMessage: UserMessage, room: string) => {
         room === "Lobby" ? setLobbyMessages((prev) => [...prev, userMessage]) : setGameMessages((prev) => [...prev, userMessage]);
+      });
+
+      connection.on("ReceiveGameInvitation", (name: string, game: Game) => {
+        setInvitation({ gameHost: name, gameName: game.gameName });
       });
 
       connection.on("AlreadyConnected", (user: string, message: string) => {
