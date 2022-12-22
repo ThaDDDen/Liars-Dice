@@ -2,6 +2,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { Surface, Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
+import { useConnection } from "../../contexts/ConnectionContext";
+import { initialGameState, useGame } from "../../contexts/GameContext";
 import { useUser } from "../../contexts/UserContext";
 import { UserConnection } from "../../types/types";
 import UserAvatar from "./UserAvatar";
@@ -13,18 +15,27 @@ interface Props {
 const OnlineUserCard = ({ userConnection }: Props) => {
   const { currentUser } = useUser();
   const { colors } = useTheme();
+  const { connection } = useConnection();
+  const { game } = useGame();
+
+  const invitePlayer = () => {
+    connection.invoke("InvitePlayer", currentUser, userConnection.user.userName);
+  };
+
   return (
     <OnlineUserContainer>
       <UserAvatar size={30} avatarCode={userConnection.user.avatarCode} />
       <UserName>{userConnection.user.userName}</UserName>
 
-      {currentUser.userName !== userConnection.user.userName && (
+      {currentUser.userName !== userConnection.user.userName && game !== initialGameState && (
         <MaterialCommunityIcons
           name="plus-circle"
           size={24}
           color={colors.primary}
           style={{ marginRight: 10 }}
-          onPress={() => console.log(`invite ${userConnection.user.userName} to your game lobby`)}
+          onPress={() => {
+            invitePlayer();
+          }}
         />
       )}
     </OnlineUserContainer>

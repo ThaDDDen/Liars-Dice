@@ -36,12 +36,14 @@ public class LobbyHub : Hub
             return;
         }
 
+
         await Groups.AddToGroupAsync(Context.ConnectionId, "Lobby");
 
         _connections.AddConnection(new UserConnection
         {
             User = new HubUser()
             {
+                ConnectionId = Context.ConnectionId,
                 UserName = user.UserName,
                 AvatarCode = user.AvatarCode
             },
@@ -96,6 +98,7 @@ public class LobbyHub : Hub
             diceList.Add(1);
         }
         await Groups.AddToGroupAsync(Context.ConnectionId, gameSettings.GameName);
+
 
         var user = await _userManager.FindByNameAsync(Context.User.Identity.Name);
 

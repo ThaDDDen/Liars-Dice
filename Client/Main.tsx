@@ -3,6 +3,7 @@ import { ColorSchemeName } from "react-native";
 import { Provider as PaperProvider } from "react-native-paper";
 import ConnectionProvider from "./contexts/ConnectionContext";
 import GameProvider from "./contexts/GameContext";
+import InvitationProvider from "./contexts/InvitationContext";
 import SnackProvider from "./contexts/SnackContext";
 import { useTheme } from "./contexts/ThemeContext";
 import UserProvider from "./contexts/UserContext";
@@ -19,9 +20,11 @@ const Main = () => {
       <SnackProvider>
         <GameProvider>
           <UserProvider>
-            <ConnectionProvider>
-              <Navigation colorScheme={colorScheme} />
-            </ConnectionProvider>
+            <InvitationProvider>
+              <ConnectionProvider>
+                <Navigation colorScheme={colorScheme} />
+              </ConnectionProvider>
+            </InvitationProvider>
           </UserProvider>
         </GameProvider>
       </SnackProvider>

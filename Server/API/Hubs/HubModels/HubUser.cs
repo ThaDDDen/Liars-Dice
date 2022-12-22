@@ -6,4 +6,5 @@ public class HubUser
     public string AvatarCode { get; set; }
     public bool GameHost { get; set; }
     public List<int> Dice { get; set; } = new();
+    public string ConnectionId { get; set; } = "";
 }
