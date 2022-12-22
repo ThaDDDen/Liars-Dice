@@ -31,7 +31,6 @@ function ConnectionProvider({ children }: Props) {
   const [connectedUsers, setConnectedUsers] = useState<UserConnection[]>([]);
   const { setGame } = useGame();
   const { invitation, invitationAccepted, setInvitation } = useInvitation();
-  const { currentUser } = useUser();
 
   useEffect(() => {
     if (invitationAccepted) connection.invoke("JoinGame", currentUser, invitation.gameName);
