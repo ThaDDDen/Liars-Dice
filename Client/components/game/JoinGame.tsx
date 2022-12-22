@@ -5,6 +5,7 @@ import { Button as PaperButton, Surface, Text, useTheme } from "react-native-pap
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useUser } from "../../contexts/UserContext";
+import { INVOKE_JOIN_GAME } from "../../utils/constants";
 import Background from "../layout/Background";
 
 const JoinGame = () => {
@@ -18,7 +19,7 @@ const JoinGame = () => {
         <Formik
           initialValues={{ GameName: "" }}
           onSubmit={(values) => {
-            connection.invoke("JoinGame", currentUser, values.GameName);
+            connection.invoke(INVOKE_JOIN_GAME, currentUser, values.GameName);
           }}
         >
           {({ handleChange, handleSubmit, values, errors }) => {

@@ -6,6 +6,7 @@ import { useConnection } from "../../contexts/ConnectionContext";
 import { initialGameState, useGame } from "../../contexts/GameContext";
 import { useUser } from "../../contexts/UserContext";
 import { UserConnection } from "../../types/types";
+import { INVOKE_INVITE_PLAYER } from "../../utils/constants";
 import UserAvatar from "./UserAvatar";
 
 interface Props {
@@ -19,7 +20,7 @@ const OnlineUserCard = ({ userConnection }: Props) => {
   const { game } = useGame();
 
   const invitePlayer = () => {
-    connection.invoke("InvitePlayer", currentUser, userConnection.user.userName);
+    connection.invoke(INVOKE_INVITE_PLAYER, currentUser, userConnection.user.userName);
   };
 
   return (

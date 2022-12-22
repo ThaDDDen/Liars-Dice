@@ -6,6 +6,7 @@ import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useUser } from "../../contexts/UserContext";
 import { GameSettings } from "../../types/types";
+import { INVOKE_CREATE_GAME } from "../../utils/constants";
 import Background from "../layout/Background";
 import SettingsHeader from "./assets/GameSettingsHeader";
 import SmallDice from "./SmallDice";
@@ -41,7 +42,7 @@ const CreateGame = () => {
           initialValues={{ GameName: "", dice: 6 }}
           onSubmit={(values) => {
             connection.invoke(
-              "CreateGame",
+              INVOKE_CREATE_GAME,
               { gameName: values.GameName, diceCount: diceAmount, playerCount: playerCount } as GameSettings,
               currentUser
             );

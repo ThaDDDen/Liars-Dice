@@ -3,7 +3,7 @@ import styled from "styled-components/native";
 import logo from "../../assets/images/liars_dice_logo.png";
 
 interface Props {
-  size: string;
+  size: "small" | "medium" | "large";
 }
 
 const Logo = ({ size }: Props) => {

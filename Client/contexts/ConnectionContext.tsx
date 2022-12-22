@@ -1,6 +1,17 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { Game, ResponseMessage, UserConnection, UserMessage } from "../types/types";
+import { Game, GameInvitation, ResponseMessage, UserConnection, UserMessage } from "../types/types";
+import {
+  BASE_URL,
+  INVOKE_JOIN_GAME,
+  INVOKE_JOIN_LOBBY,
+  RECEIVE_ALREADY_CONNECTED,
+  RECEIVE_CONNECTED_USERS,
+  RECEIVE_GAME,
+  RECEIVE_GAME_INVITATION,
+  RECEIVE_MESSAGE,
+  RECEIVE_NO_GAME_WITH_THAT_NAME,
+} from "../utils/constants";
 import { useGame } from "./GameContext";
 import { useInvitation } from "./InvitationContext";
 import { useSnackBar } from "./SnackContext";
@@ -26,21 +37,20 @@ interface Props {
 
 function ConnectionProvider({ children }: Props) {
   const [connection, setConnection] = useState<HubConnection>({} as HubConnection);
-  const { setResponseMessage } = useSnackBar();
-  const { currentUser, setLobbyMessages, setGameMessages } = useUser();
   const [connectedUsers, setConnectedUsers] = useState<UserConnection[]>([]);
-  const { setGame } = useGame();
   const { invitation, invitationAccepted, setInvitation } = useInvitation();
-  const { currentUser } = useUser();
+  const { currentUser, setLobbyMessages, setGameMessages } = useUser();
+  const { setResponseMessage } = useSnackBar();
+  const { setGame } = useGame();
 
   useEffect(() => {
-    if (invitationAccepted) connection.invoke("JoinGame", currentUser, invitation.gameName);
+    if (invitationAccepted) connection.invoke(INVOKE_JOIN_GAME, currentUser, invitation.gameName);
   }, [invitationAccepted]);
 
-  const joinLobby = async (accessToken: string) => {
+  const connectToHub = async (accessToken: string) => {
     try {
       const connection = new HubConnectionBuilder()
-        .withUrl("http://192.168.0.4:5141/hubs/lobby", {
+        .withUrl(`${BASE_URL}hubs/lobby`, {
           accessTokenFactory: () => {
             return accessToken;
           },
@@ -51,38 +61,34 @@ function ConnectionProvider({ children }: Props) {
         .configureLogging(LogLevel.Information)
         .build();
 
-      connection.on("ReceiveMessage", (userMessage: UserMessage, room: string) => {
+      connection.on(RECEIVE_MESSAGE, (userMessage: UserMessage, room: string) => {
         room === "Lobby" ? setLobbyMessages((prev) => [...prev, userMessage]) : setGameMessages((prev) => [...prev, userMessage]);
       });
 
-      connection.on("ReceiveGameInvitation", (name: string, game: Game) => {
-        setInvitation({ gameHost: name, gameName: game.gameName });
+      connection.on(RECEIVE_GAME_INVITATION, (gameInvitation: GameInvitation) => {
+        setInvitation({ gameHost: gameInvitation.gameHost, gameName: gameInvitation.gameName });
       });
 
-      connection.on("AlreadyConnected", (user: string, message: string) => {
+      connection.on(RECEIVE_ALREADY_CONNECTED, (user: string, message: string) => {
         // change this to prompt error (Snackbar?)
         console.log(user + ": " + message);
       });
 
-      connection.on("NoGameWithThatName", (responseMessage: ResponseMessage) => {
+      connection.on(RECEIVE_NO_GAME_WITH_THAT_NAME, (responseMessage: ResponseMessage) => {
         setResponseMessage(responseMessage);
       });
 
-      connection.on("ConnectedUsers", (connectedUsers: UserConnection[]) => {
+      connection.on(RECEIVE_CONNECTED_USERS, (connectedUsers: UserConnection[]) => {
         setConnectedUsers(connectedUsers);
       });
 
-      connection.on("ReceiveGame", (game: Game) => {
-        setGame(game);
-      });
-
-      connection.on("GameCreated", (game: Game) => {
+      connection.on(RECEIVE_GAME, (game: Game) => {
         setGame(game);
       });
 
       await connection.start();
 
-      await connection.invoke("JoinLobby");
+      await connection.invoke(INVOKE_JOIN_LOBBY);
       setConnection(connection);
     } catch (e) {
       console.log(e);
@@ -97,7 +103,11 @@ function ConnectionProvider({ children }: Props) {
     }
   };
 
-  return <ConnectionContext.Provider value={{ connection, closeConnection, joinLobby, connectedUsers }}>{children}</ConnectionContext.Provider>;
+  return (
+    <ConnectionContext.Provider value={{ connection, closeConnection, joinLobby: connectToHub, connectedUsers }}>
+      {children}
+    </ConnectionContext.Provider>
+  );
 }
 
 export const useConnection = () => useContext(ConnectionContext);
