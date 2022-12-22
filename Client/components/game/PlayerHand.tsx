@@ -1,7 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { useGame } from "../../contexts/GameContext";
-import SmallDice from "./SmallDice";
+import RandomDice from "./assets/RandomDice";
 
 interface Props {
   dice: number[] | undefined;
@@ -9,9 +8,7 @@ interface Props {
 }
 
 const PlayerHand = ({ dice, size }: Props) => {
-  const { game } = useGame();
-
-  return <View style={{ flexDirection: "row" }}>{dice && dice.map((x, index) => <SmallDice key={index} size={size} />)}</View>;
+  return <View style={{ flexDirection: "row" }}>{dice && dice.map((x, index) => <RandomDice size={size} />)}</View>;
 };
 
 export default PlayerHand;

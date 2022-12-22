@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Dimensions, ImageBackground, ScrollView, View } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { Button as PaperButton, IconButton, Text, useTheme } from "react-native-paper";
@@ -12,13 +12,14 @@ import ChatMessage from "../Lobby/ChatMessage";
 import MessageForm from "../Lobby/MessageForm";
 import UserAvatar from "../Lobby/UserAvatar";
 import PlayerCard from "./PlayerCard";
+import UserHand from "./UserHand";
 
 const GameLobby = () => {
   const { game } = useGame();
   const { currentUser } = useUser();
-  const [userDice, setUserDice] = useState<number[] | undefined>();
   const { connection } = useConnection();
   const { colors } = useTheme();
+  const { gameMessages } = useUser();
 
   const scrollViewRef = useRef<ScrollView | null>(null);
   const usersOnlineModalize = useRef<Modalize>(null);
@@ -26,11 +27,6 @@ const GameLobby = () => {
   const openModal = () => {
     usersOnlineModalize.current?.open();
   };
-
-  useEffect(() => {
-    setUserDice(game.players.find((x) => x.userName === currentUser.userName)?.dice);
-  }, []);
-  const { gameMessages } = useUser();
 
   // STÄDA KODEN FÖR HELVETE TOMMY! DET SER UT SOM FAAN
   const tableHeight = game.playerCount > 6 ? 0.6 : game.playerCount > 4 ? 0.4 : 0.35;
@@ -69,41 +65,33 @@ const GameLobby = () => {
 
   return (
     <>
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>{game.gameName}</Text>
+      <Text>{game.gameName}</Text>
+      <Table>
         <TableBackground
           source={table}
           resizeMode="cover"
           width={Dimensions.get("window").width * 0.7}
           height={Dimensions.get("window").height * tableHeight}
-        ></TableBackground>
+        />
         <TableOverlay width={Dimensions.get("window").width * 0.7} height={Dimensions.get("window").height * tableHeight}>
           {playersInGameLobby}
           {placeHolderAvatars}
         </TableOverlay>
-      </View>
-      <View style={{ backgroundColor: "red" }}>
-        <View style={{ flexDirection: "row" }}>
-          <View>
-            <RollButton
-              mode="contained"
-              onPress={() => {
-                connection.invoke("DiceRolled", currentUser);
-              }}
-            >
-              Roll
-            </RollButton>
-          </View>
-          {game.players
-            .find((x) => x.userName === currentUser.userName)
-            ?.dice.map((dice, index) => (
-              <View key={index}>
-                <Text>{dice}</Text>
-              </View>
-            ))}
-          <IconButton icon="chat-outline" iconColor={colors.secondaryContainer} size={30} onPress={() => openModal()} style={{ margin: 0 }} />
-        </View>
-      </View>
+      </Table>
+
+      <GameBar>
+        <RollButton
+          mode="contained"
+          onPress={() => {
+            connection.invoke("DiceRolled", currentUser);
+          }}
+        >
+          Roll
+        </RollButton>
+        <UserHand dice={game.players.find((x) => x.userName === currentUser.userName)?.dice} />
+        <IconButton icon="chat-outline" iconColor={colors.secondaryContainer} size={30} onPress={() => openModal()} style={{ margin: 0 }} />
+      </GameBar>
+
       <Modalize ref={usersOnlineModalize} rootStyle={{}} modalStyle={{ backgroundColor: colors.surface, padding: 5 }} adjustToContentHeight>
         <ChatContainer>
           <ChatWindow
@@ -122,6 +110,12 @@ const GameLobby = () => {
 
 export default GameLobby;
 
+const Table = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
+
 const TableBackground = styled(ImageBackground)<{ width: number; height: number }>`
   width: ${({ width }) => width}px;
   height: ${({ height }) => height}px;
@@ -138,6 +132,13 @@ const TableOverlay = styled.View<{ width: number; height: number }>`
   height: ${({ height }) => height}px;
 `;
 
+const GameBar = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+`;
+
+const RollButton = styled(PaperButton)``;
+
 const ChatWindow = styled.ScrollView<{ bg: string }>`
   background-color: ${({ bg }) => bg};
   /* flex: 1; */
@@ -151,5 +152,3 @@ const ChatContainer = styled.View`
   width: 100%;
   padding: 10px;
 `;
-
-const RollButton = styled(PaperButton)``;
