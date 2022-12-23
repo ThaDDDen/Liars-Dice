@@ -47,7 +47,7 @@ const ProfileScreen = ({ navigation }: NavigationProps) => {
           <ContentCard title="Statistics">
             <Statistics />
           </ContentCard>
-          <Button title={"log out"} mode={"contained"} onPress={() => handleLogout()} />
+          <Button title={"log out"} mode={"contained"} onPress={() => handleLogout()} styles={{ marginTop: "auto", borderRadius: 5 }} />
         </Content>
       </Container>
     </Background>

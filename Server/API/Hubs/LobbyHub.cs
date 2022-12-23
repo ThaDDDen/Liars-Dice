@@ -131,11 +131,12 @@ public class LobbyHub : Hub
         }, gameSettings.GameName);
     }
 
-    public async Task ChangePlayerCount(HubUser hubUser, int newPlayerCount)
+    public async Task UpdateGameSettings(GameSettings updatedGameSettings)
     {
-        var game = _games.GetGameByPlayerName(hubUser.UserName);
+        var game = _games.GetGameByName(updatedGameSettings.GameName);
 
-        game.ChangePlayerCount(newPlayerCount);
+        game.UpdatePlayerCount(updatedGameSettings.PlayerCount);
+        game.UpdateDiceCount(updatedGameSettings.DiceCount);
 
         await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
     }

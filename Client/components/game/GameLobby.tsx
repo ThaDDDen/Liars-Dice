@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Dimensions, ImageBackground, ScrollView, View } from "react-native";
 import { Modalize } from "react-native-modalize";
 import { IconButton, useTheme } from "react-native-paper";
@@ -23,6 +23,7 @@ const GameLobby = () => {
   const { connection } = useConnection();
   const { colors } = useTheme();
   const { gameMessages } = useUser();
+  const [gameHostPanelVisible, setGameHostPanelVisible] = useState(false);
 
   const scrollViewRef = useRef<ScrollView | null>(null);
   const usersOnlineModalize = useRef<Modalize>(null);
@@ -68,15 +69,19 @@ const GameLobby = () => {
 
   return (
     <>
-      {/* Fix padding with SafeArea (?) */}
-
-      {game.players.find((p) => p.userName == currentUser.userName)?.gameHost && (
-        <View style={{ marginTop: 20, padding: 10, zIndex: 1000 }}>
-          <ContentCard title="Game host panel">
-            <GameHostPanel />
-          </ContentCard>
-        </View>
-      )}
+      {game.players.find((p) => p.userName == currentUser.userName)?.gameHost &&
+        (gameHostPanelVisible ? (
+          // Fix padding with SafeArea (?)
+          <View style={{ marginTop: 20, padding: 10, zIndex: 1000 }}>
+            <ContentCard title="Game settings">
+              <GameHostPanel setGameHostPanelVisible={setGameHostPanelVisible} />
+            </ContentCard>
+          </View>
+        ) : (
+          <View style={{ marginTop: 20, padding: 10, flexDirection: "row-reverse" }}>
+            <IconButton icon="cog" onPress={() => setGameHostPanelVisible(true)} />
+          </View>
+        ))}
       <Table>
         <TableBackground
           source={table}
@@ -101,7 +106,6 @@ const GameLobby = () => {
 
         <UserHand dice={game.players.find((x) => x.userName === currentUser.userName)?.dice} />
         <IconButton icon="chat-outline" iconColor={colors.secondaryContainer} size={30} onPress={() => openModal()} style={{ margin: 0 }} />
-        <Button title="set to 8" mode="text" onPress={() => connection.invoke("ChangePlayerCount", currentUser, 8)} />
       </GameBar>
 
       <Modalize ref={usersOnlineModalize} rootStyle={{}} modalStyle={{ backgroundColor: colors.surface, padding: 5 }} adjustToContentHeight>
