@@ -3,6 +3,9 @@ import { MD3DarkTheme as PaperDarkTheme, MD3LightTheme as PaperLightTheme, MD3Th
 
 import { ColorSchemeName } from "react-native";
 
+// if we want more themes add in ,"theme1" | "theme2" | "theme3">
+export type AppColorSchemeName = Record<keyof ColorSchemeName, "theme1">;
+
 export type Theme = NavigationTheme & PaperTheme;
 
 export const LightTheme: Theme = {
@@ -100,6 +103,63 @@ export const DarkTheme: Theme = {
   },
 };
 
-export function getTheme(scheme: ColorSchemeName) {
-  return scheme === "dark" ? DarkTheme : LightTheme;
+export const Theme1: Theme = {
+  ...PaperDarkTheme,
+  ...NavigationDarkTheme,
+  colors: {
+    ...PaperDarkTheme.colors,
+    ...NavigationDarkTheme.colors,
+    primary: "rgb(136, 212, 152)",
+    onPrimary: "rgb(24, 56, 0)",
+    primaryContainer: "rgb(26, 147, 111)", // color of active bottomTab
+    onPrimaryContainer: "rgb(170, 247, 112)",
+    secondary: "rgb(190, 203, 174)", // rgb(190, 203, 174)
+    onSecondary: "rgb(41, 52, 32)",
+    secondaryContainer: "rgb(89, 149, 237)", // the color on container of view inside view. ex. LobbyChatWindow, Generate avatar button
+    onSecondaryContainer: "rgb(255, 173, 5)", // the color of text on secondarycontainer
+    tertiary: "rgb(160, 207, 206)",
+    onTertiary: "rgb(0, 55, 54)",
+    tertiaryContainer: "rgb(30, 78, 77)",
+    onTertiaryContainer: "rgb(187, 236, 234)",
+    error: "rgb(255, 180, 171)",
+    onError: "rgb(105, 0, 5)",
+    errorContainer: "rgb(147, 0, 10)",
+    onErrorContainer: "rgb(255, 180, 171)",
+    background: "rgb(17, 75, 95)",
+    onBackground: "rgb(227, 227, 220)",
+    surface: "rgb(26, 147, 111)",
+    onSurface: "rgb(227, 227, 220)", // rgb(107, 39, 55) // rgb(227, 227, 220)OLD
+    surfaceVariant: "rgb(68, 72, 62)",
+    onSurfaceVariant: "rgb(196, 200, 186)",
+    outline: "rgb(142, 146, 134)",
+    outlineVariant: "rgb(68, 72, 62)",
+    shadow: "rgb(0, 0, 0)",
+    scrim: "rgb(0, 0, 0)",
+    inverseSurface: "rgb(227, 227, 220)",
+    inverseOnSurface: "rgb(47, 49, 44)",
+    inversePrimary: "rgb(51, 107, 0)",
+    elevation: {
+      //rgb(26, 147, 111) surface
+      level0: "transparent",
+      level1: "rgb(32, 157, 114)", //surface(+6,+10,+3)
+      level2: "rgb(35, 165, 31)", //level1(+3,+5,+2)
+      level3: "rgb(39, 171, 34)", //level2(+4, +6, +3)
+      level4: "rgb(40, 173, 35)", //level3(+1,+2,+1)
+      level5: "rgb(42, 177, 36)", //level4(+2,+4,+1)
+    },
+    surfaceDisabled: "rgba(227, 227, 220, 0.12)",
+    onSurfaceDisabled: "rgba(227, 227, 220, 0.38)",
+    backdrop: "rgba(45, 50, 40, 0.4)",
+  },
+};
+
+export function getTheme(scheme: AppColorSchemeName) {
+  switch (scheme) {
+    case "dark":
+      return DarkTheme;
+    case "light":
+      return LightTheme;
+    case "theme1":
+      return Theme1;
+  }
 }
