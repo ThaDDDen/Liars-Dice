@@ -13,6 +13,6 @@ export default Background;
 
 const AppBackground = styled.ImageBackground`
   flex: 1;
-  background-color: #0f4553;
+  /* background-color: #0f4553; */
   justify-content: center;
 `;

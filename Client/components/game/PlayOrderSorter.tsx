@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Dimensions, Text, View } from "react-native";
+import { Dimensions, View } from "react-native";
 import { DragSortableView } from "react-native-drag-sort";
-import { Button, Dialog, Portal, Surface } from "react-native-paper";
+import { Button, Dialog, Portal, Surface, Text } from "react-native-paper";
 import styled from "styled-components/native";
 import { useGame } from "../../contexts/GameContext";
 import { User } from "../../types/types";
@@ -30,8 +30,10 @@ const GameLobby = ({ orderSorterVisible, setOrderSorterVisible, updatePlayerOrde
   return (
     <Portal>
       <Dialog visible={orderSorterVisible} onDismiss={() => setOrderSorterVisible(false)}>
-        <Text>Drag and drop to change the play order!</Text>
-        <Dialog.Content>
+        <Text variant="titleLarge" style={{ alignSelf: "center", marginBottom: 10 }}>
+          Drag and drop to change the play order!
+        </Text>
+        <Dialog.Content style={{ alignItems: "center" }}>
           <View style={{ width: "100%", flexDirection: "row" }}>
             <DragSortableView
               dataSource={players}
@@ -48,7 +50,7 @@ const GameLobby = ({ orderSorterVisible, setOrderSorterVisible, updatePlayerOrde
                 return (
                   <PlayerContainer>
                     <UserAvatar size={30} avatarCode={item.avatarCode} />
-                    <Text>{item.userName}</Text>
+                    <Text style={{ marginHorizontal: 10 }}>{item.userName}</Text>
                   </PlayerContainer>
                 );
               }}
@@ -79,4 +81,5 @@ const PlayerContainer = styled(Surface)`
   margin: 0 5px 10px 5px;
   padding: 5px;
   border-radius: 10px;
+  align-self: center;
 `;
