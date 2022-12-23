@@ -38,7 +38,7 @@ const Home = ({ navigation }: HomeNavProps) => {
     <Background>
       <Logo size={"large"} />
       <ButtonContainer>
-        <Button title={"log in"} mode={"contained"} onPress={() => navigation.navigate("LogIn")} />
+        <Button title={"log in"} mode={"contained"} styles={{ marginBottom: 20 }} onPress={() => navigation.navigate("LogIn")} />
         <Button title={"register"} mode={"contained"} onPress={() => navigation.navigate("Register")} />
       </ButtonContainer>
     </Background>

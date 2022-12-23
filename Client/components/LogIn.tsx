@@ -53,7 +53,7 @@ const LogIn = ({ navigation }: HomeNavProps) => {
               <>
                 <Input placeholder="username" value={values.username} onChangeText={handleChange("username")} />
                 <Input placeholder="password" value={values.password} onChangeText={handleChange("password")} secureTextEntry={true} />
-                <Button title={"log in"} mode={"contained"} onPress={() => handleSubmit()} />
+                <Button title={"log in"} mode={"contained"} styles={{ marginBottom: 20 }} onPress={() => handleSubmit()} />
               </>
             );
           }}

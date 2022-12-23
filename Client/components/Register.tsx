@@ -129,7 +129,7 @@ const Register = ({ navigation, route }: HomeNavProps) => {
                     </Tooltip>
                   )}
                 </InputContainer>
-                <Button title={"register"} mode={"contained"} onPress={() => handleSubmit()} />
+                <Button title={"register"} mode={"contained"} styles={{ marginBottom: 20 }} onPress={() => handleSubmit()} />
               </>
             );
           }}

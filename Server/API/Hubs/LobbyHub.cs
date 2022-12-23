@@ -131,6 +131,16 @@ public class LobbyHub : Hub
         }, gameSettings.GameName);
     }
 
+    public async Task UpdateGameSettings(GameSettings updatedGameSettings)
+    {
+        var game = _games.GetGameByName(updatedGameSettings.GameName);
+
+        game.UpdatePlayerCount(updatedGameSettings.PlayerCount);
+        game.UpdateDiceCount(updatedGameSettings.DiceCount);
+
+        await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
+    }
+
     public async Task JoinGame(HubUser hubUser, string gameName)
     {
 

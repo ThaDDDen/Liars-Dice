@@ -1,20 +1,20 @@
 import React, { useRef, useState } from "react";
 import { Dimensions, ImageBackground, ScrollView, View } from "react-native";
 import { Modalize } from "react-native-modalize";
-import { IconButton, Text, useTheme } from "react-native-paper";
+import { IconButton, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import table from "../../assets/images/table.png";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useGame } from "../../contexts/GameContext";
 import { useUser } from "../../contexts/UserContext";
-import { User } from "../../types/types";
 import { EIGHT_SEAT_TABLE, FOUR_SEAT_TABLE, INVOKE_ROLL_DICE, SIX_SEAT_TABLE } from "../../utils/constants";
 import Button from "../layout/Button";
+import ContentCard from "../layout/ContentCard";
 import ChatMessage from "../Lobby/ChatMessage";
 import MessageForm from "../Lobby/MessageForm";
 import UserAvatar from "../Lobby/UserAvatar";
+import GameHostPanel from "./GameHostPanel";
 import PlayerCard from "./PlayerCard";
-import PlayOrderSorter from "./PlayOrderSorter";
 import UserHand from "./UserHand";
 
 const GameLobby = () => {
@@ -23,11 +23,7 @@ const GameLobby = () => {
   const { connection } = useConnection();
   const { colors } = useTheme();
   const { gameMessages } = useUser();
-  const [orderSorterVisible, setOrderSorterVisible] = useState(false);
-
-  const updatePlayerOrder = (players: User[]) => {
-    connection.invoke("UpdatePlayerOrder", players);
-  };
+  const [gameHostPanelVisible, setGameHostPanelVisible] = useState(false);
 
   const scrollViewRef = useRef<ScrollView | null>(null);
   const usersOnlineModalize = useRef<Modalize>(null);
@@ -73,10 +69,19 @@ const GameLobby = () => {
 
   return (
     <>
-      <Text>{game.gameName}</Text>
-      {game.players.find((p) => p.userName == currentUser.userName)?.gameHost && (
-        <Button title={"open"} mode={"text"} onPress={() => setOrderSorterVisible(true)} />
-      )}
+      {game.players.find((p) => p.userName == currentUser.userName)?.gameHost &&
+        (gameHostPanelVisible ? (
+          // Fix padding with SafeArea (?)
+          <View style={{ marginTop: 20, padding: 10, zIndex: 1000 }}>
+            <ContentCard title="Game settings">
+              <GameHostPanel setGameHostPanelVisible={setGameHostPanelVisible} />
+            </ContentCard>
+          </View>
+        ) : (
+          <View style={{ marginTop: 20, padding: 10, flexDirection: "row-reverse" }}>
+            <IconButton icon="cog" onPress={() => setGameHostPanelVisible(true)} />
+          </View>
+        ))}
       <Table>
         <TableBackground
           source={table}
@@ -115,8 +120,6 @@ const GameLobby = () => {
         </ChatContainer>
         <MessageForm chatName={game.gameName} />
       </Modalize>
-
-      <PlayOrderSorter orderSorterVisible={orderSorterVisible} setOrderSorterVisible={setOrderSorterVisible} updatePlayerOrder={updatePlayerOrder} />
     </>
   );
 };

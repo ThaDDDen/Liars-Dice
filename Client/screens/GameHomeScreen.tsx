@@ -1,6 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
-import { useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import Background from "../components/layout/Background";
 import Button from "../components/layout/Button";
@@ -14,7 +13,7 @@ const GameHomeScreen = ({ navigation }: GameHomeNavProps) => {
     <Background>
       <Logo size={"medium"} />
       <ButtonContainer>
-        <Button title={"create game"} mode={"contained"} onPress={() => navigation.navigate("CreateGameScreen")} />
+        <Button title={"create game"} mode={"contained"} styles={{ marginBottom: 20 }} onPress={() => navigation.navigate("CreateGameScreen")} />
         <Button title={"join game"} mode={"contained"} onPress={() => navigation.navigate("JoinGameScreen")} />
       </ButtonContainer>
     </Background>

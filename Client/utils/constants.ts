@@ -41,6 +41,8 @@ export const INVOKE_INVITE_PLAYER = "InvitePlayer";
 
 export const INVOKE_ROLL_DICE = "RollDice";
 
+export const INVOKE_UPDATE_GAME_SETTINGS = "UpdateGameSettings";
+
 export const RECEIVE_MESSAGE = "ReceiveMessage";
 
 export const RECEIVE_GAME_INVITATION = "ReceiveGameInvitation";

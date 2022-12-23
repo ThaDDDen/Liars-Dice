@@ -55,6 +55,29 @@ public class Game
         user.Dice = Players.FirstOrDefault(x => x.UserName == user.UserName).Dice.Select(y => y = _random.Next(1, 7)).ToList();
     }
 
+    public void UpdatePlayerCount(int newPlayerCount)
+    {
+        PlayerCount = newPlayerCount;
+    }
+
+    public void UpdateDiceCount(int newDiceCount)
+    {
+        DiceCount = newDiceCount;
+
+        foreach (var player in Players)
+        {
+            var newDiceList = new List<int>();
+
+            for (int i = 0; i < newDiceCount; i++)
+            {
+                newDiceList.Add(1);
+            }
+
+            player.Dice = newDiceList;
+            
+        }
+    }
+
 
     public bool GameOver()
     {
