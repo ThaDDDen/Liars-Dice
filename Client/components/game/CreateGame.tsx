@@ -31,7 +31,7 @@ const CreateGame = () => {
         <Formik
           initialValues={{ GameName: "" }}
           onSubmit={(values) => {
-            if (values.GameName && values.GameName.length > 3 && values.GameName.length <= 10) {
+            if (values.GameName && values.GameName.length >= 3 && values.GameName.length <= 10) {
               connection.invoke(
                 INVOKE_CREATE_GAME,
                 { gameName: values.GameName, diceCount: diceAmount, playerCount: playerCount } as GameSettings,
