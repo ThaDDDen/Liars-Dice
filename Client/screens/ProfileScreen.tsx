@@ -1,8 +1,9 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
-import { Button, Text, useTheme } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import Background from "../components/layout/Background";
+import Button from "../components/layout/Button";
 import ContentCard from "../components/layout/ContentCard";
 import AvatarPicker from "../components/profile/AvatarPicker";
 import Statistics from "../components/profile/Statistics";
@@ -46,10 +47,7 @@ const ProfileScreen = ({ navigation }: NavigationProps) => {
           <ContentCard title="Statistics">
             <Statistics />
           </ContentCard>
-
-          <Button mode="contained" onPress={() => handleLogout()} style={{ marginTop: "auto", width: 150, alignSelf: "center" }}>
-            Log out
-          </Button>
+          <Button title={"log out"} mode={"contained"} onPress={() => handleLogout()} />
         </Content>
       </Container>
     </Background>

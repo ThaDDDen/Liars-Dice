@@ -9,6 +9,7 @@ import { useUser } from "../../contexts/UserContext";
 import { GameSettings } from "../../types/types";
 import { INVOKE_CREATE_GAME } from "../../utils/constants";
 import Background from "../layout/Background";
+import Button from "../layout/Button";
 import ContentCard from "../layout/ContentCard";
 import SettingsHeader from "./assets/GameSettingsHeader";
 import DicePicker from "./DicePicker";
@@ -56,9 +57,7 @@ const CreateGame = () => {
                   <PlayerPicker playerCount={playerCount} setPlayerCount={setPlayerCount} />
                 </ContentCard>
 
-                <CreateGameButton mode="contained" uppercase onPress={() => handleSubmit()}>
-                  Create Game
-                </CreateGameButton>
+                <Button title={"Create Game"} mode={"contained"} onPress={() => handleSubmit()} />
               </>
             );
           }}
@@ -69,10 +68,6 @@ const CreateGame = () => {
 };
 
 export default CreateGame;
-
-const CreateGameButton = styled(PaperButton)`
-  border-radius: 5px;
-`;
 
 const SettingsContainer = styled.View`
   padding: 10px;

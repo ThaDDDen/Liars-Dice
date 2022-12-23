@@ -4,7 +4,6 @@ import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 
 const Statistics = () => {
-  const { colors } = useTheme();
   return (
     <>
       <View style={{ marginLeft: 10, marginTop: 10, flexDirection: "row", alignItems: "baseline" }}>

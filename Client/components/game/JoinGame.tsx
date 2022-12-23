@@ -7,6 +7,7 @@ import { useConnection } from "../../contexts/ConnectionContext";
 import { useUser } from "../../contexts/UserContext";
 import { INVOKE_JOIN_GAME } from "../../utils/constants";
 import Background from "../layout/Background";
+import Button from "../layout/Button";
 
 const JoinGame = () => {
   const { currentUser } = useUser();
@@ -29,9 +30,7 @@ const JoinGame = () => {
                   <Text variant="labelLarge">Game name</Text>
                   <Input value={values.GameName} onChangeText={handleChange("GameName")} />
                 </InputSurface>
-                <JoinGameButton mode="contained" onPress={() => handleSubmit()}>
-                  Join Game
-                </JoinGameButton>
+                <Button title={"join game"} mode={"contained"} onPress={() => handleSubmit()} />
               </>
             );
           }}
@@ -54,8 +53,4 @@ const InputSurface = styled(Surface)`
   padding: 10px;
   border-radius: 10px;
   margin-bottom: 10px;
-`;
-
-const JoinGameButton = styled(PaperButton)`
-  border-radius: 5px;
 `;

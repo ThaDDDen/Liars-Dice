@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Dimensions, ImageBackground, ScrollView, View } from "react-native";
 import { Modalize } from "react-native-modalize";
-import { Button, Button as PaperButton, IconButton, Text, useTheme } from "react-native-paper";
+import { IconButton, Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import table from "../../assets/images/table.png";
 import { useConnection } from "../../contexts/ConnectionContext";
@@ -9,6 +9,7 @@ import { useGame } from "../../contexts/GameContext";
 import { useUser } from "../../contexts/UserContext";
 import { User } from "../../types/types";
 import { EIGHT_SEAT_TABLE, FOUR_SEAT_TABLE, INVOKE_ROLL_DICE, SIX_SEAT_TABLE } from "../../utils/constants";
+import Button from "../layout/Button";
 import ChatMessage from "../Lobby/ChatMessage";
 import MessageForm from "../Lobby/MessageForm";
 import UserAvatar from "../Lobby/UserAvatar";
@@ -73,7 +74,9 @@ const GameLobby = () => {
   return (
     <>
       <Text>{game.gameName}</Text>
-      {game.players.find((p) => p.userName == currentUser.userName)?.gameHost && <Button onPress={() => setOrderSorterVisible(true)}> open</Button>}
+      {game.players.find((p) => p.userName == currentUser.userName)?.gameHost && (
+        <Button title={"open"} mode={"text"} onPress={() => setOrderSorterVisible(true)} />
+      )}
       <Table>
         <TableBackground
           source={table}
@@ -88,14 +91,14 @@ const GameLobby = () => {
       </Table>
 
       <GameBar>
-        <RollButton
-          mode="contained"
+        <Button
+          title={"roll"}
+          mode={"contained"}
           onPress={() => {
             connection.invoke(INVOKE_ROLL_DICE, currentUser);
           }}
-        >
-          Roll
-        </RollButton>
+        />
+
         <UserHand dice={game.players.find((x) => x.userName === currentUser.userName)?.dice} />
         <IconButton icon="chat-outline" iconColor={colors.secondaryContainer} size={30} onPress={() => openModal()} style={{ margin: 0 }} />
       </GameBar>
@@ -143,11 +146,11 @@ const TableOverlay = styled.View<{ width: number; height: number }>`
 `;
 
 const GameBar = styled.View`
+  align-items: center;
+  justify-content: center;
   flex-direction: row;
   justify-content: space-around;
 `;
-
-const RollButton = styled(PaperButton)``;
 
 const ChatWindow = styled.ScrollView<{ bg: string }>`
   background-color: ${({ bg }) => bg};
