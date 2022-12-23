@@ -28,16 +28,16 @@ const CreateGame = () => {
       </View>
       <SettingsContainer>
         <Formik
-          initialValues={{ GameName: "", dice: 6 }}
+          initialValues={{ GameName: "" }}
           onSubmit={(values) => {
-            if (values.GameName) {
+            if (values.GameName && values.GameName.length > 3 && values.GameName.length <= 10) {
               connection.invoke(
                 INVOKE_CREATE_GAME,
                 { gameName: values.GameName, diceCount: diceAmount, playerCount: playerCount } as GameSettings,
                 currentUser
               );
             } else {
-              setResponseMessage({ status: "Error", message: "Game name cannot be empty!" });
+              setResponseMessage({ status: "Error", message: "The game name must be between 3-10 characters long." });
             }
           }}
         >
