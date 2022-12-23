@@ -22,8 +22,8 @@ const PlayerCard = ({ player }: Props) => {
         </Text>
       </NameContainer>
       {player.gameHost && (
-        <GameHostCrown backgroundColor={colors.primary}>
-          <MaterialCommunityIcons name="crown" size={13} color="yellow" />
+        <GameHostCrown>
+          <MaterialCommunityIcons name="crown" size={18} color="yellow" />
         </GameHostCrown>
       )}
       <DiceContainer>
@@ -35,11 +35,10 @@ const PlayerCard = ({ player }: Props) => {
 
 export default PlayerCard;
 
-const GameHostCrown = styled.View<{ backgroundColor: string }>`
+const GameHostCrown = styled.View`
   position: absolute;
-  top: -6px;
-  right: 6px;
-  background-color: ${({ backgroundColor }) => backgroundColor};
+  top: -10px;
+  right: 2px;
   border-radius: 50px;
   padding: 2px;
 `;

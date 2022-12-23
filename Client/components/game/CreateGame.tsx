@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Button as PaperButton, Text, useTheme } from "react-native-paper";
+import { Button as PaperButton } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useUser } from "../../contexts/UserContext";
@@ -51,7 +51,7 @@ const CreateGame = () => {
                 </ContentCard>
 
                 <CreateGameButton mode="contained" uppercase onPress={() => handleSubmit()}>
-                  <Text>Create Game</Text>
+                  Create Game
                 </CreateGameButton>
               </>
             );

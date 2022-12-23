@@ -34,9 +34,7 @@ const ProfileScreen = ({ navigation }: NavigationProps) => {
     <Background>
       <Container>
         <Header>
-          <HeaderTitle variant="headlineSmall" color={colors.secondaryContainer}>
-            {currentUser.userName}
-          </HeaderTitle>
+          <HeaderTitle variant="headlineSmall">{currentUser.userName}</HeaderTitle>
         </Header>
         <Content>
           <ContentCard title="Avatar">
@@ -66,8 +64,7 @@ const Header = styled.View`
   margin-top: 10px;
 `;
 
-const HeaderTitle = styled(Text)<{ color: string }>`
-  color: ${({ color }) => color};
+const HeaderTitle = styled(Text)`
   margin-right: auto;
 `;
 

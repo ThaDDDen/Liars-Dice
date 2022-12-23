@@ -24,7 +24,6 @@ const BottomTabStack = () => {
       screenOptions={{
         tabBarActiveBackgroundColor: colors.primaryContainer,
         tabBarActiveTintColor: colors.onPrimaryContainer,
-        tabBarInactiveBackgroundColor: colors.background,
       }}
     >
       <TabStack.Screen

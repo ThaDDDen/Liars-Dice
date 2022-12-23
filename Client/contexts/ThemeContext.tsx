@@ -1,6 +1,7 @@
 import { Theme as NavigationTheme } from "@react-navigation/native";
-import { createContext, ReactNode, useContext, useState } from "react";
+import { createContext, ReactNode, useContext } from "react";
 import { MD3Theme as PaperTheme } from "react-native-paper";
+import useAsyncStorage from "../hooks/useAsyncStorage";
 
 export type Theme = NavigationTheme & PaperTheme;
 
@@ -19,7 +20,7 @@ interface Props {
 }
 
 function ThemeProvider({ children }: Props) {
-  const [theme, setTheme] = useState("light");
+  const [theme, setTheme] = useAsyncStorage("theme", "dark");
 
   return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
 }

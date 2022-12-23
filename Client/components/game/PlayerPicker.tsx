@@ -1,6 +1,5 @@
-import { StyleSheet, View } from "react-native";
 import React from "react";
-import { IconButton, useTheme, Text } from "react-native-paper";
+import { IconButton, Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 
 interface Props {
@@ -18,7 +17,7 @@ const PlayerPicker = ({ playerCount, setPlayerCount }: Props) => {
       <Text
         key={index}
         variant={number === playerCount ? "headlineLarge" : "headlineMedium"}
-        style={{ marginHorizontal: 8, color: number === playerCount ? colors.primary : colors.onSurface }}
+        style={{ marginHorizontal: 8, color: number === playerCount ? colors.primary : colors.onSurfaceVariant }}
       >
         {number}
       </Text>
