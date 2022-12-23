@@ -12,7 +12,8 @@ const ThemePicker = () => {
     if (selectedTheme < 0) setSelectedTheme(themes.length);
   }, [selectedTheme]);
 
-  const themes = ["light", "dark"];
+  //add the new theme name in this array
+  const themes = ["light", "dark", "theme1"];
   return (
     <View>
       <Text variant="labelLarge" style={{ alignSelf: "center" }}>
