@@ -1,20 +1,20 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { Dimensions, ImageBackground, ScrollView, View } from "react-native";
 import { Modalize } from "react-native-modalize";
-import { IconButton, Text, useTheme } from "react-native-paper";
+import { IconButton, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import table from "../../assets/images/table.png";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useGame } from "../../contexts/GameContext";
 import { useUser } from "../../contexts/UserContext";
-import { User } from "../../types/types";
 import { EIGHT_SEAT_TABLE, FOUR_SEAT_TABLE, INVOKE_ROLL_DICE, SIX_SEAT_TABLE } from "../../utils/constants";
 import Button from "../layout/Button";
+import ContentCard from "../layout/ContentCard";
 import ChatMessage from "../Lobby/ChatMessage";
 import MessageForm from "../Lobby/MessageForm";
 import UserAvatar from "../Lobby/UserAvatar";
+import GameHostPanel from "./GameHostPanel";
 import PlayerCard from "./PlayerCard";
-import PlayOrderSorter from "./PlayOrderSorter";
 import UserHand from "./UserHand";
 
 const GameLobby = () => {
@@ -23,11 +23,6 @@ const GameLobby = () => {
   const { connection } = useConnection();
   const { colors } = useTheme();
   const { gameMessages } = useUser();
-  const [orderSorterVisible, setOrderSorterVisible] = useState(false);
-
-  const updatePlayerOrder = (players: User[]) => {
-    connection.invoke("UpdatePlayerOrder", players);
-  };
 
   const scrollViewRef = useRef<ScrollView | null>(null);
   const usersOnlineModalize = useRef<Modalize>(null);
@@ -73,9 +68,14 @@ const GameLobby = () => {
 
   return (
     <>
-      <Text>{game.gameName}</Text>
+      {/* Fix padding with SafeArea (?) */}
+
       {game.players.find((p) => p.userName == currentUser.userName)?.gameHost && (
-        <Button title={"open"} mode={"text"} onPress={() => setOrderSorterVisible(true)} />
+        <View style={{ marginTop: 20, padding: 10, zIndex: 1000 }}>
+          <ContentCard title="Game host panel">
+            <GameHostPanel />
+          </ContentCard>
+        </View>
       )}
       <Table>
         <TableBackground
@@ -101,6 +101,7 @@ const GameLobby = () => {
 
         <UserHand dice={game.players.find((x) => x.userName === currentUser.userName)?.dice} />
         <IconButton icon="chat-outline" iconColor={colors.secondaryContainer} size={30} onPress={() => openModal()} style={{ margin: 0 }} />
+        <Button title="set to 8" mode="text" onPress={() => connection.invoke("ChangePlayerCount", currentUser, 8)} />
       </GameBar>
 
       <Modalize ref={usersOnlineModalize} rootStyle={{}} modalStyle={{ backgroundColor: colors.surface, padding: 5 }} adjustToContentHeight>
@@ -115,8 +116,6 @@ const GameLobby = () => {
         </ChatContainer>
         <MessageForm chatName={game.gameName} />
       </Modalize>
-
-      <PlayOrderSorter orderSorterVisible={orderSorterVisible} setOrderSorterVisible={setOrderSorterVisible} updatePlayerOrder={updatePlayerOrder} />
     </>
   );
 };

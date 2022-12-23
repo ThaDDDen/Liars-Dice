@@ -131,6 +131,15 @@ public class LobbyHub : Hub
         }, gameSettings.GameName);
     }
 
+    public async Task ChangePlayerCount(HubUser hubUser, int newPlayerCount)
+    {
+        var game = _games.GetGameByPlayerName(hubUser.UserName);
+
+        game.ChangePlayerCount(newPlayerCount);
+
+        await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
+    }
+
     public async Task JoinGame(HubUser hubUser, string gameName)
     {
 

@@ -55,6 +55,11 @@ public class Game
         user.Dice = Players.FirstOrDefault(x => x.UserName == user.UserName).Dice.Select(y => y = _random.Next(1, 7)).ToList();
     }
 
+    public void ChangePlayerCount(int newPlayerCount)
+    {
+        PlayerCount = newPlayerCount;
+    }
+
 
     public bool GameOver()
     {
