@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import React, { useRef } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
-import { IconButton, Tooltip } from "react-native-paper";
+import { Pressable, TextInput, View } from "react-native";
+import { IconButton, Text, Tooltip } from "react-native-paper";
 import styled from "styled-components/native";
 import * as yup from "yup";
 import { useSnackBar } from "../contexts/SnackContext";
@@ -10,6 +10,7 @@ import { HomeNavProps } from "../screens/HomeScreen";
 import { ResponseMessage } from "../types/types";
 import { postLogInModel, postRegisterModel } from "../utils/authFunctions";
 import Background from "./layout/Background";
+import Button from "./layout/Button";
 import Logo from "./layout/Logo";
 
 const registerSchema = yup.object().shape({
@@ -128,22 +129,20 @@ const Register = ({ navigation, route }: HomeNavProps) => {
                     </Tooltip>
                   )}
                 </InputContainer>
-                <RegisterButton onPress={() => handleSubmit()}>
-                  <Text style={{ color: "white" }}>Register</Text>
-                </RegisterButton>
+                <Button title={"register"} mode={"contained"} onPress={() => handleSubmit()} />
               </>
             );
           }}
         </Formik>
         <View style={{ flexDirection: "row" }}>
-          <Text style={{ color: "white", fontSize: 12 }}>Dont have a user yet? please </Text>
+          <Text>Dont have a user yet? please </Text>
           <Pressable
             onPress={() => {
               navigation.navigate("LogIn");
             }}
             style={{ justifyContent: "flex-end" }}
           >
-            <Text style={{ color: "#ffd42a", fontSize: 12 }}>log in here!</Text>
+            <Text style={{ color: "#ffa32a" }}>log in here!</Text>
           </Pressable>
         </View>
       </FormContainer>
@@ -170,12 +169,4 @@ const InputContainer = styled.View`
 const Input = styled.TextInput`
   flex: 1;
   padding: 5px 10px;
-`;
-
-const RegisterButton = styled.Pressable`
-  background-color: #2ec4b6;
-  border-radius: 5px;
-  align-items: center;
-  padding: 10px;
-  margin-bottom: 20px;
 `;

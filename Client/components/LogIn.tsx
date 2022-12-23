@@ -1,6 +1,7 @@
 import { Formik } from "formik";
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
+import { Text } from "react-native-paper";
 import styled from "styled-components/native";
 import * as yup from "yup";
 import { useSnackBar } from "../contexts/SnackContext";
@@ -9,6 +10,7 @@ import { HomeNavProps } from "../screens/HomeScreen";
 import { LogInModel } from "../types/types";
 import { postLogInModel } from "../utils/authFunctions";
 import Background from "./layout/Background";
+import Button from "./layout/Button";
 import Logo from "./layout/Logo";
 
 type LogInYupObject = Record<keyof LogInModel, yup.AnySchema>;
@@ -51,26 +53,20 @@ const LogIn = ({ navigation }: HomeNavProps) => {
               <>
                 <Input placeholder="username" value={values.username} onChangeText={handleChange("username")} />
                 <Input placeholder="password" value={values.password} onChangeText={handleChange("password")} secureTextEntry={true} />
-                <LoginButton
-                  onPress={() => {
-                    handleSubmit();
-                  }}
-                >
-                  <Text style={{ color: "white" }}>Log In</Text>
-                </LoginButton>
+                <Button title={"log in"} mode={"contained"} onPress={() => handleSubmit()} />
               </>
             );
           }}
         </Formik>
         <View style={{ flexDirection: "row" }}>
-          <Text style={{ color: "white", fontSize: 12 }}>Dont have a user yet? please </Text>
+          <Text>Dont have a user yet? please </Text>
           <Pressable
             onPress={() => {
               navigation.navigate("Register");
             }}
             style={{ justifyContent: "flex-end" }}
           >
-            <Text style={{ color: "#ffd42a", fontSize: 12 }}>register here!</Text>
+            <Text style={{ color: "#ffa32a" }}>register here!</Text>
           </Pressable>
         </View>
       </FormContainer>
@@ -94,11 +90,4 @@ const FormContainer = styled.View`
   justify-content: center;
   width: 100%;
   padding: 50px 50px;
-`;
-const LoginButton = styled.Pressable`
-  background-color: #087e8b;
-  border-radius: 5px;
-  align-items: center;
-  padding: 10px;
-  margin-bottom: 20px;
 `;
