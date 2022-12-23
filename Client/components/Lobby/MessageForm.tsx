@@ -15,13 +15,21 @@ const MessageForm = ({ chatName }: Props) => {
   const { colors } = useTheme();
 
   const handleSendMessage = () => {
-    connection.invoke(INVOKE_SEND_MESSAGE, chatName, message);
-    setMessage("");
+    if (message) {
+      connection.invoke(INVOKE_SEND_MESSAGE, chatName, message);
+      setMessage("");
+    }
   };
 
   return (
     <View style={{ width: "100%", paddingHorizontal: 10, flexDirection: "row", justifyContent: "center" }}>
-      <Input placeholder="Type something.." value={message} onChangeText={(message) => setMessage(message)} />
+      <Input
+        placeholder="Type something.."
+        value={message}
+        returnKeyType="send"
+        onSubmitEditing={() => handleSendMessage()}
+        onChangeText={(message) => setMessage(message)}
+      />
       <IconButton icon="send" iconColor={colors.primary} size={25} onPress={() => handleSendMessage()} />
     </View>
   );
