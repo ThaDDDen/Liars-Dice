@@ -47,7 +47,7 @@ export const RECEIVE_GAME_INVITATION = "ReceiveGameInvitation";
 
 export const RECEIVE_ALREADY_CONNECTED = "AlreadyConnected";
 
-export const RECEIVE_NO_GAME_WITH_THAT_NAME = "NoGameWithThatName";
+export const RECEIVE_ERROR = "ReceiveError";
 
 export const RECEIVE_CONNECTED_USERS = "ConnectedUsers";
 
