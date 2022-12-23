@@ -4,6 +4,7 @@ import { View } from "react-native";
 import { Button as PaperButton } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
+import { useSnackBar } from "../../contexts/SnackContext";
 import { useUser } from "../../contexts/UserContext";
 import { GameSettings } from "../../types/types";
 import { INVOKE_CREATE_GAME } from "../../utils/constants";
@@ -16,6 +17,7 @@ import PlayerPicker from "./PlayerPicker";
 const CreateGame = () => {
   const [diceAmount, setDiceAmount] = useState(6);
   const [playerCount, setPlayerCount] = useState(5);
+  const { setResponseMessage } = useSnackBar();
   const { connection } = useConnection();
   const { currentUser } = useUser();
 
@@ -28,11 +30,15 @@ const CreateGame = () => {
         <Formik
           initialValues={{ GameName: "", dice: 6 }}
           onSubmit={(values) => {
-            connection.invoke(
-              INVOKE_CREATE_GAME,
-              { gameName: values.GameName, diceCount: diceAmount, playerCount: playerCount } as GameSettings,
-              currentUser
-            );
+            if (values.GameName) {
+              connection.invoke(
+                INVOKE_CREATE_GAME,
+                { gameName: values.GameName, diceCount: diceAmount, playerCount: playerCount } as GameSettings,
+                currentUser
+              );
+            } else {
+              setResponseMessage({ status: "Error", message: "Game name cannot be empty!" });
+            }
           }}
         >
           {({ handleChange, handleSubmit, values, errors }) => {

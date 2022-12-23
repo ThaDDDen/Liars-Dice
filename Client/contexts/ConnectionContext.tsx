@@ -7,7 +7,9 @@ import {
   INVOKE_JOIN_LOBBY,
   RECEIVE_ALREADY_CONNECTED,
   RECEIVE_CONNECTED_USERS,
+  RECEIVE_ERROR,
   RECEIVE_GAME,
+  RECEIVE_GAME_ALREADY_EXISTS,
   RECEIVE_GAME_INVITATION,
   RECEIVE_MESSAGE,
   RECEIVE_NO_GAME_WITH_THAT_NAME,
@@ -74,7 +76,7 @@ function ConnectionProvider({ children }: Props) {
         console.log(user + ": " + message);
       });
 
-      connection.on(RECEIVE_NO_GAME_WITH_THAT_NAME, (responseMessage: ResponseMessage) => {
+      connection.on(RECEIVE_ERROR, (responseMessage: ResponseMessage) => {
         setResponseMessage(responseMessage);
       });
 

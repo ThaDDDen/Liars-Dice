@@ -92,6 +92,15 @@ public class LobbyHub : Hub
 
     public async Task CreateGame(GameSettings gameSettings, HubUser gameHost)
     {
+        if(_games.GetGameByName(gameSettings.GameName) != null)
+        {
+            await Clients.Caller.SendAsync("ReceiveError", new ResponseModel
+            {
+                Status="Error",
+                Message=$"There is already a game called \"{gameSettings.GameName}\". Please try something else!"  
+            } );
+            return;
+        }
         var diceList = new List<int>();
         for (int i = 0; i < gameSettings.DiceCount; i++)
         {
@@ -129,10 +138,10 @@ public class LobbyHub : Hub
 
         if (game == null)
         {
-            await Clients.Caller.SendAsync("NoGameWithThatName", new ResponseModel()
+            await Clients.Caller.SendAsync("ReceiveError", new ResponseModel()
             {
                 Status = "Error",
-                Message = "There is no game with that name! Try again!"
+                Message = $"There is no game named \"{gameName}\"! Try again!"
             });
             return;
         }
