@@ -2,7 +2,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigatorScreenParams } from "@react-navigation/native";
 import React from "react";
-import { Image } from "react-native";
+import { Image, View } from "react-native";
 import { useTheme } from "react-native-paper";
 import dice from "../assets/images/white_dice/white_dice_tabstack.png";
 import UserAvatar from "../components/Lobby/UserAvatar";
@@ -45,7 +45,9 @@ const BottomTabStack = () => {
         component={GameStack}
         options={{
           headerShown: false,
-          tabBarIcon: ({ color, size }) => <Image source={dice} style={{ width: size, resizeMode: "contain" }} />,
+          tabBarIcon: ({ color, size, focused }) => (
+            <Image source={dice} style={{ width: size, resizeMode: "contain", opacity: focused ? 1 : 0.5 }} />
+          ),
         }}
       />
       <TabStack.Screen
@@ -54,7 +56,11 @@ const BottomTabStack = () => {
         options={{
           headerTitleAlign: "center",
           headerShown: false,
-          tabBarIcon: ({ color, size }) => <UserAvatar avatarCode={currentUser.avatarCode} size={size} />,
+          tabBarIcon: ({ color, size, focused }) => (
+            <View style={{ opacity: focused ? 1 : 0.5 }}>
+              <UserAvatar avatarCode={currentUser.avatarCode} size={size} />
+            </View>
+          ),
         }}
       />
     </TabStack.Navigator>
