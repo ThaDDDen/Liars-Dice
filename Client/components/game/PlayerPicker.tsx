@@ -10,7 +10,7 @@ interface Props {
 const PlayerPicker = ({ playerCount, setPlayerCount }: Props) => {
   const { colors } = useTheme();
 
-  const playerCountArray = [1, 2, 3, 4, 5, 6, 7, 8];
+  const playerCountArray = [2, 3, 4, 5, 6, 7, 8];
 
   const playerCountSelector = playerCountArray.map((number, index) => {
     return (
@@ -29,7 +29,7 @@ const PlayerPicker = ({ playerCount, setPlayerCount }: Props) => {
         style={{ borderRadius: 5, backgroundColor: colors.surfaceVariant }}
         icon="minus"
         size={20}
-        onPress={() => playerCount !== 1 && setPlayerCount((prev) => prev - 1)}
+        onPress={() => playerCount !== 2 && setPlayerCount((prev) => prev - 1)}
       />
       <PlayerContainer>{playerCountSelector}</PlayerContainer>
       <IconButton
