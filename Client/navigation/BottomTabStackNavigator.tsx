@@ -1,9 +1,9 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigatorScreenParams } from "@react-navigation/native";
 import React from "react";
 import { Image, View } from "react-native";
 import { useTheme } from "react-native-paper";
+import lobby from "../assets/images/lobby_chat.png";
 import dice from "../assets/images/white_dice/white_dice_tabstack.png";
 import UserAvatar from "../components/Lobby/UserAvatar";
 import { useUser } from "../contexts/UserContext";
@@ -23,7 +23,7 @@ const BottomTabStack = () => {
   const { currentUser } = useUser();
   const { colors } = useTheme();
   return (
-    // TODO Check posibility to use more colorful images instead of Icons in the bottomtab
+    // TODO Check posibility to use more colorful images instead of Icons in the bottomtab <MaterialCommunityIcons name="chat-outline" size={size} color={color} />
     <TabStack.Navigator
       initialRouteName="Lobby"
       screenOptions={{
@@ -37,7 +37,9 @@ const BottomTabStack = () => {
         options={{
           headerTitleAlign: "center",
           headerShown: false,
-          tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="chat-outline" size={size} color={color} />,
+          tabBarIcon: ({ color, size, focused }) => (
+            <Image source={lobby} style={{ width: size, resizeMode: "contain", opacity: focused ? 1 : 0.5 }} />
+          ),
         }}
       />
       <TabStack.Screen
