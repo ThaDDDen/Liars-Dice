@@ -1,5 +1,7 @@
-import React from "react";
+import { StatusBar } from "expo-status-bar";
+import React, { useEffect, useState } from "react";
 import { Provider as PaperProvider } from "react-native-paper";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import ConnectionProvider from "./contexts/ConnectionContext";
 import GameProvider from "./contexts/GameContext";
 import InvitationProvider from "./contexts/InvitationContext";
@@ -14,20 +16,33 @@ const Main = () => {
   const { theme } = useTheme();
   const colorScheme = useColorScheme(theme as NonNullable<AppColorSchemeName>);
 
+  const [statusBarColor, setStatusBarColor] = useState<"dark" | "light">("dark");
+
+  useEffect(() => {
+    if (colorScheme === "dark" || colorScheme === "thadtheme" || colorScheme === "theme1") {
+      setStatusBarColor("light");
+    } else {
+      setStatusBarColor("dark");
+    }
+  }, [colorScheme]);
+
   return (
-    <PaperProvider theme={getTheme(colorScheme)}>
-      <SnackProvider>
-        <GameProvider>
-          <UserProvider>
-            <InvitationProvider>
-              <ConnectionProvider>
-                <Navigation colorScheme={colorScheme} />
-              </ConnectionProvider>
-            </InvitationProvider>
-          </UserProvider>
-        </GameProvider>
-      </SnackProvider>
-    </PaperProvider>
+    <SafeAreaProvider>
+      <PaperProvider theme={getTheme(colorScheme)}>
+        <SnackProvider>
+          <GameProvider>
+            <UserProvider>
+              <InvitationProvider>
+                <ConnectionProvider>
+                  <StatusBar style={statusBarColor} />
+                  <Navigation colorScheme={colorScheme} />
+                </ConnectionProvider>
+              </InvitationProvider>
+            </UserProvider>
+          </GameProvider>
+        </SnackProvider>
+      </PaperProvider>
+    </SafeAreaProvider>
   );
 };
 

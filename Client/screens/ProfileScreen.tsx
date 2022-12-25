@@ -59,7 +59,6 @@ export default ProfileScreen;
 const Header = styled.View`
   flex-direction: row;
   align-items: center;
-  margin-top: 10px;
 `;
 
 const HeaderTitle = styled(Text)`
@@ -68,8 +67,6 @@ const HeaderTitle = styled(Text)`
 
 const Container = styled.View`
   flex: 1;
-  width: 100%;
-  padding: 10px;
 `;
 
 const Content = styled.View`
