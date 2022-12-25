@@ -108,9 +108,6 @@ public class LobbyHub : Hub
         }
         await Groups.AddToGroupAsync(Context.ConnectionId, gameSettings.GameName);
 
-
-        var user = await _userManager.FindByNameAsync(Context.User.Identity.Name);
-
         gameHost.GameHost = true;
         gameHost.Dice = diceList;
 

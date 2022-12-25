@@ -5,11 +5,15 @@ namespace API.Hubs.HubServices;
 public class Game
 {
     private readonly Random _random;
-    public HubUser GameHost { get; set; }
     public string GameName { get; set; }
     public int DiceCount { get; set; }
     public int PlayerCount { get; set; }
     public List<HubUser> Players { get; set; }
+    public GameBet CurrentBet { get; set; } = null;
+    public HubUser CurrentBetter { get; set; }
+    public bool GameStarted { get; set; }
+    public bool RoundStarted { get; set; }
+    
     public Game(GameSettings gameSettings, HubUser gameHost)
     {
         _random = new();
@@ -17,7 +21,6 @@ public class Game
         GameName = gameSettings.GameName;
         DiceCount = gameSettings.DiceCount;
         PlayerCount = gameSettings.PlayerCount;
-        GameHost = gameHost;
         AddPlayerToGame(gameHost);
     }
 
