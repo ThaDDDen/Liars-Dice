@@ -138,6 +138,24 @@ public class LobbyHub : Hub
         await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
     }
 
+    public async Task StartGame(HubUser user)
+    {
+        var game = _games.GetGameByPlayerName(user.UserName);
+        game.GameStarted = true;
+
+        await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
+        await Clients.Group(game.GameName).SendAsync("ReceiveMessage", new UserMessage()
+        {
+            User = new HubUser()
+            {
+                UserName = _gameBot,
+                AvatarCode = "BotAvatar"
+            },
+            Message = $"{user.UserName} has started the game!",
+            Time = DateTime.Now.ToString("HH:mm")
+        }, game.GameName);
+    }
+
     public async Task JoinGame(HubUser hubUser, string gameName)
     {
 
