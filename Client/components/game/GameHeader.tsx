@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { IconButton, Surface, Text } from "react-native-paper";
+import styled from "styled-components/native";
 import { useGame } from "../../contexts/GameContext";
 import { useUser } from "../../contexts/UserContext";
 import ContentCard from "../layout/ContentCard";
@@ -17,20 +18,19 @@ const GameHeader = ({ openChatModal }: Props) => {
   const [gameHostPanelVisible, setGameHostPanelVisible] = useState(false);
   return (
     <View>
-      <Surface style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: 10, borderRadius: 10 }}>
+      <GameHeaderContainer>
         <Text variant="headlineSmall">{game.gameName}</Text>
-        <View style={{ flexDirection: "row" }}>
+        <ButtonContainer>
           <IconButton icon="chat-outline" onPress={() => openChatModal()} />
           {currentUser.gameHost && <IconButton icon="cog" onPress={() => setGameHostPanelVisible((prev) => !prev)} />}
-        </View>
-      </Surface>
+        </ButtonContainer>
+      </GameHeaderContainer>
       {gameHostPanelVisible && (
-        // Fix padding with SafeArea (?)
-        <View style={{ position: "absolute", zIndex: 1000, width: "100%", top: 55 }}>
+        <GameSettingsContainer>
           <ContentCard title="Game settings">
             <GameHostPanel setGameHostPanelVisible={setGameHostPanelVisible} />
           </ContentCard>
-        </View>
+        </GameSettingsContainer>
       )}
     </View>
   );
@@ -38,4 +38,21 @@ const GameHeader = ({ openChatModal }: Props) => {
 
 export default GameHeader;
 
-const styles = StyleSheet.create({});
+const GameHeaderContainer = styled(Surface)`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 10px;
+  border-radius: 10px;
+`;
+
+const ButtonContainer = styled.View`
+  flex-direction: row;
+`;
+
+const GameSettingsContainer = styled.View`
+  position: absolute;
+  width: 100%;
+  top: 55px;
+  z-index: 5;
+`;

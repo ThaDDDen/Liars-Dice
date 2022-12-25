@@ -22,7 +22,7 @@ export type GameBet = {
   better: User;
   diceAmount: number;
   diceValue: number;
-}
+};
 
 export type UserMessage = {
   user: User;
@@ -41,11 +41,14 @@ export type UserConnection = {
 };
 
 export type Game = {
-  gameHost: User;
   gameName: string;
   diceCount: number;
   playerCount: number;
   players: User[];
+  currentBet: GameBet;
+  currentBetter: User;
+  gameStarted: boolean;
+  roundStarted: boolean;
 };
 
 export interface LogInModel {
