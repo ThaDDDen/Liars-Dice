@@ -42,7 +42,11 @@ const SnackProvider = ({ children }: Props) => {
       {children}
       {responseMessage && (
         <Snackbar
-          style={responseMessage.status === "Error" && { backgroundColor: colors.errorContainer }}
+          style={
+            responseMessage.status === "Error"
+              ? { backgroundColor: colors.errorContainer }
+              : responseMessage.status === "Success" && { backgroundColor: "green" }
+          }
           visible={snackVisible}
           onDismiss={() => setSnackVisible(false)}
         >

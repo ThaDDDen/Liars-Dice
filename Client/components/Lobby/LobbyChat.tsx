@@ -48,7 +48,7 @@ const LobbyChat = () => {
         <OnlinePlayersText variant="titleMedium">Players online:</OnlinePlayersText>
         {connectedUsers.map((user, index) => (
           <View key={index}>
-            <OnlineUserCard userConnection={user} />
+            <OnlineUserCard userConnection={user} closeModal={() => usersOnlineModalize.current?.close()} />
           </View>
         ))}
       </Modalize>

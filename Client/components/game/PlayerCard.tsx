@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 import { Text, View } from "react-native";
-import { Surface, Tooltip, useTheme } from "react-native-paper";
+import { Surface } from "react-native-paper";
 import styled from "styled-components/native";
 import { User } from "../../types/types";
 import UserAvatar from "../Lobby/UserAvatar";
@@ -12,7 +12,6 @@ interface Props {
 }
 
 const PlayerCard = ({ player }: Props) => {
-  const { colors } = useTheme();
   return (
     <View style={{ justifyContent: "center", alignItems: "center" }}>
       <UserAvatar size={50} avatarCode={player.avatarCode} />
@@ -26,12 +25,10 @@ const PlayerCard = ({ player }: Props) => {
           <MaterialCommunityIcons name="crown" size={18} color="yellow" />
         </GameHostCrown>
       )}
+
+      {/* Experiment with viewing one dice with a value to represent nr of dice left */}
       <View style={{ position: "absolute", left: -5, top: -7 }}>
-        <Tooltip title="test">
-          <View>
-            <ValueDice size={25} value={player.dice.length} />
-          </View>
-        </Tooltip>
+        <ValueDice size={25} value={player.dice.length} />
       </View>
 
       {/* <DiceContainer>
