@@ -1,8 +1,12 @@
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigatorScreenParams } from "@react-navigation/native";
 import React from "react";
+import { Image } from "react-native";
 import { useTheme } from "react-native-paper";
+import dice from "../assets/images/white_dice/white_dice_tabstack.png";
+import UserAvatar from "../components/Lobby/UserAvatar";
+import { useUser } from "../contexts/UserContext";
 import LobbyScreen from "../screens/LobbyScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import GameStack, { GameStackParams } from "./GameStackNavigator";
@@ -16,6 +20,7 @@ export type BottomTabStackParams = {
 const TabStack = createBottomTabNavigator<BottomTabStackParams>();
 
 const BottomTabStack = () => {
+  const { currentUser } = useUser();
   const { colors } = useTheme();
   return (
     // TODO Check posibility to use more colorful images instead of Icons in the bottomtab
@@ -40,7 +45,7 @@ const BottomTabStack = () => {
         component={GameStack}
         options={{
           headerShown: false,
-          tabBarIcon: ({ color, size }) => <MaterialCommunityIcons name="dice-5-outline" size={size} color={color} />,
+          tabBarIcon: ({ color, size }) => <Image source={dice} style={{ width: size, resizeMode: "contain" }} />,
         }}
       />
       <TabStack.Screen
@@ -49,7 +54,7 @@ const BottomTabStack = () => {
         options={{
           headerTitleAlign: "center",
           headerShown: false,
-          tabBarIcon: ({ color, size }) => <MaterialIcons name="person-outline" size={size} color={color} />,
+          tabBarIcon: ({ color, size }) => <UserAvatar avatarCode={currentUser.avatarCode} size={size} />,
         }}
       />
     </TabStack.Navigator>
