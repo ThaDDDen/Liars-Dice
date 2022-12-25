@@ -17,6 +17,13 @@ export type GameInvitation = {
   gameName: string;
 };
 
+export type GameBet = {
+  gameName: string;
+  better: User;
+  diceAmount: number;
+  diceValue: number;
+}
+
 export type UserMessage = {
   user: User;
   message: string;
