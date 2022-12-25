@@ -15,7 +15,7 @@ const UserAvatar = ({ avatarCode, size }: Props) => {
       {avatarCode === "BotAvatar" ? (
         <Avatar.Icon size={size} icon="robot-happy-outline" />
       ) : avatarCode === "PlaceHolder" ? (
-        <Avatar.Icon size={size} icon="account" style={{ backgroundColor: colors.tertiary }} />
+        <Avatar.Icon size={size} icon="account-plus" style={{ backgroundColor: colors.tertiary }} />
       ) : (
         <SvgXml xml={multiavatar(avatarCode)} width={size} height={size} />
       )}

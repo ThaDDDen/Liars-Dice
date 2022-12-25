@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Dimensions, ImageBackground, ScrollView, View } from "react-native";
 import { Modalize } from "react-native-modalize";
-import { IconButton, useTheme } from "react-native-paper";
+import { Appbar, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import table from "../../assets/images/table.png";
 import { useConnection } from "../../contexts/ConnectionContext";
@@ -27,10 +27,10 @@ const GameLobby = () => {
   const [gameHostPanelVisible, setGameHostPanelVisible] = useState(false);
 
   const scrollViewRef = useRef<ScrollView | null>(null);
-  const usersOnlineModalize = useRef<Modalize>(null);
+  const chatModalize = useRef<Modalize>(null);
 
   const openModal = () => {
-    usersOnlineModalize.current?.open();
+    chatModalize.current?.open();
   };
 
   // STÄDA KODEN FÖR HELVETE TOMMY! DET SER UT SOM FAAN
@@ -70,19 +70,23 @@ const GameLobby = () => {
 
   return (
     <Background>
-      {game.players.find((p) => p.userName == currentUser.userName)?.gameHost &&
-        (gameHostPanelVisible ? (
-          // Fix padding with SafeArea (?)
-          <View style={{ zIndex: 1000 }}>
-            <ContentCard title="Game settings">
-              <GameHostPanel setGameHostPanelVisible={setGameHostPanelVisible} />
-            </ContentCard>
-          </View>
-        ) : (
-          <View style={{ flexDirection: "row-reverse" }}>
-            <IconButton icon="cog" onPress={() => setGameHostPanelVisible(true)} />
-          </View>
-        ))}
+      <Appbar.Header style={{ backgroundColor: "red", paddingBottom: 0 }}>
+        <Appbar.Content title={game.gameName} />
+        <Appbar.Action icon="chat-outline" onPress={() => openModal()} />
+        {game.players.find((p) => p.userName == currentUser.userName)?.gameHost && (
+          <Appbar.Action icon="cog" onPress={() => setGameHostPanelVisible((prev) => !prev)} />
+        )}
+      </Appbar.Header>
+
+      {gameHostPanelVisible && (
+        // Fix padding with SafeArea (?)
+        <View style={{ marginTop: 20, padding: 10, zIndex: 1000 }}>
+          <ContentCard title="Game settings">
+            <GameHostPanel setGameHostPanelVisible={setGameHostPanelVisible} />
+          </ContentCard>
+        </View>
+      )}
+
       <Table>
         <TableBackground
           source={table}
@@ -106,10 +110,9 @@ const GameLobby = () => {
         />
 
         <UserHand dice={game.players.find((x) => x.userName === currentUser.userName)?.dice} />
-        <IconButton icon="chat-outline" iconColor={colors.secondaryContainer} size={30} onPress={() => openModal()} style={{ margin: 0 }} />
       </GameBar>
 
-      <Modalize ref={usersOnlineModalize} rootStyle={{}} modalStyle={{ backgroundColor: colors.surface, padding: 5 }} adjustToContentHeight>
+      <Modalize ref={chatModalize} rootStyle={{}} modalStyle={{ backgroundColor: colors.surface, padding: 5 }} adjustToContentHeight>
         <ChatContainer>
           <ChatWindow
             ref={scrollViewRef}

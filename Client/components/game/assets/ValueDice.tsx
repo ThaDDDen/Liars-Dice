@@ -9,18 +9,19 @@ import dice6 from "../../../assets/images/white_dice/white_dice_6.png";
 
 interface Props {
   value: number;
+  size: number;
 }
 
-const Dice = ({ value }: Props) => {
+const Dice = ({ value, size }: Props) => {
   const soureArray: ImageSourcePropType[] = [dice1, dice2, dice3, dice4, dice5, dice6];
 
-  return <DiceImg source={soureArray[value - 1]} />;
+  return <DiceImg source={soureArray[value - 1]} size={size} />;
 };
 
 export default Dice;
 
-const DiceImg = styled.Image`
-  height: 40px;
-  width: 40px;
+const DiceImg = styled.Image<{ size: number }>`
+  height: ${({ size }) => size}px;
+  width: ${({ size }) => size}px;
   resize-mode: contain;
 `;

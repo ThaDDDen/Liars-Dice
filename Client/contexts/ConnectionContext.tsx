@@ -9,10 +9,8 @@ import {
   RECEIVE_CONNECTED_USERS,
   RECEIVE_ERROR,
   RECEIVE_GAME,
-  RECEIVE_GAME_ALREADY_EXISTS,
   RECEIVE_GAME_INVITATION,
   RECEIVE_MESSAGE,
-  RECEIVE_NO_GAME_WITH_THAT_NAME,
 } from "../utils/constants";
 import { useGame } from "./GameContext";
 import { useInvitation } from "./InvitationContext";
