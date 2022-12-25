@@ -47,9 +47,7 @@ const LobbyChat = () => {
       <Modalize ref={usersOnlineModalize} rootStyle={{}} modalStyle={{ backgroundColor: colors.surface, padding: 5 }} adjustToContentHeight>
         <OnlinePlayersText variant="titleMedium">Players online:</OnlinePlayersText>
         {connectedUsers.map((user, index) => (
-          <View key={index}>
-            <OnlineUserCard userConnection={user} closeModal={() => usersOnlineModalize.current?.close()} />
-          </View>
+          <OnlineUserCard key={index} userConnection={user} closeModal={() => usersOnlineModalize.current?.close()} />
         ))}
       </Modalize>
     </Background>
@@ -66,7 +64,6 @@ const ChatWindow = styled.ScrollView`
 
 const ChatContainer = styled.View`
   flex: 1;
-  width: 100%;
 `;
 
 const OnlineUsers = styled(Badge)`
