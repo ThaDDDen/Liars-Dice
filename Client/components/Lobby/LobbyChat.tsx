@@ -67,7 +67,6 @@ const ChatWindow = styled.ScrollView`
 const ChatContainer = styled.View`
   flex: 1;
   width: 100%;
-  padding: 10px;
 `;
 
 const OnlineUsers = styled(Badge)`
@@ -83,7 +82,6 @@ const OnlinePlayersText = styled(Text)`
 const Header = styled.View`
   flex-direction: row;
   align-items: center;
-  margin-top: 10px;
 `;
 
 const HeaderTitle = styled(Text)`

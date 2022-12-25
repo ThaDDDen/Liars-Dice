@@ -22,15 +22,17 @@ const MessageForm = ({ chatName }: Props) => {
   };
 
   return (
-    <View style={{ width: "100%", paddingHorizontal: 10, flexDirection: "row", justifyContent: "center" }}>
-      <Input
-        placeholder="Type something.."
-        value={message}
-        returnKeyType="send"
-        onSubmitEditing={() => handleSendMessage()}
-        onChangeText={(message) => setMessage(message)}
-      />
-      <IconButton icon="send" iconColor={colors.primary} size={25} onPress={() => handleSendMessage()} />
+    <View style={{ width: "100%", marginTop: 10, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+      <InputContainer>
+        <Input
+          placeholder="Type something.."
+          value={message}
+          returnKeyType="send"
+          onSubmitEditing={() => handleSendMessage()}
+          onChangeText={(message) => setMessage(message)}
+        />
+      </InputContainer>
+      <IconButton icon="send" iconColor={colors.primary} size={25} onPress={() => handleSendMessage()} style={{ margin: 0 }} />
     </View>
   );
 };
@@ -39,11 +41,14 @@ export default MessageForm;
 
 const Input = styled.TextInput`
   color: black;
-  background-color: white;
   font-size: 16px;
-  border: 1px solid black;
-  border-radius: 5px;
   padding: 8px;
-  margin-bottom: 10px;
+`;
+
+const InputContainer = styled.View`
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  justify-content: center;
   flex: 1;
 `;

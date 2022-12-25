@@ -8,6 +8,7 @@ import { useConnection } from "../../contexts/ConnectionContext";
 import { useGame } from "../../contexts/GameContext";
 import { useUser } from "../../contexts/UserContext";
 import { EIGHT_SEAT_TABLE, FOUR_SEAT_TABLE, INVOKE_ROLL_DICE, SIX_SEAT_TABLE } from "../../utils/constants";
+import Background from "../layout/Background";
 import Button from "../layout/Button";
 import ContentCard from "../layout/ContentCard";
 import ChatMessage from "../Lobby/ChatMessage";
@@ -68,17 +69,17 @@ const GameLobby = () => {
   ));
 
   return (
-    <>
+    <Background>
       {game.players.find((p) => p.userName == currentUser.userName)?.gameHost &&
         (gameHostPanelVisible ? (
           // Fix padding with SafeArea (?)
-          <View style={{ marginTop: 20, padding: 10, zIndex: 1000 }}>
+          <View style={{ zIndex: 1000 }}>
             <ContentCard title="Game settings">
               <GameHostPanel setGameHostPanelVisible={setGameHostPanelVisible} />
             </ContentCard>
           </View>
         ) : (
-          <View style={{ marginTop: 20, padding: 10, flexDirection: "row-reverse" }}>
+          <View style={{ flexDirection: "row-reverse" }}>
             <IconButton icon="cog" onPress={() => setGameHostPanelVisible(true)} />
           </View>
         ))}
@@ -95,7 +96,7 @@ const GameLobby = () => {
         </TableOverlay>
       </Table>
 
-      <GameBar>
+      <GameBar style={{ backgroundColor: "red" }}>
         <Button
           title={"roll"}
           mode={"contained"}
@@ -120,7 +121,7 @@ const GameLobby = () => {
         </ChatContainer>
         <MessageForm chatName={game.gameName} />
       </Modalize>
-    </>
+    </Background>
   );
 };
 
