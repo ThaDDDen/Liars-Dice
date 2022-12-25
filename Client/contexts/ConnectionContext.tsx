@@ -9,10 +9,8 @@ import {
   RECEIVE_CONNECTED_USERS,
   RECEIVE_ERROR,
   RECEIVE_GAME,
-  RECEIVE_GAME_ALREADY_EXISTS,
   RECEIVE_GAME_INVITATION,
   RECEIVE_MESSAGE,
-  RECEIVE_NO_GAME_WITH_THAT_NAME,
 } from "../utils/constants";
 import { useGame } from "./GameContext";
 import { useInvitation } from "./InvitationContext";
@@ -41,7 +39,7 @@ function ConnectionProvider({ children }: Props) {
   const [connection, setConnection] = useState<HubConnection>({} as HubConnection);
   const [connectedUsers, setConnectedUsers] = useState<UserConnection[]>([]);
   const { invitation, invitationAccepted, setInvitation } = useInvitation();
-  const { currentUser, setLobbyMessages, setGameMessages } = useUser();
+  const { currentUser, setLobbyMessages, setGameMessages, setCurrentUser } = useUser();
   const { setResponseMessage } = useSnackBar();
   const { setGame } = useGame();
 
@@ -86,6 +84,8 @@ function ConnectionProvider({ children }: Props) {
 
       connection.on(RECEIVE_GAME, (game: Game) => {
         setGame(game);
+        const updatedCurrentUser = game.players.find((p) => p.userName === currentUser.userName);
+        updatedCurrentUser && setCurrentUser(updatedCurrentUser);
       });
 
       await connection.start();
