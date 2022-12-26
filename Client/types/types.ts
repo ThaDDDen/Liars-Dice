@@ -47,6 +47,7 @@ export type Game = {
   playerCount: number;
   players: User[];
   currentBet: GameBet;
+  previousBetter: User;
   currentBetter: User;
   gameStarted: boolean;
   roundStarted: boolean;
@@ -56,6 +57,7 @@ export type Game = {
 export type RoundResult = {
   roundWinner: string;
   roundLoser: string;
+  caller: string;
   gameBet: GameBet;
   callResult: number;
 };

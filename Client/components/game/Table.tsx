@@ -1,13 +1,12 @@
 import React from "react";
 import { Dimensions, ImageBackground, Pressable, View } from "react-native";
-import { Text } from "react-native-paper";
 import styled from "styled-components/native";
 import table from "../../assets/images/table.png";
 import { useGame } from "../../contexts/GameContext";
 import { EIGHT_SEAT_TABLE, FOUR_SEAT_TABLE, SIX_SEAT_TABLE } from "../../utils/constants";
 import UserAvatar from "../Lobby/UserAvatar";
-import ValueDice from "./assets/ValueDice";
 import PlayerCard from "./PlayerCard";
+import RoundInfo from "./RoundInfo";
 
 interface Props {
   openOnlineUsersModal: () => void;
@@ -56,31 +55,7 @@ const Table = ({ openOnlineUsersModal }: Props) => {
       <TableOverlay width={Dimensions.get("window").width * 0.7} height={Dimensions.get("window").height * tableHeight}>
         {playersInGameLobby}
         {placeHolderAvatars}
-        <View style={{ backgroundColor: "#ffffff33", borderRadius: 5, padding: 5, borderWidth: 2, borderColor: "black" }}>
-          <Text style={{ color: "black" }} variant="titleMedium">
-            Round 22
-          </Text>
-          {!game.roundStarted && game.roundResult && (
-            <>
-              <Text>{game.roundResult.roundWinner} won!</Text>
-              <Text>{game.roundResult.roundLoser} lost!</Text>
-              <Text>
-                RESULT: {game.roundResult.callResult} x {game.roundResult.gameBet.diceValue}
-              </Text>
-              <Text>
-                BET: {game.currentBet.diceAmount} x {game.currentBet.diceValue}
-              </Text>
-            </>
-          )}
-
-          <Text style={{ color: "black" }}>{game.roundStarted ? "true" : "false"} </Text>
-          {game.currentBet && (
-            <Text variant="titleMedium" style={{ color: "black" }}>
-              {game.currentBet.better.userName} bet {game.currentBet.diceAmount} x <ValueDice value={game.currentBet.diceValue} size={18} />
-            </Text>
-          )}
-          {game.currentBetter && <Text style={{ color: "black" }}>It's {game.currentBetter.userName} turn!</Text>}
-        </View>
+        <RoundInfo />
       </TableOverlay>
     </TableContainer>
   );

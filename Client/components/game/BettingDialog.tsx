@@ -88,7 +88,7 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
             <Button
               mode="text"
               onPress={() => {
-                connection.invoke(INVOKE_CALL, currentUser, game.currentBetter);
+                connection.invoke(INVOKE_CALL, currentUser);
                 setBettingDialogVisible(false);
               }}
               title="Call"

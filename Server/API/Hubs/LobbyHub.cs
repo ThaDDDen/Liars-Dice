@@ -238,11 +238,11 @@ public class LobbyHub : Hub
         await Clients.Group(gameBet.GameName).SendAsync("ReceiveGame", game);
     }
 
-    public async Task Call(HubUser caller, HubUser better)
+    public async Task Call(HubUser caller)
     {
         var game = _games.GetGameByPlayerName(caller.UserName);
 
-        game.Call(caller, better);
+        game.Call(caller);
 
         await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
     }

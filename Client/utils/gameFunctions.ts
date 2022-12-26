@@ -1,4 +1,4 @@
-import { GameBet, User } from "../types/types";
+import { Game, GameBet, User } from "../types/types";
 
 export const getDiceValueArray = (currentBet: GameBet | null, diceAmount: number) => {
   const diceValArr: number[] = [];
@@ -43,4 +43,8 @@ export const getDiceAmountArray = (players: User[], currentBet: GameBet | null) 
     }
   }
   return diceAmountArr;
+};
+
+export const getCurrentRound = (game: Game) => {
+  return game.diceCount * game.playerCount - game.players.map((x) => x.dice.length).reduce((x, c) => x + c, 0) + 1;
 };

@@ -23,6 +23,7 @@ export const initialGameState = {
   playerCount: 0,
   players: [] as User[],
   currentBet: {} as GameBet,
+  previousBetter: {} as User,
   currentBetter: {} as User,
   gameStarted: false,
   roundStarted: false,

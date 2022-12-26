@@ -10,6 +10,7 @@ public class Game
     public int PlayerCount { get; set; }
     public List<HubUser> Players { get; set; }
     public GameBet CurrentBet { get; set; } = null;
+    public HubUser PreviousBetter { get; set; } = null;
     public HubUser CurrentBetter { get; set; } = null;
     public bool GameStarted { get; set; }
     public bool RoundStarted { get; set; }
@@ -88,6 +89,8 @@ public class Game
         //find the actual Player that placed the bet.
         var currentBetter = Players.FirstOrDefault(x => x.UserName == gameBet.Better.UserName);
 
+        PreviousBetter = currentBetter;
+        
         if (currentBetter == Players.Last())
         {
             CurrentBetter = Players.First();
@@ -97,30 +100,30 @@ public class Game
         CurrentBetter = Players[Players.IndexOf(currentBetter) + 1];
     }
 
-    public void Call(HubUser gameCaller, HubUser gameBetter)
+    public void Call(HubUser gameCaller)
     {
         var roundResult = new RoundResult();
 
         var caller = Players.FirstOrDefault(x => x.UserName == gameCaller.UserName);
-        var better = Players.FirstOrDefault(x => x.UserName == gameBetter.UserName);
+        var better = Players.FirstOrDefault(x => x.UserName == PreviousBetter.UserName);
 
         //quick maddafakka test solution
 
-        var lastBetter = new HubUser();
+        // var lastBetter = new HubUser();
 
-        if (better == Players.First())
-        {
-            lastBetter = Players.Last();
-        }
-        else
-        {
-            lastBetter = Players[Players.IndexOf(better) - 1];
-        }
+        // if (better == Players.First())
+        // {
+        //     lastBetter = Players.Last();
+        // }
+        // else
+        // {
+        //     lastBetter = Players[Players.IndexOf(better) - 1];
+        // }
 
-        System.Console.WriteLine("test lastBetter:" + lastBetter.UserName);
+        // System.Console.WriteLine("test lastBetter:" + lastBetter.UserName);
 
-        Console.WriteLine("GameCaller: " + gameCaller.UserName);
-        Console.WriteLine("GameBetter: " + gameBetter.UserName);
+        // Console.WriteLine("GameCaller: " + gameCaller.UserName);
+        // Console.WriteLine("GameBetter: " + gameBetter.UserName);
 
         var result = GetDiceWithBetValue(CurrentBet.DiceValue);
 
@@ -129,22 +132,28 @@ public class Game
             caller.Dice.RemoveAt(0);
 
             roundResult.RoundLoser = caller.UserName;
-            roundResult.RoundWinner = lastBetter.UserName;
+            roundResult.RoundWinner = better.UserName;
+            CurrentBetter = better;
         }
         else
         {
-            lastBetter.Dice.RemoveAt(0);
+            better.Dice.RemoveAt(0);
 
-            roundResult.RoundLoser = lastBetter.UserName;
+            roundResult.RoundLoser = better.UserName;
             roundResult.RoundWinner = caller.UserName;
+            CurrentBetter = caller;
         }
 
         roundResult.CallResult = result;
         roundResult.GameBet = CurrentBet;
+        roundResult.Caller = gameCaller.UserName;
 
         RoundResult = roundResult;
 
+
+        CurrentBet = null;
         RoundStarted = false;
+        Players.ForEach(p => p.HasRolled = false);
     }
 
     private int GetDiceWithBetValue(int betValue)

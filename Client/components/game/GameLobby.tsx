@@ -27,7 +27,7 @@ const GameLobby = () => {
   const usersOnlineModalize = useRef<Modalize>(null);
 
   useEffect(() => {
-    if (game.currentBetter)
+    if (game.currentBetter && game.roundStarted)
       if (currentUser.userName === game.currentBetter.userName) {
         setBettingDialogVisible(true);
       }
