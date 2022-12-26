@@ -1,7 +1,7 @@
 import { Entypo, FontAwesome5 } from "@expo/vector-icons";
 import React from "react";
 import { View } from "react-native";
-import { Text, useTheme } from "react-native-paper";
+import { Text } from "react-native-paper";
 
 const Statistics = () => {
   return (

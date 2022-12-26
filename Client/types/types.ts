@@ -50,6 +50,14 @@ export type Game = {
   currentBetter: User;
   gameStarted: boolean;
   roundStarted: boolean;
+  roundResult: RoundResult;
+};
+
+export type RoundResult = {
+  roundWinner: string;
+  roundLoser: string;
+  gameBet: GameBet;
+  callResult: number;
 };
 
 export interface LogInModel {

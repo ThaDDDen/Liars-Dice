@@ -1,3 +1,4 @@
+using System;
 using API.Auth.Models;
 using API.Hubs.HubModels;
 using API.Hubs.HubServices;
@@ -235,6 +236,15 @@ public class LobbyHub : Hub
         game.SetBet(gameBet);
 
         await Clients.Group(gameBet.GameName).SendAsync("ReceiveGame", game);
+    }
+
+    public async Task Call(HubUser caller, HubUser better)
+    {
+        var game = _games.GetGameByPlayerName(caller.UserName);
+
+        game.Call(caller, better);
+
+        await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
     }
 
     public override Task OnDisconnectedAsync(Exception exception)

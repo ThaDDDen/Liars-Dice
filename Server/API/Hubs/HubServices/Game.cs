@@ -13,6 +13,7 @@ public class Game
     public HubUser CurrentBetter { get; set; } = null;
     public bool GameStarted { get; set; }
     public bool RoundStarted { get; set; }
+    public RoundResult RoundResult { get; set; } = null;
 
     public Game(GameSettings gameSettings, HubUser gameHost)
     {
@@ -82,7 +83,6 @@ public class Game
 
     public void SetBet(GameBet gameBet)
     {
-        //TODO cleanup and investigate abit because gameBet.Better and PLayers user didnt match.
         CurrentBet = gameBet;
 
         //find the actual Player that placed the bet.
@@ -96,6 +96,104 @@ public class Game
 
         CurrentBetter = Players[Players.IndexOf(currentBetter) + 1];
     }
+
+    public void Call(HubUser gameCaller, HubUser gameBetter)
+    {
+        var roundResult = new RoundResult();
+
+        var caller = Players.FirstOrDefault(x => x.UserName == gameCaller.UserName);
+        var better = Players.FirstOrDefault(x => x.UserName == gameBetter.UserName);
+
+        //quick maddafakka test solution
+
+        var lastBetter = new HubUser();
+
+        if (better == Players.First())
+        {
+            lastBetter = Players.Last();
+        }
+        else
+        {
+            lastBetter = Players[Players.IndexOf(better) - 1];
+        }
+
+        System.Console.WriteLine("test lastBetter:" + lastBetter.UserName);
+
+        Console.WriteLine("GameCaller: " + gameCaller.UserName);
+        Console.WriteLine("GameBetter: " + gameBetter.UserName);
+
+        var result = GetDiceWithBetValue(CurrentBet.DiceValue);
+
+        if (result >= CurrentBet.DiceAmount)
+        {
+            caller.Dice.RemoveAt(0);
+
+            roundResult.RoundLoser = caller.UserName;
+            roundResult.RoundWinner = lastBetter.UserName;
+        }
+        else
+        {
+            lastBetter.Dice.RemoveAt(0);
+
+            roundResult.RoundLoser = lastBetter.UserName;
+            roundResult.RoundWinner = caller.UserName;
+        }
+
+        roundResult.CallResult = result;
+        roundResult.GameBet = CurrentBet;
+
+        RoundResult = roundResult;
+
+        RoundStarted = false;
+    }
+
+    private int GetDiceWithBetValue(int betValue)
+    {
+        var diceWithBetValue = 0;
+        var diceWithInStraight = 0;
+        var diceWithValueOne = 0;
+
+        foreach (var player in Players)
+        {
+            if (PlayerHasStraight(player))
+            {
+                diceWithInStraight += player.Dice.Count;
+            }
+            else
+            {
+                foreach (var dice in player.Dice)
+                {
+                    if (dice == betValue)
+                    {
+                        diceWithBetValue += 1;
+                    }
+                    if (dice == 1)
+                    {
+                        diceWithValueOne += 1;
+                    }
+                }
+            }
+        }
+        return diceWithBetValue + diceWithInStraight + diceWithValueOne;
+    }
+
+    private bool PlayerHasStraight(HubUser player)
+    {
+        if (player.Dice.Count < 3) return false;
+
+        var orderedHand = player.Dice.OrderBy(dice => dice).ToList();
+
+        if (orderedHand[0] != 1) return false;
+
+        if (!orderedHand.Select((i, j) => i - j).Distinct().Skip(1).Any())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
 
     public void UpdatePlayerCount(int newPlayerCount)
     {

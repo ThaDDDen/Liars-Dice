@@ -1,7 +1,6 @@
-import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import styled from "styled-components/native";
 import { IconButton, useTheme } from "react-native-paper";
+import styled from "styled-components/native";
 import SmallDice from "./SmallDice";
 
 interface Props {

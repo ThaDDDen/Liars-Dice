@@ -1,7 +1,6 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Button as PaperButton } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useSnackBar } from "../../contexts/SnackContext";

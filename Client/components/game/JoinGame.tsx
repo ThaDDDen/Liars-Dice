@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import React from "react";
 import { View } from "react-native";
-import { Button as PaperButton, Surface, Text, useTheme } from "react-native-paper";
+import { Surface, Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useUser } from "../../contexts/UserContext";

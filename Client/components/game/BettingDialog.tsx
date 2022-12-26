@@ -4,7 +4,7 @@ import { Dialog, Portal, Text } from "react-native-paper";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useGame } from "../../contexts/GameContext";
 import { useUser } from "../../contexts/UserContext";
-import { INVOKE_SET_BET } from "../../utils/constants";
+import { INVOKE_CALL, INVOKE_SET_BET } from "../../utils/constants";
 import { getDiceAmountArray, getDiceValueArray } from "../../utils/gameFunctions";
 import Button from "../layout/Button";
 import ValueDice from "./assets/ValueDice";
@@ -88,6 +88,7 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
             <Button
               mode="text"
               onPress={() => {
+                connection.invoke(INVOKE_CALL, currentUser, game.currentBetter);
                 setBettingDialogVisible(false);
               }}
               title="Call"

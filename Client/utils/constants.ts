@@ -47,6 +47,8 @@ export const INVOKE_START_GAME = "StartGame";
 
 export const INVOKE_SET_BET = "SetBet";
 
+export const INVOKE_CALL = "Call";
+
 export const RECEIVE_MESSAGE = "ReceiveMessage";
 
 export const RECEIVE_GAME_INVITATION = "ReceiveGameInvitation";

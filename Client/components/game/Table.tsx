@@ -60,6 +60,18 @@ const Table = ({ openOnlineUsersModal }: Props) => {
           <Text style={{ color: "black" }} variant="titleMedium">
             Round 22
           </Text>
+          {!game.roundStarted && game.roundResult && (
+            <>
+              <Text>{game.roundResult.roundWinner} won!</Text>
+              <Text>{game.roundResult.roundLoser} lost!</Text>
+              <Text>
+                RESULT: {game.roundResult.callResult} x {game.roundResult.gameBet.diceValue}
+              </Text>
+              <Text>
+                BET: {game.currentBet.diceAmount} x {game.currentBet.diceValue}
+              </Text>
+            </>
+          )}
 
           <Text style={{ color: "black" }}>{game.roundStarted ? "true" : "false"} </Text>
           {game.currentBet && (
