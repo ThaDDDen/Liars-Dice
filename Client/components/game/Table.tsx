@@ -6,6 +6,7 @@ import table from "../../assets/images/table.png";
 import { useGame } from "../../contexts/GameContext";
 import { EIGHT_SEAT_TABLE, FOUR_SEAT_TABLE, SIX_SEAT_TABLE } from "../../utils/constants";
 import UserAvatar from "../Lobby/UserAvatar";
+import ValueDice from "./assets/ValueDice";
 import PlayerCard from "./PlayerCard";
 
 interface Props {
@@ -59,9 +60,14 @@ const Table = ({ openOnlineUsersModal }: Props) => {
           <Text style={{ color: "black" }} variant="titleMedium">
             Round 22
           </Text>
-          <Text style={{ color: "black" }}>Dice left 4/26</Text>
-          <Text style={{ color: "black" }}>thad bet 2 x 5</Text>
-          <Text style={{ color: "black" }}>It's oscars turn!</Text>
+
+          <Text style={{ color: "black" }}>{game.roundStarted ? "true" : "false"} </Text>
+          {game.currentBet && (
+            <Text variant="titleMedium" style={{ color: "black" }}>
+              {game.currentBet.better.userName} bet {game.currentBet.diceAmount} x <ValueDice value={game.currentBet.diceValue} size={18} />
+            </Text>
+          )}
+          {game.currentBetter && <Text style={{ color: "black" }}>It's {game.currentBetter.userName} turn!</Text>}
         </View>
       </TableOverlay>
     </TableContainer>

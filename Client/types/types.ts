@@ -4,6 +4,7 @@ export type User = {
   gameHost: boolean;
   dice: number[];
   connectionId: string;
+  hasRolled: boolean;
 };
 
 export type GameSettings = {
