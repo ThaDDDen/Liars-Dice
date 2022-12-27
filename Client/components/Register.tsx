@@ -15,7 +15,7 @@ import Logo from "./layout/Logo";
 
 const registerSchema = yup.object().shape({
   email: yup.string().email("Provide a valid email").required(),
-  username: yup.string().min(2).required(),
+  username: yup.string().min(2).max(10).required(),
   password: yup
     .string()
     .min(8)
