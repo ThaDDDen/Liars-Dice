@@ -1,6 +1,6 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 
-import { Game, User } from "../types/types";
+import { Game, GameBet, RoundResult, User } from "../types/types";
 
 interface Props {
   children: ReactNode;
@@ -17,11 +17,19 @@ const GameContext = createContext<GameContext>({
 });
 
 export const initialGameState = {
+  gameOver: false,
   gameHost: {} as User,
   gameName: "",
   diceCount: 0,
   playerCount: 0,
+  round: 0,
   players: [] as User[],
+  currentBet: {} as GameBet,
+  previousBetter: {} as User,
+  currentBetter: {} as User,
+  gameStarted: false,
+  roundStarted: false,
+  roundResult: {} as RoundResult,
 };
 
 function GameProvider({ children }: Props) {

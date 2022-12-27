@@ -41,6 +41,7 @@ const LogIn = ({ navigation }: HomeNavProps) => {
                 gameHost: false,
                 dice: [],
                 connectionId: response.connectionId,
+                hasRolled: false,
               });
               setToken(response.token);
             } else {

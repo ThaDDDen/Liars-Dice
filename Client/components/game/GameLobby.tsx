@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Modalize } from "react-native-modalize";
 import { Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
@@ -9,19 +9,31 @@ import { INVOKE_ROLL_DICE } from "../../utils/constants";
 import Background from "../layout/Background";
 import Button from "../layout/Button";
 import OnlineUserCard from "../Lobby/OnlineUserCard";
+import BettingDialog from "./BettingDialog";
 import GameChat from "./GameChat";
 import GameHeader from "./GameHeader";
 import Table from "./Table";
 import UserHand from "./UserHand";
 
 const GameLobby = () => {
-  const { game } = useGame();
+  const { game, setGame } = useGame();
   const { currentUser } = useUser();
   const { connection, connectedUsers } = useConnection();
   const { colors } = useTheme();
 
+  const [bettingDialogVisible, setBettingDialogVisible] = useState(false);
+
   const chatModalize = useRef<Modalize>(null);
   const usersOnlineModalize = useRef<Modalize>(null);
+
+  useEffect(() => {
+    if (game.currentBetter && game.roundStarted)
+      if (currentUser.userName === game.currentBetter.userName) {
+        setBettingDialogVisible(true);
+      }
+  }, [game]);
+
+  //------- OPEN MODAL FUNCTIONS -------
 
   const openChatModal = () => {
     chatModalize.current?.open();
@@ -35,17 +47,20 @@ const GameLobby = () => {
     <Background>
       <GameHeader openChatModal={openChatModal} />
       <Table openOnlineUsersModal={openOnlineUsersModal} />
-      <GameBar>
-        <Button
-          title={"roll"}
-          mode={"contained"}
-          onPress={() => {
-            connection.invoke(INVOKE_ROLL_DICE, currentUser);
-          }}
-        />
-
-        <UserHand dice={game.players.find((x) => x.userName === currentUser.userName)?.dice} />
-      </GameBar>
+      {game.gameStarted && !game.gameOver && (
+        <GameBar>
+          {!currentUser.hasRolled && (
+            <Button
+              title={"roll"}
+              mode={"contained"}
+              onPress={() => {
+                connection.invoke(INVOKE_ROLL_DICE, currentUser);
+              }}
+            />
+          )}
+          {currentUser.hasRolled && <UserHand dice={game.players.find((x) => x.userName === currentUser.userName)?.dice} />}
+        </GameBar>
+      )}
 
       <Modalize ref={chatModalize} rootStyle={{}} modalStyle={{ backgroundColor: colors.surface }} adjustToContentHeight>
         <GameChat />
@@ -57,6 +72,8 @@ const GameLobby = () => {
           <OnlineUserCard key={index} userConnection={user} closeModal={() => usersOnlineModalize.current?.close()} />
         ))}
       </Modalize>
+
+      <BettingDialog bettingDialogVisible={bettingDialogVisible} setBettingDialogVisible={setBettingDialogVisible} />
     </Background>
   );
 };

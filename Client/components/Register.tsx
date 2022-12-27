@@ -51,6 +51,7 @@ const Register = ({ navigation, route }: HomeNavProps) => {
                 gameHost: false,
                 dice: [],
                 connectionId: loginResponse.connectionId,
+                hasRolled: false,
               });
             } else {
               setResponseMessage(registerResponse as ResponseMessage);

@@ -1,3 +1,4 @@
+using System;
 using API.Auth.Models;
 using API.Hubs.HubModels;
 using API.Hubs.HubServices;
@@ -92,13 +93,13 @@ public class LobbyHub : Hub
 
     public async Task CreateGame(GameSettings gameSettings, HubUser gameHost)
     {
-        if(_games.GetGameByName(gameSettings.GameName) != null)
+        if (_games.GetGameByName(gameSettings.GameName) != null)
         {
             await Clients.Caller.SendAsync("ReceiveError", new ResponseModel
             {
-                Status="Error",
-                Message=$"There is already a game called \"{gameSettings.GameName}\". Please try something else!"  
-            } );
+                Status = "Error",
+                Message = $"There is already a game called \"{gameSettings.GameName}\". Please try something else!"
+            });
             return;
         }
         var diceList = new List<int>();
@@ -203,6 +204,28 @@ public class LobbyHub : Hub
         }
     }
 
+    public async Task LeaveGame(HubUser user)
+    {
+        var game = _games.GetGameByPlayerName(user.UserName);
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, game.GameName);
+        game.RemovePlayerFromGame(user.UserName);
+
+        await Clients.Group(game.GameName).SendAsync("ReceiveMessage", new UserMessage
+        {
+            User = new HubUser()
+                {
+                    UserName = _gameBot,
+                    AvatarCode = "BotAvatar"
+                },
+                Message = $"{user.UserName} has left the game!",
+                Time = DateTime.Now.ToString("HH:mm")
+        });
+
+        await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
+
+        if(game.IsEmpty()) _games.RemoveGame(game);
+    }
+
     public async Task UpdatePlayerOrder(List<HubUser> players)
     {
         var game = _games.GetGameByPlayerName(Context.User.Identity.Name);
@@ -216,13 +239,32 @@ public class LobbyHub : Hub
         var game = _games.GetGameByPlayerName(hubUser.UserName);
         var user = _connections.GetConnectionByName(playerToInvite);
 
-        await Clients.Client(user.User.ConnectionId).SendAsync("ReceiveGameInvitation", new GameInvitation {GameHost = hubUser.UserName, GameName = game.GameName});
+        await Clients.Client(user.User.ConnectionId).SendAsync("ReceiveGameInvitation", new GameInvitation { GameHost = hubUser.UserName, GameName = game.GameName });
     }
     public async Task RollDice(HubUser user)
     {
         var game = _games.GetGameByPlayerName(user.UserName);
 
         game.RollDice(game.Players.FirstOrDefault(x => x.UserName == user.UserName));
+
+
+        await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
+    }
+
+    public async Task SetBet(GameBet gameBet)
+    {
+        var game = _games.GetGameByName(gameBet.GameName);
+
+        game.SetBet(gameBet);
+
+        await Clients.Group(gameBet.GameName).SendAsync("ReceiveGame", game);
+    }
+
+    public async Task Call(HubUser caller)
+    {
+        var game = _games.GetGameByPlayerName(caller.UserName);
+
+        game.Call(caller);
 
         await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
     }

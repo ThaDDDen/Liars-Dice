@@ -7,4 +7,5 @@ public class HubUser
     public bool GameHost { get; set; }
     public List<int> Dice { get; set; } = new();
     public string ConnectionId { get; set; } = "";
+    public bool HasRolled { get; set; }
 }

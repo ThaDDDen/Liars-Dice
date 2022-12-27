@@ -1,12 +1,12 @@
 import React from "react";
 import { Dimensions, ImageBackground, Pressable, View } from "react-native";
-import { Text } from "react-native-paper";
 import styled from "styled-components/native";
 import table from "../../assets/images/table.png";
 import { useGame } from "../../contexts/GameContext";
 import { EIGHT_SEAT_TABLE, FOUR_SEAT_TABLE, SIX_SEAT_TABLE } from "../../utils/constants";
 import UserAvatar from "../Lobby/UserAvatar";
 import PlayerCard from "./PlayerCard";
+import RoundInfo from "./RoundInfo";
 
 interface Props {
   openOnlineUsersModal: () => void;
@@ -55,14 +55,7 @@ const Table = ({ openOnlineUsersModal }: Props) => {
       <TableOverlay width={Dimensions.get("window").width * 0.7} height={Dimensions.get("window").height * tableHeight}>
         {playersInGameLobby}
         {placeHolderAvatars}
-        <View style={{ backgroundColor: "#ffffff33", borderRadius: 5, padding: 5, borderWidth: 2, borderColor: "black" }}>
-          <Text style={{ color: "black" }} variant="titleMedium">
-            Round 22
-          </Text>
-          <Text style={{ color: "black" }}>Dice left 4/26</Text>
-          <Text style={{ color: "black" }}>thad bet 2 x 5</Text>
-          <Text style={{ color: "black" }}>It's oscars turn!</Text>
-        </View>
+        <RoundInfo />
       </TableOverlay>
     </TableContainer>
   );
