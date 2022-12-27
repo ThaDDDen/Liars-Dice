@@ -24,6 +24,7 @@ const RoundInfo = () => {
             mode="contained"
             onPress={() => {
               setGame(initialGameState);
+              currentUser.gameHost = false;
               connection.invoke(INVOKE_LEAVE_GAME, currentUser);
             }}
           />
