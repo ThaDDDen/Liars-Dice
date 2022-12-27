@@ -47,7 +47,7 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
   useEffect(() => {
     const diceAmountArray = getDiceAmountArray(game.players, game.currentBet);
     setDicePickerAmount(diceAmountArray);
-  }, [game.currentBet]);
+  }, [game]);
 
   // ------ SET ALLOWED DICE VALUE PICKER ARRAY ------
   useEffect(() => {

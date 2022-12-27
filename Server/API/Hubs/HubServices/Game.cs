@@ -5,16 +5,18 @@ namespace API.Hubs.HubServices;
 public class Game
 {
     private readonly Random _random;
+    public bool GameOver { get; set; }
     public string GameName { get; set; }
     public int DiceCount { get; set; }
     public int PlayerCount { get; set; }
+    public int Round { get; set; }
     public List<HubUser> Players { get; set; }
     public GameBet CurrentBet { get; set; } = null;
     public HubUser PreviousBetter { get; set; } = null;
     public HubUser CurrentBetter { get; set; } = null;
     public bool GameStarted { get; set; }
     public bool RoundStarted { get; set; }
-    public RoundResult RoundResult { get; set; } = null;
+    public RoundResult RoundResult { get; set; }
 
     public Game(GameSettings gameSettings, HubUser gameHost)
     {
@@ -23,6 +25,8 @@ public class Game
         GameName = gameSettings.GameName;
         DiceCount = gameSettings.DiceCount;
         PlayerCount = gameSettings.PlayerCount;
+        RoundResult = new();
+        Round = 1;
         AddPlayerToGame(gameHost);
     }
 
@@ -131,22 +135,23 @@ public class Game
         {
             caller.Dice.RemoveAt(0);
 
-            roundResult.RoundLoser = caller.UserName;
-            roundResult.RoundWinner = better.UserName;
+            roundResult.RoundLoser = caller;
+            roundResult.RoundWinner = better;
             CurrentBetter = better;
         }
         else
         {
             better.Dice.RemoveAt(0);
 
-            roundResult.RoundLoser = better.UserName;
-            roundResult.RoundWinner = caller.UserName;
+            roundResult.RoundLoser = better;
+            roundResult.RoundWinner = caller;
             CurrentBetter = caller;
         }
 
         roundResult.CallResult = result;
         roundResult.GameBet = CurrentBet;
         roundResult.Caller = gameCaller.UserName;
+        roundResult.Round = Round;
 
         RoundResult = roundResult;
 
@@ -154,6 +159,8 @@ public class Game
         CurrentBet = null;
         RoundStarted = false;
         Players.ForEach(p => p.HasRolled = false);
+        Round++;
+        CheckGameOver();
     }
 
     private int GetDiceWithBetValue(int betValue)
@@ -226,16 +233,12 @@ public class Game
         }
     }
 
-
-    public bool GameOver()
+    public bool IsEmpty()
     {
-        int diceLeft = 0;
-
-        foreach (HubUser hubUser in Players)
-        {
-            diceLeft += hubUser.Dice.Count();
-        }
-
-        return diceLeft == 0;
+        return Players.Count == 0;
+    }
+    public void CheckGameOver()
+    {
+        if(Players.Where(p => p.Dice.Count > 0).Count() == 1) GameOver = true;
     }
 }

@@ -42,9 +42,11 @@ export type UserConnection = {
 };
 
 export type Game = {
+  gameOver: boolean;
   gameName: string;
   diceCount: number;
   playerCount: number;
+  round: number;
   players: User[];
   currentBet: GameBet;
   previousBetter: User;
@@ -55,8 +57,9 @@ export type Game = {
 };
 
 export type RoundResult = {
-  roundWinner: string;
-  roundLoser: string;
+  round: number;
+  roundWinner: User;
+  roundLoser: User;
   caller: string;
   gameBet: GameBet;
   callResult: number;

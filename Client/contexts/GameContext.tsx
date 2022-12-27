@@ -17,10 +17,12 @@ const GameContext = createContext<GameContext>({
 });
 
 export const initialGameState = {
+  gameOver: false,
   gameHost: {} as User,
   gameName: "",
   diceCount: 0,
   playerCount: 0,
+  round: 0,
   players: [] as User[],
   currentBet: {} as GameBet,
   previousBetter: {} as User,

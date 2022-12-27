@@ -204,6 +204,28 @@ public class LobbyHub : Hub
         }
     }
 
+    public async Task LeaveGame(HubUser user)
+    {
+        var game = _games.GetGameByPlayerName(user.UserName);
+        await Groups.RemoveFromGroupAsync(Context.ConnectionId, game.GameName);
+        game.RemovePlayerFromGame(user.UserName);
+
+        await Clients.Group(game.GameName).SendAsync("ReceiveMessage", new UserMessage
+        {
+            User = new HubUser()
+                {
+                    UserName = _gameBot,
+                    AvatarCode = "BotAvatar"
+                },
+                Message = $"{user.UserName} has left the game!",
+                Time = DateTime.Now.ToString("HH:mm")
+        });
+
+        await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
+
+        if(game.IsEmpty()) _games.RemoveGame(game);
+    }
+
     public async Task UpdatePlayerOrder(List<HubUser> players)
     {
         var game = _games.GetGameByPlayerName(Context.User.Identity.Name);

@@ -35,6 +35,8 @@ export const INVOKE_CREATE_GAME = "CreateGame";
 
 export const INVOKE_JOIN_GAME = "JoinGame";
 
+export const INVOKE_LEAVE_GAME = "LeaveGame";
+
 export const INVOKE_SEND_MESSAGE = "SendMessage";
 
 export const INVOKE_INVITE_PLAYER = "InvitePlayer";

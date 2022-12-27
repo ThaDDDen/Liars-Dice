@@ -16,7 +16,7 @@ import Table from "./Table";
 import UserHand from "./UserHand";
 
 const GameLobby = () => {
-  const { game } = useGame();
+  const { game, setGame } = useGame();
   const { currentUser } = useUser();
   const { connection, connectedUsers } = useConnection();
   const { colors } = useTheme();
@@ -47,7 +47,7 @@ const GameLobby = () => {
     <Background>
       <GameHeader openChatModal={openChatModal} />
       <Table openOnlineUsersModal={openOnlineUsersModal} />
-      {game.gameStarted && (
+      {game.gameStarted && !game.gameOver && (
         <GameBar>
           {!currentUser.hasRolled && (
             <Button

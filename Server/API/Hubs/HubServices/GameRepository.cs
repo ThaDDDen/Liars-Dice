@@ -14,6 +14,10 @@ public class GameRepository
         _gameRepository.Add(newGame);
     }
 
+    public void RemoveGame(Game gameToRemove)
+    {
+        _gameRepository.Remove(gameToRemove);
+    }
     public Game GetGameByName(string gameName)
     {
         return _gameRepository.FirstOrDefault(g => g.GameName == gameName);
