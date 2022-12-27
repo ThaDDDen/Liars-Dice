@@ -25,6 +25,7 @@ const Home = ({ navigation }: HomeNavProps) => {
           dice: [],
           connectionId: deserializedResponse.connectionId,
           hasRolled: false,
+          isOut: false,
         });
       }
     }

@@ -52,6 +52,7 @@ const Register = ({ navigation, route }: HomeNavProps) => {
                 dice: [],
                 connectionId: loginResponse.connectionId,
                 hasRolled: false,
+                isOut: false,
               });
             } else {
               setResponseMessage(registerResponse as ResponseMessage);

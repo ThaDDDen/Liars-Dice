@@ -23,7 +23,7 @@ const Table = ({ openOnlineUsersModal }: Props) => {
         key={index}
         style={game.playerCount > 6 ? EIGHT_SEAT_TABLE[index] : game.playerCount > 4 ? SIX_SEAT_TABLE[index] : FOUR_SEAT_TABLE[index]}
       >
-        <PlayerCard player={player} />
+        <PlayerCard disabled={player.isOut} player={player} />
       </View>
     );
   });

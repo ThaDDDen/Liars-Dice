@@ -5,6 +5,7 @@ export type User = {
   dice: number[];
   connectionId: string;
   hasRolled: boolean;
+  isOut: boolean;
 };
 
 export type GameSettings = {

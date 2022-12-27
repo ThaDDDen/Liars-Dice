@@ -42,6 +42,7 @@ const LogIn = ({ navigation }: HomeNavProps) => {
                 dice: [],
                 connectionId: response.connectionId,
                 hasRolled: false,
+                isOut: false,
               });
               setToken(response.token);
             } else {
