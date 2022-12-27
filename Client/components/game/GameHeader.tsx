@@ -3,10 +3,10 @@ import { View } from "react-native";
 import { Dialog, IconButton, Paragraph, Portal, Surface, Text, Tooltip } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
-import { useGame } from "../../contexts/GameContext";
+import { initialGameState, useGame } from "../../contexts/GameContext";
 import { useSnackBar } from "../../contexts/SnackContext";
 import { useUser } from "../../contexts/UserContext";
-import { INVOKE_START_GAME, INVOKE_UPDATE_GAME_SETTINGS } from "../../utils/constants";
+import { INVOKE_LEAVE_GAME, INVOKE_START_GAME, INVOKE_UPDATE_GAME_SETTINGS } from "../../utils/constants";
 import Button from "../layout/Button";
 import ContentCard from "../layout/ContentCard";
 import GameHostPanel from "./GameHostPanel";
@@ -16,11 +16,13 @@ interface Props {
 }
 
 const GameHeader = ({ openChatModal }: Props) => {
-  const { game } = useGame();
+  const { game, setGame } = useGame();
   const { currentUser } = useUser();
   const { setResponseMessage } = useSnackBar();
   const { connection } = useConnection();
   const [tableNotFullDialogVisible, setTableNotFullDialogVisible] = useState(false);
+  const [gameHostPanelVisible, setGameHostPanelVisible] = useState(false);
+  const [leaveDialogVisible, setLeaveDialogVisible] = useState(false);
 
   const startGame = () => {
     if (game.players.length === 1) {
@@ -40,7 +42,6 @@ const GameHeader = ({ openChatModal }: Props) => {
     setTableNotFullDialogVisible(false);
   };
 
-  const [gameHostPanelVisible, setGameHostPanelVisible] = useState(false);
   return (
     <>
       <View>
@@ -48,6 +49,7 @@ const GameHeader = ({ openChatModal }: Props) => {
           <Text variant="headlineSmall">{game.gameName}</Text>
           <ButtonContainer>
             <IconButton icon="chat-outline" onPress={() => openChatModal()} style={{ margin: 0 }} />
+            <IconButton icon="exit-to-app" onPress={() => setLeaveDialogVisible(true)} />
             {currentUser.gameHost && (
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <IconButton iconColor={game.gameStarted ? "green" : undefined} icon="play" onPress={startGame} style={{ margin: 0 }} />
@@ -84,6 +86,25 @@ const GameHeader = ({ openChatModal }: Props) => {
           </Dialog.Actions>
         </Dialog>
       </Portal>
+      <Portal>
+        <Dialog visible={leaveDialogVisible}>
+          <Dialog.Title>You're about to leave!</Dialog.Title>
+          <Dialog.Content>
+            <Paragraph>Are you sure you want to leave the game?</Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions style={{ flexDirection: "column" }}>
+            <Button
+              mode="text"
+              onPress={() => {
+                setGame(initialGameState);
+                connection.invoke(INVOKE_LEAVE_GAME, currentUser);
+              }}
+              title="Chicken out and leave! 🐥"
+            />
+            <Button mode="text" onPress={() => setLeaveDialogVisible(false)} title="No, I want to play!" />
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </>
   );
 };
@@ -100,6 +121,7 @@ const GameHeaderContainer = styled(Surface)`
 
 const ButtonContainer = styled.View`
   flex-direction: row;
+  align-items: center;
 `;
 
 const GameSettingsContainer = styled.View`
