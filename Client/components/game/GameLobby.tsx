@@ -47,7 +47,7 @@ const GameLobby = () => {
     <Background>
       <GameHeader openChatModal={openChatModal} />
       <Table openOnlineUsersModal={openOnlineUsersModal} />
-      {game.gameStarted && !game.gameOver && (
+      {game.gameStarted && !game.gameOver && !currentUser.isOut && (
         <GameBar>
           {!currentUser.hasRolled && (
             <Button

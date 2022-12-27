@@ -68,7 +68,7 @@ public class Game
 
     private void CheckRolls()
     {
-        if (Players.All(x => x.HasRolled))
+        if (Players.Where(p => !p.IsOut).All(x => x.HasRolled))
         {
             RoundStarted = true;
 
@@ -95,13 +95,13 @@ public class Game
 
         PreviousBetter = currentBetter;
         
-        if (currentBetter == Players.Last())
+        if (currentBetter == Players.Where(p => !p.IsOut).Last())
         {
-            CurrentBetter = Players.First();
+            CurrentBetter = Players.Where(p => !p.IsOut).First();
             return;
         }
 
-        CurrentBetter = Players[Players.IndexOf(currentBetter) + 1];
+        CurrentBetter = Players.Where(p => !p.IsOut).ToList()[Players.Where(p => !p.IsOut).ToList().IndexOf(currentBetter) + 1];
     }
 
     public void Call(HubUser gameCaller)
@@ -135,6 +135,8 @@ public class Game
         {
             caller.Dice.RemoveAt(0);
 
+            if(caller.Dice.Count == 0) caller.IsOut = true;
+
             roundResult.RoundLoser = caller;
             roundResult.RoundWinner = better;
             CurrentBetter = better;
@@ -142,6 +144,8 @@ public class Game
         else
         {
             better.Dice.RemoveAt(0);
+
+            if(better.Dice.Count == 0) better.IsOut = true;
 
             roundResult.RoundLoser = better;
             roundResult.RoundWinner = caller;

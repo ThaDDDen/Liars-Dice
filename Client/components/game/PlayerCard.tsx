@@ -1,6 +1,6 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
-import { Text, View } from "react-native";
+import { StyleProp, Text, View, ViewStyle } from "react-native";
 import { Surface } from "react-native-paper";
 import styled from "styled-components/native";
 import { User } from "../../types/types";
@@ -9,12 +9,13 @@ import ValueDice from "./assets/ValueDice";
 
 interface Props {
   player: User;
+  disabled?: boolean;
 }
 
-const PlayerCard = ({ player }: Props) => {
+const PlayerCard = ({ player, disabled }: Props) => {
   return (
-    <View style={{ justifyContent: "center", alignItems: "center" }}>
-      <UserAvatar size={50} avatarCode={player.avatarCode} />
+    <Container>
+      <UserAvatar size={50} avatarCode={player.avatarCode} disabled={disabled} />
       <NameContainer>
         <Text numberOfLines={1} style={{ width: "100%", paddingHorizontal: 2 }}>
           {player.userName}
@@ -34,11 +35,16 @@ const PlayerCard = ({ player }: Props) => {
       {/* <DiceContainer>
         <PlayerHand size={"small"} dice={player.dice} />
       </DiceContainer> */}
-    </View>
+    </Container>
   );
 };
 
 export default PlayerCard;
+
+const Container = styled.View`
+  justify-content: center;
+  align-items: center;
+`;
 
 const GameHostCrown = styled.View`
   position: absolute;
