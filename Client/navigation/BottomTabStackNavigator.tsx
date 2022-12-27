@@ -38,7 +38,7 @@ const BottomTabStack = () => {
           headerTitleAlign: "center",
           headerShown: false,
           tabBarIcon: ({ color, size, focused }) => (
-            <Image source={lobby} style={{ width: size, resizeMode: "contain", opacity: focused ? 1 : 0.5 }} />
+            <Image source={lobby} style={{ width: size, height: size * 1.2, resizeMode: "contain", opacity: focused ? 1 : 0.5 }} />
           ),
         }}
       />
@@ -47,8 +47,9 @@ const BottomTabStack = () => {
         component={GameStack}
         options={{
           headerShown: false,
+          tabBarStyle: { overflow: "hidden" },
           tabBarIcon: ({ color, size, focused }) => (
-            <Image source={dice} style={{ width: size, resizeMode: "contain", opacity: focused ? 1 : 0.5 }} />
+            <Image source={dice} style={{ width: size, height: size * 1.2, resizeMode: "contain", opacity: focused ? 1 : 0.5 }} />
           ),
         }}
       />
