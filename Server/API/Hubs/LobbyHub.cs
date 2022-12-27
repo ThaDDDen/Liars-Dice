@@ -217,7 +217,7 @@ public class LobbyHub : Hub
                     UserName = _gameBot,
                     AvatarCode = "BotAvatar"
                 },
-                Message = $"{user.UserName} has left the game!",
+                Message = user.GameHost ? $"{user.UserName} has left the game! A new game host has randomly been assigned!" : $"{user.UserName} has left the game!",
                 Time = DateTime.Now.ToString("HH:mm")
         });
 

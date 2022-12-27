@@ -56,6 +56,7 @@ public class Game
 
     public void RemovePlayerFromGame(string playerToRemove)
     {
+        if(Players.FirstOrDefault(p => p.UserName == playerToRemove).GameHost) Players.Where(p => p.UserName != playerToRemove).ToList()[_random.Next(0, Players.Count)].GameHost = true;
         Players.Remove(Players.FirstOrDefault(p => p.UserName == playerToRemove));
     }
 
