@@ -95,7 +95,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.UseEndpoints(endpoints =>
 {
-    endpoints.MapHub<LobbyHub>("/hubs/lobby");
+    endpoints.MapHub<Hub>("/hub");
 });
 
 app.Run();

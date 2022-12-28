@@ -50,7 +50,7 @@ function ConnectionProvider({ children }: Props) {
   const connectToHub = async (accessToken: string) => {
     try {
       const connection = new HubConnectionBuilder()
-        .withUrl(`${BASE_URL}hubs/lobby`, {
+        .withUrl(`${BASE_URL}hub`, {
           accessTokenFactory: () => {
             return accessToken;
           },
