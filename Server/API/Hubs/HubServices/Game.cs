@@ -30,14 +30,15 @@ public class Game
         AddPlayerToGame(gameHost);
     }
 
+    // ----- PUBLIC METHODS ----- //
+
     public bool AddPlayerToGame(HubUser newPlayer)
     {
         if (Players.Count() != PlayerCount)
         {
-            if (Players.Any(p => p.UserName == newPlayer.UserName))
-            {
-                return false;
-            }
+            if (Players.Any(p => p.UserName == newPlayer.UserName)) return false;        
+
+            if (GameStarted) return false;
 
             if (!newPlayer.GameHost)
             {
@@ -46,17 +47,22 @@ public class Game
                     newPlayer.Dice.Add(1);
                 }
             }
-
-            Players.Add(newPlayer);
-            return true;
+                Players.Add(newPlayer);
+                return true;
         }
-
         return false;
     }
 
     public void RemovePlayerFromGame(string playerToRemove)
     {
-        if(Players.FirstOrDefault(p => p.UserName == playerToRemove).GameHost) Players.Where(p => p.UserName != playerToRemove).ToList()[_random.Next(0, Players.Count)].GameHost = true;
+        // If the player that's leaving is gameHost we assign //
+        // a random gameHost from the remaining players       //
+        if(Players.FirstOrDefault(p => p.UserName == playerToRemove).GameHost) 
+        {
+            Players.FirstOrDefault(p => p.UserName == playerToRemove).GameHost = false;
+            Players.Where(p => p.UserName != playerToRemove).ToList()[_random.Next(0, Players.Where(p => p.UserName != playerToRemove).ToList().Count)].GameHost = true;
+        }
+
         Players.Remove(Players.FirstOrDefault(p => p.UserName == playerToRemove));
     }
 
@@ -66,43 +72,10 @@ public class Game
         user.HasRolled = true;
         CheckRolls();
     }
-
-    private void CheckRolls()
-    {
-        if (Players.Where(p => !p.IsOut).All(x => x.HasRolled))
-        {
-            RoundStarted = true;
-
-            if (IsFirstRound())
-            {
-                CurrentBetter = Players[_random.Next(0, Players.Count)];
-            }
-        }
-    }
-
-    private bool IsFirstRound()
-    {
-        var diceLeft = Players.Select(x => (x.Dice.Count)).Sum();
-
-        return DiceCount * PlayerCount == diceLeft;
-    }
-
     public void SetBet(GameBet gameBet)
     {
         CurrentBet = gameBet;
-
-        //find the actual Player that placed the bet.
-        var currentBetter = Players.FirstOrDefault(x => x.UserName == gameBet.Better.UserName);
-
-        PreviousBetter = currentBetter;
-        
-        if (currentBetter == Players.Where(p => !p.IsOut).Last())
-        {
-            CurrentBetter = Players.Where(p => !p.IsOut).First();
-            return;
-        }
-
-        CurrentBetter = Players.Where(p => !p.IsOut).ToList()[Players.Where(p => !p.IsOut).ToList().IndexOf(currentBetter) + 1];
+        SetBetter(gameBet);        
     }
 
     public void Call(HubUser gameCaller)
@@ -111,24 +84,6 @@ public class Game
 
         var caller = Players.FirstOrDefault(x => x.UserName == gameCaller.UserName);
         var better = Players.FirstOrDefault(x => x.UserName == PreviousBetter.UserName);
-
-        //quick maddafakka test solution
-
-        // var lastBetter = new HubUser();
-
-        // if (better == Players.First())
-        // {
-        //     lastBetter = Players.Last();
-        // }
-        // else
-        // {
-        //     lastBetter = Players[Players.IndexOf(better) - 1];
-        // }
-
-        // System.Console.WriteLine("test lastBetter:" + lastBetter.UserName);
-
-        // Console.WriteLine("GameCaller: " + gameCaller.UserName);
-        // Console.WriteLine("GameBetter: " + gameBetter.UserName);
 
         var result = GetDiceWithBetValue(CurrentBet.DiceValue);
 
@@ -160,12 +115,76 @@ public class Game
 
         RoundResult = roundResult;
 
+        PrepareNextRound();
+        CheckGameOver();
+    }
+    public void UpdatePlayerCount(int newPlayerCount)
+    {
+        PlayerCount = newPlayerCount;
+    }
 
+    public void UpdateDiceCount(int newDiceCount)
+    {
+        DiceCount = newDiceCount;
+
+        foreach (var player in Players)
+        {
+            var newDiceList = new List<int>();
+
+            for (int i = 0; i < newDiceCount; i++)
+            {
+                newDiceList.Add(1);
+            }
+            player.Dice = newDiceList;
+        }
+    }
+
+    public bool GameIsEmpty()
+    {
+        return Players.Count == 0;
+    }
+
+
+    // ----- PRIVATE METHODS ----- //
+    private void CheckRolls()
+    {
+        if (Players.Where(p => !p.IsOut).All(x => x.HasRolled))
+        {
+            RoundStarted = true;
+
+            // Set random better if it's the first round // 
+            if (IsFirstRound()) CurrentBetter = Players[_random.Next(0, Players.Count)];        
+        }
+    }
+
+    private void SetBetter(GameBet gameBet)
+    {
+        //find the actual Player that placed the bet.
+        var currentBetter = Players.FirstOrDefault(x => x.UserName == gameBet.Better.UserName);
+
+        PreviousBetter = currentBetter;
+        
+        if (currentBetter == Players.Where(p => !p.IsOut).Last())
+        {
+            CurrentBetter = Players.Where(p => !p.IsOut).First();
+            return;
+        }
+        CurrentBetter = Players.Where(p => !p.IsOut).ToList()[Players.Where(p => !p.IsOut).ToList().IndexOf(currentBetter) + 1];
+    }
+
+    private bool IsFirstRound()
+    {
+        var diceLeft = Players.Select(x => (x.Dice.Count)).Sum();
+
+        return DiceCount * PlayerCount == diceLeft;
+    }
+    
+    private void PrepareNextRound()
+    {
         CurrentBet = null;
         RoundStarted = false;
         Players.ForEach(p => p.HasRolled = false);
         Round++;
-        CheckGameOver();
     }
 
     private int GetDiceWithBetValue(int betValue)
@@ -210,39 +229,10 @@ public class Game
         {
             return true;
         }
-
         return false;
     }
 
-
-
-    public void UpdatePlayerCount(int newPlayerCount)
-    {
-        PlayerCount = newPlayerCount;
-    }
-
-    public void UpdateDiceCount(int newDiceCount)
-    {
-        DiceCount = newDiceCount;
-
-        foreach (var player in Players)
-        {
-            var newDiceList = new List<int>();
-
-            for (int i = 0; i < newDiceCount; i++)
-            {
-                newDiceList.Add(1);
-            }
-
-            player.Dice = newDiceList;
-        }
-    }
-
-    public bool IsEmpty()
-    {
-        return Players.Count == 0;
-    }
-    public void CheckGameOver()
+    private void CheckGameOver()
     {
         if(Players.Where(p => p.Dice.Count > 0).Count() == 1) GameOver = true;
     }
