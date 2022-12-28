@@ -29,6 +29,8 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
   const [dicePickerAmount, setDicePickerAmount] = useState<number[]>([]);
   const [dicePickerValue, setDicePickerValue] = useState<number[]>([]);
 
+  const maxBet = 6 * game.players.map((x) => x.dice.length).reduce((x, c) => x + c, 0);
+
   useEffect(() => {
     if (game.currentBet) {
       if (game.currentBet.diceValue === 6) {
@@ -66,8 +68,12 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
         <Dialog.Title>Your turn!</Dialog.Title>
         <Dialog.Content>
           <View style={{ flexDirection: "row", paddingHorizontal: 80, justifyContent: "space-around", marginBottom: 20 }}>
-            <DiceBetAmountPicker setDiceAmount={setDiceAmount} dicePickerAmount={dicePickerAmount} />
-            <DiceBetValuePicker setDiceValue={setDiceValue} dicePickerValue={dicePickerValue} defaultValue={diceValue} />
+            {maxBet !== game.currentBet?.diceAmount * game.currentBet?.diceValue && (
+              <>
+                <DiceBetAmountPicker setDiceAmount={setDiceAmount} dicePickerAmount={dicePickerAmount} />
+                <DiceBetValuePicker setDiceValue={setDiceValue} dicePickerValue={dicePickerValue} defaultValue={diceValue} />
+              </>
+            )}
           </View>
           {game.currentBet && (
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -79,14 +85,16 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
           )}
         </Dialog.Content>
         <Dialog.Actions style={{ flexDirection: "column" }}>
-          <Button
-            mode="text"
-            onPress={() => {
-              connection.invoke(INVOKE_SET_BET, { gameName: game.gameName, better: currentUser, diceAmount: diceAmount, diceValue: diceValue });
-              setBettingDialogVisible(false);
-            }}
-            title="Bet"
-          />
+          {maxBet !== game.currentBet?.diceAmount * game.currentBet?.diceValue && (
+            <Button
+              mode="text"
+              onPress={() => {
+                connection.invoke(INVOKE_SET_BET, { gameName: game.gameName, better: currentUser, diceAmount: diceAmount, diceValue: diceValue });
+                setBettingDialogVisible(false);
+              }}
+              title="Bet"
+            />
+          )}
           {game.currentBet && (
             <Button
               mode="text"
