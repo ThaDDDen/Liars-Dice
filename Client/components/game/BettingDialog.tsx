@@ -38,6 +38,9 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
         setDiceAmount(game.currentBet.diceAmount);
         setDiceValue((game.currentBet.diceValue + 1) as 2 | 3 | 4 | 5 | 6);
       }
+    } else {
+      setDiceAmount(1);
+      setDiceValue(2);
     }
     const diceValueArray = getDiceValueArray(game.currentBet, diceAmount);
     setDicePickerValue(diceValueArray);
