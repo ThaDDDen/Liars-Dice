@@ -5,7 +5,7 @@ import { IconButton, Text, Tooltip } from "react-native-paper";
 import styled from "styled-components/native";
 import * as yup from "yup";
 import { useSnackBar } from "../contexts/SnackContext";
-import { useUser } from "../contexts/UserContext";
+import { initialUserState, useUser } from "../contexts/UserContext";
 import { HomeNavProps } from "../screens/HomeScreen";
 import { ResponseMessage } from "../types/types";
 import { postLogInModel, postRegisterModel } from "../utils/authFunctions";
@@ -46,13 +46,10 @@ const Register = ({ navigation, route }: HomeNavProps) => {
             if (registerResponse.status === "Success") {
               var loginResponse = await postLogInModel({ username: values.username, password: values.password });
               setCurrentUser({
+                ...initialUserState,
                 userName: values.username,
                 avatarCode: loginResponse.avatarCode,
-                gameHost: false,
-                dice: [],
                 connectionId: loginResponse.connectionId,
-                hasRolled: false,
-                isOut: false,
               });
             } else {
               setResponseMessage(registerResponse as ResponseMessage);

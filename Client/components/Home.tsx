@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styled from "styled-components/native";
-import { useUser } from "../contexts/UserContext";
+import { initialUserState, useUser } from "../contexts/UserContext";
 import { HomeNavProps } from "../screens/HomeScreen";
 import Background from "./layout/Background";
 import Button from "./layout/Button";
@@ -17,15 +17,11 @@ const Home = ({ navigation }: HomeNavProps) => {
       });
       if (response.status === 200) {
         const deserializedResponse = await response.json();
-        //::::D USE INTIALSTATE {...} login register,..
         setCurrentUser({
+          ...initialUserState,
           userName: deserializedResponse.username,
           avatarCode: deserializedResponse.avatarCode,
-          gameHost: false,
-          dice: [],
           connectionId: deserializedResponse.connectionId,
-          hasRolled: false,
-          isOut: false,
         });
       }
     }
