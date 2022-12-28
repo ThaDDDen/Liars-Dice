@@ -1,7 +1,7 @@
 import React from "react";
 import { IconButton, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
-import SmallDice from "./SmallDice";
+import SmallDice from "../game-layout/SmallDice";
 
 interface Props {
   diceAmount: number;

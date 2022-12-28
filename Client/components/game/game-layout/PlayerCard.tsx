@@ -1,11 +1,11 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
-import { StyleProp, Text, View, ViewStyle } from "react-native";
+import { Text, View } from "react-native";
 import { Surface } from "react-native-paper";
 import styled from "styled-components/native";
-import { User } from "../../types/types";
-import UserAvatar from "../Lobby/UserAvatar";
-import ValueDice from "./assets/ValueDice";
+import { User } from "../../../types/types";
+import UserAvatar from "../../Lobby/UserAvatar";
+import ValueDice from "../game-assets/ValueDice";
 
 interface Props {
   player: User;
@@ -31,10 +31,6 @@ const PlayerCard = ({ player, disabled }: Props) => {
       <View style={{ position: "absolute", left: -5, top: -7 }}>
         <ValueDice size={25} value={player.dice.length} />
       </View>
-
-      {/* <DiceContainer>
-        <PlayerHand size={"small"} dice={player.dice} />
-      </DiceContainer> */}
     </Container>
   );
 };
@@ -62,11 +58,4 @@ const NameContainer = styled(Surface)`
   border-radius: 3px;
   padding: 0px 3px;
   margin-top: 3px;
-`;
-
-const DiceContainer = styled.View`
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 80px;
 `;

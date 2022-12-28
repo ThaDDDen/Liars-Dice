@@ -34,7 +34,6 @@ const LogIn = ({ navigation }: HomeNavProps) => {
           onSubmit={async (values) => {
             var response = await postLogInModel({ username: values.username, password: values.password });
             if (response.status === "Success") {
-              console.log(response);
               setCurrentUser({
                 ...initialUserState,
                 userName: values.username,

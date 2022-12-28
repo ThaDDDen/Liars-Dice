@@ -3,9 +3,9 @@ import { Dimensions, View } from "react-native";
 import { DragSortableView } from "react-native-drag-sort";
 import { Button, Dialog, Portal, Surface, Text } from "react-native-paper";
 import styled from "styled-components/native";
-import { useGame } from "../../contexts/GameContext";
-import { User } from "../../types/types";
-import UserAvatar from "../Lobby/UserAvatar";
+import { useGame } from "../../../contexts/GameContext";
+import { User } from "../../../types/types";
+import UserAvatar from "../../Lobby/UserAvatar";
 
 const { width } = Dimensions.get("window");
 

@@ -2,12 +2,12 @@ import React, { useEffect, useRef } from "react";
 import { Animated, View } from "react-native";
 import { Text } from "react-native-paper";
 import styled from "styled-components/native";
-import winner from "../../assets/images/winner.png";
-import { useConnection } from "../../contexts/ConnectionContext";
-import { useGame } from "../../contexts/GameContext";
-import { useUser } from "../../contexts/UserContext";
-import UserAvatar from "../Lobby/UserAvatar";
-import ValueDice from "./assets/ValueDice";
+import winner from "../../../assets/images/winner.png";
+import { useConnection } from "../../../contexts/ConnectionContext";
+import { useGame } from "../../../contexts/GameContext";
+import { useUser } from "../../../contexts/UserContext";
+import UserAvatar from "../../Lobby/UserAvatar";
+import ValueDice from "../game-assets/ValueDice";
 
 const RoundInfo = () => {
   const { game, setGame } = useGame();

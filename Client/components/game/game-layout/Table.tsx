@@ -1,12 +1,12 @@
 import React from "react";
 import { Dimensions, ImageBackground, Pressable, View } from "react-native";
 import styled from "styled-components/native";
-import table from "../../assets/images/table.png";
-import { useGame } from "../../contexts/GameContext";
-import { EIGHT_SEAT_TABLE, FOUR_SEAT_TABLE, SIX_SEAT_TABLE } from "../../utils/constants";
-import UserAvatar from "../Lobby/UserAvatar";
+import table from "../../../assets/images/table.png";
+import { useGame } from "../../../contexts/GameContext";
+import { EIGHT_SEAT_TABLE, FOUR_SEAT_TABLE, SIX_SEAT_TABLE } from "../../../utils/constants";
+import UserAvatar from "../../Lobby/UserAvatar";
+import RoundInfo from "../game-logic/RoundInfo";
 import PlayerCard from "./PlayerCard";
-import RoundInfo from "./RoundInfo";
 
 interface Props {
   openOnlineUsersModal: () => void;
