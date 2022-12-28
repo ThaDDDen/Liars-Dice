@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.SignalR;
 namespace API.Hubs;
 
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class LobbyHub : Hub
+public class Hub : Microsoft.AspNetCore.SignalR.Hub
 {
     private readonly string _lobbyBot;
     private readonly string _gameBot;
@@ -18,7 +18,7 @@ public class LobbyHub : Hub
     private readonly GameRepository _games;
     private readonly UserManager<AppUser> _userManager;
 
-    public LobbyHub(ConnectionRepository connections, GameRepository games, UserManager<AppUser> userManager)
+    public Hub(ConnectionRepository connections, GameRepository games, UserManager<AppUser> userManager)
     {
         _connections = connections;
         _games = games;
@@ -37,7 +37,6 @@ public class LobbyHub : Hub
             return;
         }
 
-
         await Groups.AddToGroupAsync(Context.ConnectionId, "Lobby");
 
         _connections.AddConnection(new UserConnection
@@ -53,29 +52,25 @@ public class LobbyHub : Hub
 
         await SendConnectedUsers();
 
-        await Clients.Group("Lobby").SendAsync("ReceiveMessage", new UserMessage()
-        {
-            User = new HubUser()
-            {
-                UserName = _lobbyBot,
-                AvatarCode = "BotAvatar"
-            },
-            Message = $"{user} has joined the lobby.",
-            Time = DateTime.Now.ToString("HH:mm")
-        }, "Lobby");
+        await SendMessage(_lobbyBot, "Lobby", $"{user.UserName} has joined the lobby.");
+
     }
 
-    public async Task SendMessage(string room, string message)
+    public async Task SendMessage(string sender, string room, string message)
     {
-        var user = await _userManager.FindByNameAsync(Context.User.Identity.Name);
-
+        AppUser user = null;
+        
+        if (sender != _lobbyBot || sender != _gameBot)
+        {
+            user = await _userManager.FindByNameAsync(sender);
+        }
 
         await Clients.Group(room).SendAsync("ReceiveMessage", new UserMessage()
         {
             User = new HubUser()
             {
-                UserName = user.UserName,
-                AvatarCode = user.AvatarCode
+                UserName = user != null ? user.UserName : sender == _lobbyBot ? _lobbyBot : _gameBot,
+                AvatarCode = user != null ? user.AvatarCode : "BotAvatar"
             },
             Message = message,
             Time = DateTime.Now.ToString("HH:mm")
@@ -84,10 +79,7 @@ public class LobbyHub : Hub
 
     public async Task SendConnectedUsers()
     {
-
         var usersInLobby = _connections.ConnectedUsers().Where(x => x.Room == "Lobby");
-
-
         await Clients.Group("Lobby").SendAsync("ConnectedUsers", usersInLobby);
     }
 
@@ -117,16 +109,8 @@ public class LobbyHub : Hub
         _games.AddGame(game);
 
         await Clients.Caller.SendAsync("ReceiveGame", game);
-        await Clients.Group(gameSettings.GameName).SendAsync("ReceiveMessage", new UserMessage()
-        {
-            User = new HubUser()
-            {
-                UserName = _gameBot,
-                AvatarCode = "BotAvatar"
-            },
-            Message = $"{gameHost.UserName} has joined the game!",
-            Time = DateTime.Now.ToString("HH:mm")
-        }, gameSettings.GameName);
+        await SendMessage(_gameBot, gameSettings.GameName, $"{gameHost.UserName} has joined the game!");
+
     }
 
     public async Task UpdateGameSettings(GameSettings updatedGameSettings)
@@ -145,16 +129,8 @@ public class LobbyHub : Hub
         game.GameStarted = true;
 
         await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
-        await Clients.Group(game.GameName).SendAsync("ReceiveMessage", new UserMessage()
-        {
-            User = new HubUser()
-            {
-                UserName = _gameBot,
-                AvatarCode = "BotAvatar"
-            },
-            Message = $"{user.UserName} has started the game!",
-            Time = DateTime.Now.ToString("HH:mm")
-        }, game.GameName);
+        await SendMessage(_gameBot, game.GameName, $"{user.UserName} has started the game!");
+
     }
 
     public async Task JoinGame(HubUser hubUser, string gameName)
@@ -191,16 +167,8 @@ public class LobbyHub : Hub
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, gameName);
             await Clients.Group(gameName).SendAsync("ReceiveGame", game);
-            await Clients.Group(gameName).SendAsync("ReceiveMessage", new UserMessage()
-            {
-                User = new HubUser()
-                {
-                    UserName = _gameBot,
-                    AvatarCode = "BotAvatar"
-                },
-                Message = $"{hubUser.UserName} has joined the game!",
-                Time = DateTime.Now.ToString("HH:mm")
-            }, gameName);
+            await SendMessage(_gameBot, gameName, $"{hubUser.UserName} has joined the game!");
+
         }
     }
 
@@ -210,20 +178,11 @@ public class LobbyHub : Hub
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, game.GameName);
         game.RemovePlayerFromGame(user.UserName);
 
-        await Clients.Group(game.GameName).SendAsync("ReceiveMessage", new UserMessage
-        {
-            User = new HubUser()
-                {
-                    UserName = _gameBot,
-                    AvatarCode = "BotAvatar"
-                },
-                Message = user.GameHost ? $"{user.UserName} has left the game! A new game host has randomly been assigned!" : $"{user.UserName} has left the game!",
-                Time = DateTime.Now.ToString("HH:mm")
-        });
+        await SendMessage(_gameBot, game.GameName, user.GameHost ? $"{user.UserName} has left the game! A new game host has randomly been assigned!" : $"{user.UserName} has left the game!");
 
         await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
 
-        if(game.IsEmpty()) _games.RemoveGame(game);
+        if(game.GameIsEmpty()) _games.RemoveGame(game);
     }
 
     public async Task UpdatePlayerOrder(List<HubUser> players)
@@ -284,16 +243,8 @@ public class LobbyHub : Hub
 
         SendConnectedUsers();
 
-        Clients.Group("Lobby").SendAsync("ReceiveMessage", new UserMessage()
-        {
-            User = new HubUser()
-            {
-                UserName = _lobbyBot,
-                AvatarCode = "BotAvatar"
-            },
-            Message = $"{user} has left the lobby.",
-            Time = DateTime.Now.ToString("HH:mm")
-        }, "Lobby");
+
+        SendMessage(_lobbyBot, "Lobby", $"{user} has left the lobby.");
 
         return base.OnDisconnectedAsync(exception);
     }

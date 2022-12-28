@@ -3,6 +3,7 @@ import { View } from "react-native";
 import { IconButton, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
+import { useUser } from "../../contexts/UserContext";
 import { INVOKE_SEND_MESSAGE } from "../../utils/constants";
 
 interface Props {
@@ -13,10 +14,11 @@ const MessageForm = ({ chatName }: Props) => {
   const [message, setMessage] = useState("");
   const { connection } = useConnection();
   const { colors } = useTheme();
+  const {currentUser} = useUser();
 
   const handleSendMessage = () => {
     if (message) {
-      connection.invoke(INVOKE_SEND_MESSAGE, chatName, message);
+      connection.invoke(INVOKE_SEND_MESSAGE, currentUser.userName, chatName, message);
       setMessage("");
     }
   };

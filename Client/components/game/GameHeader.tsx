@@ -97,6 +97,7 @@ const GameHeader = ({ openChatModal }: Props) => {
               mode="text"
               onPress={() => {
                 setGame(initialGameState);
+                currentUser.gameHost = false;
                 connection.invoke(INVOKE_LEAVE_GAME, currentUser);
               }}
               title="Chicken out and leave! 🐥"
