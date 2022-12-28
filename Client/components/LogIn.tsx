@@ -5,7 +5,7 @@ import { Text } from "react-native-paper";
 import styled from "styled-components/native";
 import * as yup from "yup";
 import { useSnackBar } from "../contexts/SnackContext";
-import { useUser } from "../contexts/UserContext";
+import { initialUserState, useUser } from "../contexts/UserContext";
 import { HomeNavProps } from "../screens/HomeScreen";
 import { LogInModel } from "../types/types";
 import { postLogInModel } from "../utils/authFunctions";
@@ -36,13 +36,10 @@ const LogIn = ({ navigation }: HomeNavProps) => {
             if (response.status === "Success") {
               console.log(response);
               setCurrentUser({
+                ...initialUserState,
                 userName: values.username,
                 avatarCode: response.avatarCode,
-                gameHost: false,
-                dice: [],
                 connectionId: response.connectionId,
-                hasRolled: false,
-                isOut: false,
               });
               setToken(response.token);
             } else {
