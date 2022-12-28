@@ -19,9 +19,6 @@ const ProfileScreen = ({ navigation }: NavigationProps) => {
   const { logout, setToken, setLobbyMessages, currentUser } = useUser();
   const { setGame } = useGame();
   const { closeConnection } = useConnection();
-  const { colors } = useTheme();
-
-  console.log(currentUser);
 
   const handleLogout = () => {
     logout();

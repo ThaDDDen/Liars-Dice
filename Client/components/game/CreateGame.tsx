@@ -10,9 +10,9 @@ import { INVOKE_CREATE_GAME } from "../../utils/constants";
 import Background from "../layout/Background";
 import Button from "../layout/Button";
 import ContentCard from "../layout/ContentCard";
-import SettingsHeader from "./assets/GameSettingsHeader";
-import DicePicker from "./DicePicker";
-import PlayerPicker from "./PlayerPicker";
+import SettingsHeader from "./game-assets/GameSettingsHeader";
+import DicePicker from "./game-settings/DicePicker";
+import PlayerPicker from "./game-settings/PlayerPicker";
 
 const CreateGame = () => {
   const [diceAmount, setDiceAmount] = useState(6);

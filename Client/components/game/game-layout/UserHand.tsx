@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import Dice from "./assets/ValueDice";
+import Dice from "../game-assets/ValueDice";
 
 interface Props {
   dice: number[] | undefined;

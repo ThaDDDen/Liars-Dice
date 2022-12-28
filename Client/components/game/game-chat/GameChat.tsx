@@ -2,10 +2,10 @@ import React, { useRef } from "react";
 import { ScrollView, View } from "react-native";
 import { useTheme } from "react-native-paper";
 import styled from "styled-components/native";
-import { useGame } from "../../contexts/GameContext";
-import { useUser } from "../../contexts/UserContext";
-import ChatMessage from "../Lobby/ChatMessage";
-import MessageForm from "../Lobby/MessageForm";
+import { useGame } from "../../../contexts/GameContext";
+import { useUser } from "../../../contexts/UserContext";
+import ChatMessage from "../../Lobby/ChatMessage";
+import MessageForm from "../../Lobby/MessageForm";
 
 const GameChat = () => {
   const { colors } = useTheme();

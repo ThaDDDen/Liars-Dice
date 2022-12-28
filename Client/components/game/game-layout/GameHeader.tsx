@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import { Dialog, IconButton, Paragraph, Portal, Surface, Text, Tooltip } from "react-native-paper";
 import styled from "styled-components/native";
-import { useConnection } from "../../contexts/ConnectionContext";
-import { initialGameState, useGame } from "../../contexts/GameContext";
-import { useSnackBar } from "../../contexts/SnackContext";
-import { useUser } from "../../contexts/UserContext";
-import { INVOKE_LEAVE_GAME, INVOKE_START_GAME, INVOKE_UPDATE_GAME_SETTINGS } from "../../utils/constants";
-import Button from "../layout/Button";
-import ContentCard from "../layout/ContentCard";
-import GameHostPanel from "./GameHostPanel";
+import { useConnection } from "../../../contexts/ConnectionContext";
+import { initialGameState, useGame } from "../../../contexts/GameContext";
+import { useSnackBar } from "../../../contexts/SnackContext";
+import { useUser } from "../../../contexts/UserContext";
+import { INVOKE_LEAVE_GAME, INVOKE_START_GAME, INVOKE_UPDATE_GAME_SETTINGS } from "../../../utils/constants";
+import Button from "../../layout/Button";
+import ContentCard from "../../layout/ContentCard";
+import GameHostPanel from "../game-settings/GameHostPanel";
 
 interface Props {
   openChatModal: () => void;

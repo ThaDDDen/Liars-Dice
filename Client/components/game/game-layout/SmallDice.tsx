@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
-import dice from "../../assets/images/small_dice.png";
+import dice from "../../../assets/images/small_dice.png";
 
 interface Props {
   size: "small" | "medium" | "large";

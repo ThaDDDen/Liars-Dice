@@ -2,14 +2,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { initialGameState, useGame } from "../contexts/GameContext";
 import CreateGameScreen from "../screens/CreateGameScreen";
 import GameHomeScreen from "../screens/GameHomeScreen";
-import GameLobbyScreen from "../screens/GameLobbyScreen";
 import GameScreen from "../screens/GameScreen";
 import JoinGameScreen from "../screens/JoinGameScreen";
 
 export type GameStackParams = {
   CreateGameScreen: undefined;
   JoinGameScreen: undefined;
-  GameLobby: undefined;
   GameScreen: undefined;
 };
 
@@ -27,7 +25,6 @@ const GameStack = () => {
         </>
       ) : (
         <>
-          <GameStackNavigator.Screen name="GameLobbyScreen" component={GameLobbyScreen} options={{ headerShown: false }} />
           <GameStackNavigator.Screen name="GameScreen" component={GameScreen} options={{ headerShown: false }} />
         </>
       )}

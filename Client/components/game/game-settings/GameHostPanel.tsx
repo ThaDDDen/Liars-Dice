@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { View } from "react-native";
 import { IconButton, Surface, Text } from "react-native-paper";
 import styled from "styled-components/native";
-import { useConnection } from "../../contexts/ConnectionContext";
-import { useGame } from "../../contexts/GameContext";
-import { User } from "../../types/types";
-import { INVOKE_UPDATE_GAME_SETTINGS } from "../../utils/constants";
-import Button from "../layout/Button";
+import { useConnection } from "../../../contexts/ConnectionContext";
+import { useGame } from "../../../contexts/GameContext";
+import { User } from "../../../types/types";
+import { INVOKE_UPDATE_GAME_SETTINGS } from "../../../utils/constants";
+import Button from "../../layout/Button";
 import PlayOrderSorter from "./PlayOrderSorter";
 
 interface Props {
