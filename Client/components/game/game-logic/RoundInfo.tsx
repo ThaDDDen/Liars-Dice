@@ -1,18 +1,18 @@
 import React, { useEffect, useRef } from "react";
 import { Animated, View } from "react-native";
-import { Text } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
-import winner from "../../../assets/images/winner.png";
-import { useConnection } from "../../../contexts/ConnectionContext";
 import { useGame } from "../../../contexts/GameContext";
-import { useUser } from "../../../contexts/UserContext";
+import { useSound } from "../../../contexts/SoundContext";
+import Button from "../../layout/Button";
+import WinnerSvg from "../../layout/WinnerSvg";
 import UserAvatar from "../../Lobby/UserAvatar";
 import ValueDice from "../game-assets/ValueDice";
 
 const RoundInfo = () => {
-  const { game, setGame } = useGame();
-  const { connection } = useConnection();
-  const { currentUser } = useUser();
+  const { game } = useGame();
+  const { colors } = useTheme();
+  const { playWinnerSound } = useSound();
 
   const scaleInCurrentBetAnimation = useRef(new Animated.Value(0)).current;
   const scaleInCallAnimation = useRef(new Animated.Value(0)).current;
@@ -21,6 +21,10 @@ const RoundInfo = () => {
   const scaleInResultWinnerAnimation = useRef(new Animated.Value(0)).current;
   const scaleInWinnerAnimation = useRef(new Animated.Value(0)).current;
   const scaleInBannerAnimation = useRef(new Animated.Value(0)).current;
+
+  const scaleInGameResultAnimation = useRef(new Animated.Value(0)).current;
+  const scaleHightLastGameResultAnimation = useRef(new Animated.Value(0)).current;
+  const scaleLastGameResultTextAnimation = useRef(new Animated.Value(0)).current;
 
   const scaleInCurrentBet = () => {
     Animated.timing(scaleInCurrentBetAnimation, {
@@ -32,12 +36,29 @@ const RoundInfo = () => {
 
   const scaleInWinner = () => {
     Animated.sequence([
+      Animated.delay(1800),
       Animated.timing(scaleInWinnerAnimation, {
         toValue: 1,
         duration: 400,
         useNativeDriver: false,
       }),
+      Animated.delay(400),
       Animated.timing(scaleInBannerAnimation, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: false,
+      }),
+      Animated.timing(scaleInGameResultAnimation, {
+        toValue: 1,
+        duration: 400,
+        useNativeDriver: false,
+      }),
+      Animated.timing(scaleHightLastGameResultAnimation, {
+        toValue: 100,
+        duration: 400,
+        useNativeDriver: false,
+      }),
+      Animated.timing(scaleLastGameResultTextAnimation, {
         toValue: 1,
         duration: 400,
         useNativeDriver: false,
@@ -89,33 +110,48 @@ const RoundInfo = () => {
   }, [game.roundResult.round]);
 
   useEffect(() => {
-    if (game.gameOver) scaleInWinner();
+    if (game.gameOver) {
+      playWinnerSound();
+      scaleInWinner();
+    }
   }, [game]);
 
   return (
     <>
       {game.gameOver ? (
         <View>
-          <Animated.View style={{ transform: [{ scale: scaleInWinnerAnimation }], alignSelf: "center" }}>
+          <WinnerAvatar style={{ transform: [{ scale: scaleInWinnerAnimation }] }}>
             <UserAvatar avatarCode={game.roundResult.roundWinner.avatarCode} size={200} />
-          </Animated.View>
+          </WinnerAvatar>
 
-          <WinnerBanner
-            source={winner}
-            style={{ transform: [{ scale: scaleInBannerAnimation }], alignSelf: "center", position: "absolute", bottom: -45 }}
-          />
+          <BannerContainer style={{ transform: [{ scale: scaleInBannerAnimation }] }}>
+            <WinnerSvg svgColor={colors.primary} />
+          </BannerContainer>
+          <GameResultContainer
+            backgroundColor={colors.surface}
+            borderColor={colors.primaryContainer}
+            style={{ minHeight: scaleHightLastGameResultAnimation, transform: [{ scale: scaleInGameResultAnimation }] }}
+          >
+            <GameResultText style={{ transform: [{ scale: scaleLastGameResultTextAnimation }] }}>
+              <CenterText variant="bodySmall">
+                {game.roundResult.gameBet.better.userName} bet {game.roundResult.gameBet.diceAmount} x{" "}
+                <ValueDice value={game.roundResult.gameBet.diceValue} size={15} />
+              </CenterText>
+              <CenterText variant="bodySmall">{game.roundResult.caller} called!</CenterText>
+              <CenterText variant="bodySmall">
+                There were {game.roundResult.callResult} x <ValueDice value={game.roundResult.gameBet.diceValue} size={15} />
+              </CenterText>
+              <CenterText variant="bodySmall" style={{ marginTop: 10 }}>
+                {game.roundResult.roundWinner.userName} wins the game! 🎉
+              </CenterText>
+              <Button toLower compact title="Leave Game" mode="text" onPress={() => {}} />
+            </GameResultText>
+          </GameResultContainer>
         </View>
       ) : (
         <>
-          <Text variant="titleMedium" style={{ position: "absolute", top: "15%" }}>
-            Round {game.round}
-          </Text>
-          <View
-            style={{
-              width: "50%",
-              overflow: "hidden",
-            }}
-          >
+          <Round>Round {game.round}</Round>
+          <RoundInfoContainer>
             {!game.roundStarted && game.roundResult.round !== 0 && (
               <View>
                 <Animated.View style={{ transform: [{ scale: scaleInCallAnimation }] }}>
@@ -170,7 +206,7 @@ const RoundInfo = () => {
             {game.currentBetter && game.roundStarted && (
               <Text style={{ textAlign: "center", marginTop: 10 }}>It's {game.currentBetter.userName}'s turn!</Text>
             )}
-          </View>
+          </RoundInfoContainer>
         </>
       )}
     </>
@@ -183,7 +219,40 @@ const CenterText = styled(Text)`
   text-align: center;
 `;
 
-const WinnerBanner = styled(Animated.Image)`
-  height: 40%;
-  resize-mode: contain;
+const WinnerAvatar = styled(Animated.View)`
+  align-self: center;
+`;
+
+const BannerContainer = styled(Animated.View)`
+  z-index: 500;
+  align-self: center;
+  position: absolute;
+  bottom: -45px;
+  height: 100px;
+  width: 100%;
+`;
+
+const GameResultContainer = styled(Animated.View)<{ backgroundColor: string; borderColor: string }>`
+  position: absolute;
+  top: 170px;
+  min-width: 170px;
+  background-color: ${({ backgroundColor }) => backgroundColor};
+  border-width: 2px;
+  border-color: ${({ borderColor }) => borderColor};
+  align-self: center;
+  border-radius: 10px;
+  padding: 10px;
+`;
+
+const GameResultText = styled(Animated.View)`
+  margin-top: 40px;
+`;
+
+const Round = styled(Text)`
+  position: absolute;
+  top: 15%;
+`;
+
+const RoundInfoContainer = styled.View`
+  width: 50%;
 `;

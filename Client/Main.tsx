@@ -6,6 +6,7 @@ import ConnectionProvider from "./contexts/ConnectionContext";
 import GameProvider from "./contexts/GameContext";
 import InvitationProvider from "./contexts/InvitationContext";
 import SnackProvider from "./contexts/SnackContext";
+import SoundProvider from "./contexts/SoundContext";
 import { useTheme } from "./contexts/ThemeContext";
 import UserProvider from "./contexts/UserContext";
 import useColorScheme from "./hooks/useColorScheme";
@@ -29,18 +30,20 @@ const Main = () => {
   return (
     <SafeAreaProvider>
       <PaperProvider theme={getTheme(colorScheme)}>
-        <SnackProvider>
-          <GameProvider>
-            <UserProvider>
-              <InvitationProvider>
-                <ConnectionProvider>
-                  <StatusBar style={statusBarColor} />
-                  <Navigation colorScheme={colorScheme} />
-                </ConnectionProvider>
-              </InvitationProvider>
-            </UserProvider>
-          </GameProvider>
-        </SnackProvider>
+        <SoundProvider>
+          <SnackProvider>
+            <GameProvider>
+              <UserProvider>
+                <InvitationProvider>
+                  <ConnectionProvider>
+                    <StatusBar style={statusBarColor} />
+                    <Navigation colorScheme={colorScheme} />
+                  </ConnectionProvider>
+                </InvitationProvider>
+              </UserProvider>
+            </GameProvider>
+          </SnackProvider>
+        </SoundProvider>
       </PaperProvider>
     </SafeAreaProvider>
   );
