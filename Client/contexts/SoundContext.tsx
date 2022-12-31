@@ -5,11 +5,13 @@ import AllSounds, { SoundObject } from "../utils/sounds";
 interface SoundContextValue {
   allSounds: SoundObject[];
   playWinnerSound: () => void;
+  playRollDice: () => void;
 }
 
 const SoundContext = createContext<SoundContextValue>({
   allSounds: [],
   playWinnerSound: () => console.warn("No provier found."),
+  playRollDice: () => console.warn("No provier found."),
 });
 
 interface Props {
@@ -33,12 +35,18 @@ function SoundProvider({ children }: Props) {
     setMusic(sound);
     await sound.playAsync();
   };
+  const playRollDice = async () => {
+    const { sound, status } = await Audio.Sound.createAsync(allSounds[1].sound);
+    setMusic(sound);
+    await sound.playAsync();
+  };
 
   return (
     <SoundContext.Provider
       value={{
         allSounds,
         playWinnerSound,
+        playRollDice,
       }}
     >
       {children}
