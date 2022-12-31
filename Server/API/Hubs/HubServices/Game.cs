@@ -64,6 +64,7 @@ public class Game
         }
 
         Players.Remove(Players.FirstOrDefault(p => p.UserName == playerToRemove));
+        PlayerCount--;
     }
 
     public void RollDice(HubUser user)
@@ -144,6 +145,13 @@ public class Game
         return Players.Count == 0;
     }
 
+    public void RestartRound()
+    {
+        CurrentBet = null;
+        RoundStarted = false;
+        Players.ForEach(p => p.HasRolled = false);
+    }
+
 
     // ----- PRIVATE METHODS ----- //
     private void CheckRolls()
@@ -151,6 +159,12 @@ public class Game
         if (Players.Where(p => !p.IsOut).All(x => x.HasRolled))
         {
             RoundStarted = true;
+
+            if(!IsFirstRound())
+            {
+                if(!Players.Any(p => p.UserName == CurrentBetter.UserName)) CurrentBetter = RoundResult.RoundLoser;
+
+            }
 
             // Set random better if it's the first round // 
             if (IsFirstRound()) CurrentBetter = Players[_random.Next(0, Players.Count)];        

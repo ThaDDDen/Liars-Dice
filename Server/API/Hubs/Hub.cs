@@ -180,6 +180,16 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
         await SendMessage(_gameBot, game.GameName, user.GameHost ? $"{user.UserName} has left the game! A new game host has randomly been assigned!" : $"{user.UserName} has left the game!");
 
+
+        if(game.RoundStarted)
+        {
+            await Clients.Group(game.GameName).SendAsync("ReceiveError", new ResponseModel()
+            {
+                Status = "Error",
+                Message = $"{user.UserName} dissconnected. 😣 The round will be restarted!" 
+            });
+            game.RestartRound();
+        }
         await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
 
         if(game.GameIsEmpty()) _games.RemoveGame(game);
@@ -233,11 +243,22 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         var user = Context.User.Identity.Name;
         _connections.RemoveConnection(user);
 
+
         if (_games.GetGameByPlayerName(user) != null)
         {
             var game = _games.GetGameByPlayerName(user);
             game.RemovePlayerFromGame(user);
 
+            if(game.RoundStarted)
+            {
+                Clients.Group(game.GameName).SendAsync("ReceiveError", new ResponseModel()
+                {
+                    Status = "Error",
+                    Message = $"{user} dissconnected. 😣 The round will be restarted!" 
+                });
+                game.RestartRound();
+            }
+            
             Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
         }
 
