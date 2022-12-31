@@ -48,6 +48,11 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
     setDicePickerValue(diceValueArray);
   }, [game]);
 
+  // ---- IF SOMEONE LEAVES DURING ROUND STARTED CLOSE MODAL ----
+  useEffect(() => {
+    if (!game.roundStarted) setBettingDialogVisible(false);
+  }, [game]);
+
   // --------- SET ALLOWED DICE AMOUNT PICKER ARRAY --------
   useEffect(() => {
     const diceAmountArray = getDiceAmountArray(game.players, game.currentBet);

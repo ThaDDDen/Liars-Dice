@@ -4,6 +4,7 @@ import { Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useGame } from "../../contexts/GameContext";
+import { useSound } from "../../contexts/SoundContext";
 import { useUser } from "../../contexts/UserContext";
 import { INVOKE_ROLL_DICE } from "../../utils/constants";
 import Background from "../layout/Background";
@@ -20,6 +21,7 @@ const Game = () => {
   const { currentUser } = useUser();
   const { connection, connectedUsers } = useConnection();
   const { colors } = useTheme();
+  const { playRollDice } = useSound();
 
   const [bettingDialogVisible, setBettingDialogVisible] = useState(false);
 
@@ -55,6 +57,7 @@ const Game = () => {
               mode={"contained"}
               onPress={() => {
                 connection.invoke(INVOKE_ROLL_DICE, currentUser);
+                playRollDice();
               }}
             />
           )}
