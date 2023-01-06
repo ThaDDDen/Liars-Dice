@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import ConnectionProvider from "./contexts/ConnectionContext";
+import DialogProvider from "./contexts/DialogContext";
 import GameProvider from "./contexts/GameContext";
-import InvitationProvider from "./contexts/InvitationContext";
 import SnackProvider from "./contexts/SnackContext";
 import SoundProvider from "./contexts/SoundContext";
 import { useTheme } from "./contexts/ThemeContext";
@@ -34,12 +34,12 @@ const Main = () => {
           <SnackProvider>
             <GameProvider>
               <UserProvider>
-                <InvitationProvider>
+                <DialogProvider>
                   <ConnectionProvider>
                     <StatusBar style={statusBarColor} />
                     <Navigation colorScheme={colorScheme} />
                   </ConnectionProvider>
-                </InvitationProvider>
+                </DialogProvider>
               </UserProvider>
             </GameProvider>
           </SnackProvider>

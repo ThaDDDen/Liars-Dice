@@ -53,6 +53,10 @@ export const INVOKE_CALL = "Call";
 
 export const INVOKE_KICK_PLAYER = "KickPlayer";
 
+export const INVOKE_REQUEST_TO_JOIN_GAME = "RequestToJoinGame";
+
+export const INVOKE_ACCEPT_JOIN_REQUEST = "AcceptJoinRequest";
+
 export const RECEIVE_MESSAGE = "ReceiveMessage";
 
 export const RECEIVE_GAME_INVITATION = "ReceiveGameInvitation";
@@ -66,3 +70,5 @@ export const RECEIVE_CONNECTED_USERS = "ConnectedUsers";
 export const RECEIVE_GAME = "ReceiveGame";
 
 export const RECEIVE_KICKED = "Kicked";
+
+export const RECEIVE_JOIN_REQUEST = "ReceiveJoinRequest";

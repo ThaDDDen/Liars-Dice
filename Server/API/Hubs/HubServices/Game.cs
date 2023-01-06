@@ -154,6 +154,11 @@ public class Game
         Players.ForEach(p => p.HasRolled = false);
     }
 
+    public HubUser GetGameHost()
+    {   
+        return Players.FirstOrDefault(p => p.GameHost);
+    }
+
 
     // ----- PRIVATE METHODS ----- //
     private void CheckRolls()
