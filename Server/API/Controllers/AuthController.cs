@@ -74,6 +74,7 @@ public class AuthController : ControllerBase
             {
                 status = "Success",
                 token = new JwtSecurityTokenHandler().WriteToken(token),
+                id = user.Id,
                 expiration = token.ValidTo,
                 avatarCode = user.AvatarCode
             });
@@ -107,6 +108,7 @@ public class AuthController : ControllerBase
 
         return Ok(new
         {
+            id = user.Id,
             username = User.Identity?.Name,
             avatarCode = user.AvatarCode
         });
