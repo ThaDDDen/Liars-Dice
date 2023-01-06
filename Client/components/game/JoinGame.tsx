@@ -4,8 +4,9 @@ import { View } from "react-native";
 import { Surface, Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
+import { useSnackBar } from "../../contexts/SnackContext";
 import { useUser } from "../../contexts/UserContext";
-import { INVOKE_JOIN_GAME } from "../../utils/constants";
+import { INVOKE_REQUEST_TO_JOIN_GAME } from "../../utils/constants";
 import Background from "../layout/Background";
 import Button from "../layout/Button";
 
@@ -13,6 +14,7 @@ const JoinGame = () => {
   const { currentUser } = useUser();
   const { connection } = useConnection();
   const { colors } = useTheme();
+  const { setResponseMessage } = useSnackBar();
 
   return (
     <Background>
@@ -20,7 +22,10 @@ const JoinGame = () => {
         <Formik
           initialValues={{ GameName: "" }}
           onSubmit={(values) => {
-            connection.invoke(INVOKE_JOIN_GAME, currentUser, values.GameName);
+            // JOINING GAME IS CURRENTLY REPLACE WITH SENDING REQUEST TO JOINT GAME
+            // connection.invoke(INVOKE_JOIN_GAME, currentUser, values.GameName);
+            connection.invoke(INVOKE_REQUEST_TO_JOIN_GAME, currentUser, values.GameName);
+            setResponseMessage({ status: "Success", message: `A request to join "${values.GameName}" has been sent to the game host.` });
           }}
         >
           {({ handleChange, handleSubmit, values, errors }) => {
@@ -30,7 +35,7 @@ const JoinGame = () => {
                   <Text variant="labelLarge">Game name</Text>
                   <Input value={values.GameName} onChangeText={handleChange("GameName")} />
                 </InputSurface>
-                <Button title={"join game"} mode={"contained"} onPress={() => handleSubmit()} />
+                <Button title={"send request"} mode={"contained"} onPress={() => handleSubmit()} />
               </>
             );
           }}

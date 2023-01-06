@@ -43,6 +43,11 @@ export type UserConnection = {
   room: string;
 };
 
+export type AcceptedRequest = {
+  user: User;
+  gameName: string;
+};
+
 export type Game = {
   id: string;
   gameOver: boolean;

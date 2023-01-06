@@ -134,6 +134,47 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
     }
 
+    public async Task RequestToJoinGame(HubUser user, string gameName)
+    {
+        var game = _games.GetGameByName(gameName);
+
+        if (game == null)
+        {
+            await Clients.Caller.SendAsync("ReceiveError", new ResponseModel()
+            {
+                Status = "Error",
+                Message = $"There is no game named \"{gameName}\"! Try again!"
+            });
+            return;
+        }
+
+        if (game.GameStarted)
+        {
+            await Clients.Caller.SendAsync("ReceiveError", new ResponseModel()
+            {
+                Status = "Error",
+                Message = $"The game has already started."
+            });
+            return; 
+        }
+
+        var gameHost =  _connections.GetConnectionByName(game.GetGameHost().UserName);
+
+        await Clients.Client(gameHost.User.ConnectionId).SendAsync("ReceiveJoinRequest", user);
+    }
+
+    public async Task AcceptJoinRequest(HubUser player, string gameName)
+    {
+        var game = _games.GetGameByName(gameName);
+
+        await Groups.AddToGroupAsync(_connections.GetConnectionByName(player.UserName).User.ConnectionId, gameName);
+        game.AddPlayerToGame(player);
+
+        await Clients.Group(gameName).SendAsync("ReceiveGame", game);
+        await SendMessage(_gameBot, gameName, $"{player.UserName} has joined the game!");
+    }
+
+    // JOIN GAME IS CURRENTLY NOT IN USE
     public async Task JoinGame(HubUser hubUser, string gameName)
     {
 

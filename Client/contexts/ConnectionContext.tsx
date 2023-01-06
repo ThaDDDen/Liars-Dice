@@ -1,8 +1,9 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { Game, GameInvitation, ResponseMessage, UserConnection, UserMessage } from "../types/types";
+import { Game, GameInvitation, ResponseMessage, User, UserConnection, UserMessage } from "../types/types";
 import {
   BASE_URL,
+  INVOKE_ACCEPT_JOIN_REQUEST,
   INVOKE_JOIN_GAME,
   INVOKE_JOIN_LOBBY,
   RECEIVE_ALREADY_CONNECTED,
@@ -10,11 +11,12 @@ import {
   RECEIVE_ERROR,
   RECEIVE_GAME,
   RECEIVE_GAME_INVITATION,
+  RECEIVE_JOIN_REQUEST,
   RECEIVE_KICKED,
   RECEIVE_MESSAGE,
 } from "../utils/constants";
+import { initialInvitationState, useDialog } from "./DialogContext";
 import { initialGameState, useGame } from "./GameContext";
-import { initialInvitationState, useInvitation } from "./InvitationContext";
 import { useSnackBar } from "./SnackContext";
 import { useUser } from "./UserContext";
 
@@ -39,7 +41,8 @@ interface Props {
 function ConnectionProvider({ children }: Props) {
   const [connection, setConnection] = useState<HubConnection>({} as HubConnection);
   const [connectedUsers, setConnectedUsers] = useState<UserConnection[]>([]);
-  const { invitation, invitationAccepted, setInvitation, setInvitationAccepted } = useInvitation();
+  const { invitation, invitationAccepted, setInvitation, setInvitationAccepted, setPlayersRequestingToJoin, acceptedRequests, setAcceptedRequests } =
+    useDialog();
   const { currentUser, setLobbyMessages, setGameMessages, setCurrentUser } = useUser();
   const { setResponseMessage } = useSnackBar();
   const { setGame } = useGame();
@@ -49,6 +52,15 @@ function ConnectionProvider({ children }: Props) {
     setInvitation(initialInvitationState);
     setInvitationAccepted(false);
   }, [invitationAccepted]);
+
+  useEffect(() => {
+    if (acceptedRequests.length !== 0) {
+      connection.invoke(INVOKE_ACCEPT_JOIN_REQUEST, acceptedRequests[0].user, acceptedRequests[0].gameName);
+      var acceptedArrayCopy = acceptedRequests;
+      acceptedArrayCopy.splice(0, 1);
+      setAcceptedRequests(acceptedArrayCopy);
+    }
+  }, [acceptedRequests]);
 
   const connectToHub = async (accessToken: string) => {
     try {
@@ -93,6 +105,10 @@ function ConnectionProvider({ children }: Props) {
         setGame(game);
         const updatedCurrentUser = game.players.find((p) => p.userName === currentUser.userName);
         updatedCurrentUser && setCurrentUser(updatedCurrentUser);
+      });
+
+      connection.on(RECEIVE_JOIN_REQUEST, (player: User) => {
+        setPlayersRequestingToJoin((prev) => [...prev, player]);
       });
 
       await connection.start();
