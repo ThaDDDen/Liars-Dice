@@ -43,6 +43,7 @@ export type UserConnection = {
 };
 
 export type Game = {
+  id: string;
   gameOver: boolean;
   gameName: string;
   diceCount: number;

@@ -17,6 +17,7 @@ const GameContext = createContext<GameContext>({
 });
 
 export const initialGameState = {
+  id: "",
   gameOver: false,
   gameHost: {} as User,
   gameName: "",
