@@ -43,6 +43,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         {
             User = new HubUser()
             {
+                Id = user.Id,
                 ConnectionId = Context.ConnectionId,
                 UserName = user.UserName,
                 AvatarCode = user.AvatarCode

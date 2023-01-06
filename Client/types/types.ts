@@ -1,4 +1,5 @@
 export type User = {
+  id: string;
   userName: string;
   avatarCode: string;
   gameHost: boolean;

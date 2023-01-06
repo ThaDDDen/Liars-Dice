@@ -7,7 +7,7 @@ import Button from "./layout/Button";
 import Logo from "./layout/Logo";
 
 const Home = ({ navigation }: HomeNavProps) => {
-  const { token, setCurrentUser } = useUser();
+  const { token, setCurrentUser, currentUser } = useUser();
 
   const getAuth = async (token: string) => {
     if (token) {
@@ -19,6 +19,7 @@ const Home = ({ navigation }: HomeNavProps) => {
         const deserializedResponse = await response.json();
         setCurrentUser({
           ...initialUserState,
+          id: deserializedResponse.id,
           userName: deserializedResponse.username,
           avatarCode: deserializedResponse.avatarCode,
           connectionId: deserializedResponse.connectionId,

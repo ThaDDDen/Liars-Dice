@@ -36,6 +36,7 @@ const LogIn = ({ navigation }: HomeNavProps) => {
             if (response.status === "Success") {
               setCurrentUser({
                 ...initialUserState,
+                id: response.id,
                 userName: values.username,
                 avatarCode: response.avatarCode,
                 connectionId: response.connectionId,

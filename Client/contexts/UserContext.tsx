@@ -31,6 +31,7 @@ interface Props {
 }
 
 export const initialUserState = {
+  id: "",
   userName: "",
   avatarCode: "",
   gameHost: false,
