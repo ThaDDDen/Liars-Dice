@@ -10,10 +10,11 @@ import {
   RECEIVE_ERROR,
   RECEIVE_GAME,
   RECEIVE_GAME_INVITATION,
+  RECEIVE_KICKED,
   RECEIVE_MESSAGE,
 } from "../utils/constants";
-import { useGame } from "./GameContext";
-import { useInvitation } from "./InvitationContext";
+import { initialGameState, useGame } from "./GameContext";
+import { initialInvitationState, useInvitation } from "./InvitationContext";
 import { useSnackBar } from "./SnackContext";
 import { useUser } from "./UserContext";
 
@@ -38,13 +39,15 @@ interface Props {
 function ConnectionProvider({ children }: Props) {
   const [connection, setConnection] = useState<HubConnection>({} as HubConnection);
   const [connectedUsers, setConnectedUsers] = useState<UserConnection[]>([]);
-  const { invitation, invitationAccepted, setInvitation } = useInvitation();
+  const { invitation, invitationAccepted, setInvitation, setInvitationAccepted } = useInvitation();
   const { currentUser, setLobbyMessages, setGameMessages, setCurrentUser } = useUser();
   const { setResponseMessage } = useSnackBar();
   const { setGame } = useGame();
 
   useEffect(() => {
     if (invitationAccepted) connection.invoke(INVOKE_JOIN_GAME, currentUser, invitation.gameName);
+    setInvitation(initialInvitationState);
+    setInvitationAccepted(false);
   }, [invitationAccepted]);
 
   const connectToHub = async (accessToken: string) => {
@@ -76,6 +79,10 @@ function ConnectionProvider({ children }: Props) {
 
       connection.on(RECEIVE_ERROR, (responseMessage: ResponseMessage) => {
         setResponseMessage(responseMessage);
+      });
+
+      connection.on(RECEIVE_KICKED, () => {
+        setGame(initialGameState);
       });
 
       connection.on(RECEIVE_CONNECTED_USERS, (connectedUsers: UserConnection[]) => {
