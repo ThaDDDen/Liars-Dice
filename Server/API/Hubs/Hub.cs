@@ -172,6 +172,35 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         }
     }
 
+    public async Task KickPlayer(HubUser player)
+    {
+        var game = _games.GetGameByPlayerName(player.UserName);
+        var user = _connections.GetConnectionByName(player.UserName);
+
+        await SendMessage(_gameBot, game.GameName, $"{player.UserName} has been kicked from the game!");
+        await Clients.Client(user.User.ConnectionId).SendAsync("Kicked");
+        await Clients.Client(user.User.ConnectionId).SendAsync("ReceiveError", new ResponseModel()
+            {
+                Status = "Error",
+                Message = "You have been kicked out of the game 😫" 
+            });
+
+        game.RemovePlayerFromGame(player.UserName);
+        await Groups.RemoveFromGroupAsync(user.User.ConnectionId, game.GameName);
+
+        if(game.RoundStarted)
+        {
+            await Clients.Group(game.GameName).SendAsync("ReceiveError", new ResponseModel()
+            {
+                Status = "Error",
+                Message = $"{player.UserName} got kicked! The round will be restarted!" 
+            });
+            game.RestartRound();
+        }
+
+        await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
+    }
+
     public async Task LeaveGame(HubUser user)
     {
         var game = _games.GetGameByPlayerName(user.UserName);

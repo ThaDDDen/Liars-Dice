@@ -51,6 +51,8 @@ export const INVOKE_SET_BET = "SetBet";
 
 export const INVOKE_CALL = "Call";
 
+export const INVOKE_KICK_PLAYER = "KickPlayer";
+
 export const RECEIVE_MESSAGE = "ReceiveMessage";
 
 export const RECEIVE_GAME_INVITATION = "ReceiveGameInvitation";
@@ -62,3 +64,5 @@ export const RECEIVE_ERROR = "ReceiveError";
 export const RECEIVE_CONNECTED_USERS = "ConnectedUsers";
 
 export const RECEIVE_GAME = "ReceiveGame";
+
+export const RECEIVE_KICKED = "Kicked";

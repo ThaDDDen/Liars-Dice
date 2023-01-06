@@ -10,12 +10,14 @@ interface InvitationContext {
   setInvitation: React.Dispatch<React.SetStateAction<GameInvitation>>;
   invitation: GameInvitation;
   invitationAccepted: boolean;
+  setInvitationAccepted: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const InvitationContext = createContext<InvitationContext>({
   setInvitation: () => console.warn("no provider found"),
   invitation: {} as GameInvitation,
   invitationAccepted: false,
+  setInvitationAccepted: () => console.warn("no provider found."),
 });
 
 export const initialInvitationState: GameInvitation = {
@@ -44,7 +46,7 @@ const InvitationProvider = ({ children }: Props) => {
   };
 
   return (
-    <InvitationContext.Provider value={{ invitation, setInvitation, invitationAccepted }}>
+    <InvitationContext.Provider value={{ invitation, setInvitation, invitationAccepted, setInvitationAccepted }}>
       {children}
       {invitation !== initialInvitationState && (
         <Portal>
