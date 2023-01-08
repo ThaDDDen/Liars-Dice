@@ -1,4 +1,5 @@
-using API.Hubs.HubModels;
+
+using Core.Models;
 
 namespace API.Hubs.HubServices;
 
