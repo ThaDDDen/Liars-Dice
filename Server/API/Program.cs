@@ -1,10 +1,10 @@
 using System.Text;
-using API.Auth;
-using API.Auth.Models;
 using API.Hubs;
-using API.Hubs.HubServices;
+using Core.Entities.AuthEntities;
 using Core.Interfaces;
 using Core.Services;
+using Infrastructure.AppData;
+using Infrastructure.Identity;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -21,6 +21,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AuthDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("IdentityConnection")));
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("AppDataConnection")));
 
 builder.Services.AddIdentity<AppUser, IdentityRole>()
     .AddEntityFrameworkStores<AuthDbContext>()
@@ -77,7 +79,9 @@ builder.Services.AddSignalR();
 
 builder.Services.AddSingleton<IGameRepository, GameRepository>();
 builder.Services.AddSingleton<IGameService, GameService>();
-builder.Services.AddSingleton<ConnectionRepository>();
+builder.Services.AddSingleton<IConnectionRepository, ConnectionRepository>();
+builder.Services.AddSingleton<IAppDataService, AppDataService>();
+builder.Services.AddScoped(typeof(IAppDataRepository<>), typeof(AppDataRepository<>));
 // builder.Services.AddSingleton<GameRepository>();
 
 var app = builder.Build();

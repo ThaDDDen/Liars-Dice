@@ -1,5 +1,4 @@
-
-namespace Core.Models;
+namespace Core.Models.App;
 
 public class RoundResult
 {

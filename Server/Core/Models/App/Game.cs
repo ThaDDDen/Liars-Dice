@@ -1,4 +1,4 @@
-namespace Core.Models;
+namespace Core.Models.App;
 public class Game
 {
     private readonly Random _random;
