@@ -3,6 +3,9 @@ using API.Auth;
 using API.Auth.Models;
 using API.Hubs;
 using API.Hubs.HubServices;
+using Core.Interfaces;
+using Core.Services;
+using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -72,8 +75,10 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddSignalR();
 
+builder.Services.AddSingleton<IGameRepository, GameRepository>();
+builder.Services.AddSingleton<IGameService, GameService>();
 builder.Services.AddSingleton<ConnectionRepository>();
-builder.Services.AddSingleton<GameRepository>();
+// builder.Services.AddSingleton<GameRepository>();
 
 var app = builder.Build();
 
