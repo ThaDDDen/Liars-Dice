@@ -1,4 +1,4 @@
-using Core.Models;
+using Core.Models.App;
 
 namespace Core.Interfaces;
 public interface IGameRepository

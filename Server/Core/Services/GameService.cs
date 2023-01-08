@@ -1,4 +1,4 @@
-using Core.Models;
+using Core.Models.App;
 using Core.Interfaces;
 
 namespace Core.Services;

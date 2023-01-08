@@ -1,5 +1,5 @@
 using Core.Interfaces;
-using Core.Models;
+using Core.Models.App;
 
 namespace Infrastructure.Repositories;
 
