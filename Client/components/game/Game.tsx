@@ -49,9 +49,9 @@ const Game = () => {
     <Background>
       <GameHeader openChatModal={openChatModal} />
       <Table openOnlineUsersModal={openOnlineUsersModal} />
-      {game.gameStarted && !game.gameOver && !currentUser.isOut && (
+      {game.gameStarted && !game.gameOver && !currentUser.gameProperties.isOut && (
         <GameBar>
-          {!currentUser.hasRolled && (
+          {!currentUser.gameProperties.hasRolled && (
             <Button
               title={"roll"}
               mode={"contained"}
@@ -61,7 +61,9 @@ const Game = () => {
               }}
             />
           )}
-          {currentUser.hasRolled && <UserHand dice={game.players.find((x) => x.userName === currentUser.userName)?.dice} />}
+          {currentUser.gameProperties.hasRolled && (
+            <UserHand dice={game.players.find((x) => x.userName === currentUser.userName)?.gameProperties.dice} />
+          )}
         </GameBar>
       )}
 

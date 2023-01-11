@@ -34,11 +34,13 @@ export const initialUserState = {
   id: "",
   userName: "",
   avatarCode: "",
-  gameHost: false,
-  dice: [],
   connectionId: "",
-  hasRolled: false,
-  isOut: false,
+  gameProperties: {
+    gameHost: false,
+    dice: [],
+    hasRolled: false,
+    isOut: false,
+  },
 };
 
 function UserProvider({ children }: Props) {

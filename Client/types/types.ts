@@ -2,9 +2,13 @@ export type User = {
   id: string;
   userName: string;
   avatarCode: string;
+  connectionId: string;
+  gameProperties: GameProperties;
+};
+
+export type GameProperties = {
   gameHost: boolean;
   dice: number[];
-  connectionId: string;
   hasRolled: boolean;
   isOut: boolean;
 };

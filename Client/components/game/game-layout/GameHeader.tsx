@@ -50,7 +50,7 @@ const GameHeader = ({ openChatModal }: Props) => {
           <ButtonContainer>
             <IconButton icon="chat-outline" onPress={() => openChatModal()} style={{ margin: 0 }} />
             <IconButton icon="exit-to-app" onPress={() => setLeaveDialogVisible(true)} />
-            {currentUser.gameHost && (
+            {currentUser.gameProperties.gameHost && (
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <IconButton iconColor={game.gameStarted ? "green" : undefined} icon="play" onPress={startGame} style={{ margin: 0 }} />
                 {game.gameStarted ? (
@@ -97,7 +97,7 @@ const GameHeader = ({ openChatModal }: Props) => {
               mode="text"
               onPress={() => {
                 setGame(initialGameState);
-                currentUser.gameHost = false;
+                currentUser.gameProperties.gameHost = false;
                 connection.invoke(INVOKE_LEAVE_GAME, currentUser);
               }}
               title="Chicken out and leave! 🐥"

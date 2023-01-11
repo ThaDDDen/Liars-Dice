@@ -108,8 +108,8 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         }
         await Groups.AddToGroupAsync(Context.ConnectionId, gameSettings.GameName);
 
-        gameHost.GameHost = true;
-        gameHost.Dice = diceList;
+        gameHost.GameProperties.GameHost = true;
+        gameHost.GameProperties.Dice = diceList;
 
 
 
@@ -257,7 +257,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, game.GameName);
         _gameService.RemovePlayerFromGame(game.GameName, user.UserName);
 
-        await SendMessage(_gameBot, game.GameName, user.GameHost ? $"{user.UserName} has left the game! A new game host has randomly been assigned!" : $"{user.UserName} has left the game!");
+        await SendMessage(_gameBot, game.GameName, user.GameProperties.GameHost ? $"{user.UserName} has left the game! A new game host has randomly been assigned!" : $"{user.UserName} has left the game!");
 
 
         if(game.RoundStarted)

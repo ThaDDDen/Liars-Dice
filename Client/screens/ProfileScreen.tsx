@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
-import { Text, useTheme } from "react-native-paper";
+import { Text } from "react-native-paper";
 import styled from "styled-components/native";
 import Background from "../components/layout/Background";
 import Button from "../components/layout/Button";
