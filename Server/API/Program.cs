@@ -80,7 +80,7 @@ builder.Services.AddSignalR();
 builder.Services.AddSingleton<IGameRepository, GameRepository>();
 builder.Services.AddSingleton<IGameService, GameService>();
 builder.Services.AddSingleton<IConnectionRepository, ConnectionRepository>();
-builder.Services.AddSingleton<IAppDataService, AppDataService>();
+builder.Services.AddScoped<IAppDataService, AppDataService>();
 builder.Services.AddScoped(typeof(IAppDataRepository<>), typeof(AppDataRepository<>));
 // builder.Services.AddSingleton<GameRepository>();
 

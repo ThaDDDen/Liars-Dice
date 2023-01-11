@@ -13,7 +13,8 @@ public class AppDataRepository<T> : IAppDataRepository<T> where T : BaseEntity
 
     public AppDataRepository(AppDbContext context)
     {
-        _context = context;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+        _entities = context.Set<T>();
     }
 
     public async Task<List<T>> GetAllAsync()
@@ -42,7 +43,12 @@ public class AppDataRepository<T> : IAppDataRepository<T> where T : BaseEntity
 
     public async Task<IEnumerable<T>> FindByConditionAsync(Expression<Func<T, bool>> predicate)
     {
+        try{
         return await _entities.Where(predicate).ToListAsync();
+
+        }catch{
+            return null;
+        }
     }
 
 
