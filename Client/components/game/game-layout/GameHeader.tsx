@@ -6,7 +6,7 @@ import { useConnection } from "../../../contexts/ConnectionContext";
 import { initialGameState, useGame } from "../../../contexts/GameContext";
 import { useSnackBar } from "../../../contexts/SnackContext";
 import { useUser } from "../../../contexts/UserContext";
-import { INVOKE_LEAVE_GAME, INVOKE_START_GAME, INVOKE_UPDATE_GAME_SETTINGS } from "../../../utils/constants";
+import { INITIAL_GAME_PROPERTIES, INVOKE_LEAVE_GAME, INVOKE_START_GAME, INVOKE_UPDATE_GAME_SETTINGS } from "../../../utils/constants";
 import Button from "../../layout/Button";
 import ContentCard from "../../layout/ContentCard";
 import GameHostPanel from "../game-settings/GameHostPanel";
@@ -17,7 +17,7 @@ interface Props {
 
 const GameHeader = ({ openChatModal }: Props) => {
   const { game, setGame } = useGame();
-  const { currentUser, setGameMessages } = useUser();
+  const { currentUser, setCurrentUser, setGameMessages } = useUser();
   const { setResponseMessage } = useSnackBar();
   const { connection } = useConnection();
   const [tableNotFullDialogVisible, setTableNotFullDialogVisible] = useState(false);
@@ -98,6 +98,7 @@ const GameHeader = ({ openChatModal }: Props) => {
               onPress={() => {
                 setGame(initialGameState);
                 setGameMessages([]);
+                setCurrentUser({ ...currentUser, gameProperties: INITIAL_GAME_PROPERTIES });
                 currentUser.gameProperties.gameHost = false;
                 connection.invoke(INVOKE_LEAVE_GAME, currentUser);
               }}
