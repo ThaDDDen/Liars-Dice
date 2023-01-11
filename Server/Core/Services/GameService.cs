@@ -60,7 +60,7 @@ public class GameService: IGameService
         var game = _gameRepository.GetGameByName(gameName);
         // If the player that's leaving is gameHost we assign //
         // a random gameHost from the remaining players       //
-        if(game.Players.FirstOrDefault(p => p.UserName == playerToRemove).GameProperties.GameHost) 
+        if(game.Players.FirstOrDefault(p => p.UserName == playerToRemove).GameProperties.GameHost && game.Players.Count != 1) 
         {
             game.Players.FirstOrDefault(p => p.UserName == playerToRemove).GameProperties.GameHost = false;
             game.Players.Where(p => p.UserName != playerToRemove).ToList()[_random.Next(0, game.Players.Where(p => p.UserName != playerToRemove).ToList().Count)].GameProperties.GameHost = true;

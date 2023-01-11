@@ -111,15 +111,10 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         gameHost.GameProperties.GameHost = true;
         gameHost.GameProperties.Dice = diceList;
 
-
-
         var game = _gameService.CreateGame(gameSettings, gameHost);
-
-        _gameRepository.AddGame(game);
 
         await Clients.Caller.SendAsync("ReceiveGame", game);
         await SendMessage(_gameBot, gameSettings.GameName, $"{gameHost.UserName} has joined the game!");
-
     }
 
     public async Task UpdateGameSettings(GameSettings updatedGameSettings)
@@ -139,7 +134,6 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
         await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
         await SendMessage(_gameBot, game.GameName, $"{user.UserName} has started the game!");
-
     }
 
     public async Task RequestToJoinGame(HubUser user, string gameName)
