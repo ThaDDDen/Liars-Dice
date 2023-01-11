@@ -14,7 +14,7 @@ const MessageForm = ({ chatName }: Props) => {
   const [message, setMessage] = useState("");
   const { connection } = useConnection();
   const { colors } = useTheme();
-  const {currentUser} = useUser();
+  const { currentUser } = useUser();
 
   const handleSendMessage = () => {
     if (message) {

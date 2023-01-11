@@ -23,7 +23,7 @@ export const getDiceValueArray = (currentBet: GameBet | null, diceAmount: number
 
 export const getDiceAmountArray = (players: User[], currentBet: GameBet | null) => {
   const diceAmountArr: number[] = [];
-  const diceInPlay = players.map((x) => x.dice.length).reduce((x, c) => x + c, 0);
+  const diceInPlay = players.map((x) => x.gameProperties.dice.length).reduce((x, c) => x + c, 0);
 
   if (currentBet) {
     var allowedDiceAmount = currentBet.diceAmount;
@@ -46,5 +46,5 @@ export const getDiceAmountArray = (players: User[], currentBet: GameBet | null) 
 };
 
 export const getCurrentRound = (game: Game) => {
-  return game.diceCount * game.playerCount - game.players.map((x) => x.dice.length).reduce((x, c) => x + c, 0) + 1;
+  return game.diceCount * game.playerCount - game.players.map((x) => x.gameProperties.dice.length).reduce((x, c) => x + c, 0) + 1;
 };

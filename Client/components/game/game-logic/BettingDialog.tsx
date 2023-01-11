@@ -29,7 +29,7 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
   const [dicePickerAmount, setDicePickerAmount] = useState<number[]>([]);
   const [dicePickerValue, setDicePickerValue] = useState<number[]>([]);
 
-  const maxBet = 6 * game.players.map((x) => x.dice.length).reduce((x, c) => x + c, 0);
+  const maxBet = 6 * game.players.map((x) => x.gameProperties.dice.length).reduce((x, c) => x + c, 0);
 
   useEffect(() => {
     if (game.currentBet) {

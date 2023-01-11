@@ -42,11 +42,11 @@ public class GameService: IGameService
 
             if (game.GameStarted) return false;
 
-            if (!newPlayer.GameHost)
+            if (!newPlayer.GameProperties.GameHost)
             {
                 for (int i = 0; i < game.DiceCount; i++)
                 {
-                    newPlayer.Dice.Add(1);
+                    newPlayer.GameProperties.Dice.Add(1);
                 }
             }
                 game.Players.Add(newPlayer);
@@ -60,10 +60,10 @@ public class GameService: IGameService
         var game = _gameRepository.GetGameByName(gameName);
         // If the player that's leaving is gameHost we assign //
         // a random gameHost from the remaining players       //
-        if(game.Players.FirstOrDefault(p => p.UserName == playerToRemove).GameHost) 
+        if(game.Players.FirstOrDefault(p => p.UserName == playerToRemove).GameProperties.GameHost) 
         {
-            game.Players.FirstOrDefault(p => p.UserName == playerToRemove).GameHost = false;
-            game.Players.Where(p => p.UserName != playerToRemove).ToList()[_random.Next(0, game.Players.Where(p => p.UserName != playerToRemove).ToList().Count)].GameHost = true;
+            game.Players.FirstOrDefault(p => p.UserName == playerToRemove).GameProperties.GameHost = false;
+            game.Players.Where(p => p.UserName != playerToRemove).ToList()[_random.Next(0, game.Players.Where(p => p.UserName != playerToRemove).ToList().Count)].GameProperties.GameHost = true;
         }
         game.Players.Remove(game.Players.FirstOrDefault(p => p.UserName == playerToRemove));
         game.PlayerCount--;
@@ -72,8 +72,8 @@ public class GameService: IGameService
     public void RollDice(string gameName, HubUser user)
     {
         var game = _gameRepository.GetGameByName(gameName);
-        user.Dice = game.Players.FirstOrDefault(x => x.UserName == user.UserName).Dice.Select(y => y = _random.Next(1, 7)).ToList();
-        user.HasRolled = true;
+        user.GameProperties.Dice = game.Players.FirstOrDefault(x => x.UserName == user.UserName).GameProperties.Dice.Select(y => y = _random.Next(1, 7)).ToList();
+        user.GameProperties.HasRolled = true;
         CheckRolls(game);
     }
 
@@ -96,9 +96,9 @@ public class GameService: IGameService
 
         if (result >= game.CurrentBet.DiceAmount)
         {
-            caller.Dice.RemoveAt(0);
+            caller.GameProperties.Dice.RemoveAt(0);
 
-            if(caller.Dice.Count == 0) caller.IsOut = true;
+            if(caller.GameProperties.Dice.Count == 0) caller.GameProperties.IsOut = true;
 
             roundResult.RoundLoser = caller;
             roundResult.RoundWinner = better;
@@ -106,9 +106,9 @@ public class GameService: IGameService
         }
         else
         {
-            better.Dice.RemoveAt(0);
+            better.GameProperties.Dice.RemoveAt(0);
 
-            if(better.Dice.Count == 0) better.IsOut = true;
+            if(better.GameProperties.Dice.Count == 0) better.GameProperties.IsOut = true;
 
             roundResult.RoundLoser = better;
             roundResult.RoundWinner = caller;
@@ -145,7 +145,7 @@ public class GameService: IGameService
             {
                 newDiceList.Add(1);
             }
-            player.Dice = newDiceList;
+            player.GameProperties.Dice = newDiceList;
         }
     }   
 
@@ -160,18 +160,18 @@ public class GameService: IGameService
         var game = _gameRepository.GetGameByName(gameName);
         game.CurrentBet = null;
         game.RoundStarted = false;
-        game.Players.ForEach(p => p.HasRolled = false);
+        game.Players.ForEach(p => p.GameProperties.HasRolled = false);
     }
 
     public HubUser GetGameHost(string gameName)
     {   
         var game = _gameRepository.GetGameByName(gameName);
-        return game.Players.FirstOrDefault(p => p.GameHost);
+        return game.Players.FirstOrDefault(p => p.GameProperties.GameHost);
     }
 
     private void CheckRolls(Game game)
     {
-        if (game.Players.Where(p => !p.IsOut).All(x => x.HasRolled))
+        if (game.Players.Where(p => !p.GameProperties.IsOut).All(x => x.GameProperties.HasRolled))
         {
             game.RoundStarted = true;
 
@@ -188,7 +188,7 @@ public class GameService: IGameService
 
     private bool IsFirstRound(Game game)
     {
-        var diceLeft = game.Players.Select(x => (x.Dice.Count)).Sum();
+        var diceLeft = game.Players.Select(x => (x.GameProperties.Dice.Count)).Sum();
 
         return game.DiceCount * game.PlayerCount == diceLeft;
     }
@@ -200,19 +200,19 @@ public class GameService: IGameService
 
         game.PreviousBetter = currentBetter;
         
-        if (currentBetter == game.Players.Where(p => !p.IsOut).Last())
+        if (currentBetter == game.Players.Where(p => !p.GameProperties.IsOut).Last())
         {
-            game.CurrentBetter = game.Players.Where(p => !p.IsOut).First();
+            game.CurrentBetter = game.Players.Where(p => !p.GameProperties.IsOut).First();
             return;
         }
-        game.CurrentBetter = game.Players.Where(p => !p.IsOut).ToList()[game.Players.Where(p => !p.IsOut).ToList().IndexOf(currentBetter) + 1];
+        game.CurrentBetter = game.Players.Where(p => !p.GameProperties.IsOut).ToList()[game.Players.Where(p => !p.GameProperties.IsOut).ToList().IndexOf(currentBetter) + 1];
     }
 
     private void PrepareNextRound(Game game)
     {
         game.CurrentBet = null;
         game.RoundStarted = false;
-        game.Players.ForEach(p => p.HasRolled = false);
+        game.Players.ForEach(p => p.GameProperties.HasRolled = false);
         game.Round++;
     }
 
@@ -226,11 +226,11 @@ public class GameService: IGameService
         {
             if (PlayerHasStraight(player))
             {
-                diceWithInStraight += player.Dice.Count;
+                diceWithInStraight += player.GameProperties.Dice.Count;
             }
             else
             {
-                foreach (var dice in player.Dice)
+                foreach (var dice in player.GameProperties.Dice)
                 {
                     if (dice == game.CurrentBet.DiceValue)
                     {
@@ -248,9 +248,9 @@ public class GameService: IGameService
 
     private bool PlayerHasStraight(HubUser player)
     {
-        if (player.Dice.Count < 3) return false;
+        if (player.GameProperties.Dice.Count < 3) return false;
 
-        var orderedHand = player.Dice.OrderBy(dice => dice).ToList();
+        var orderedHand = player.GameProperties.Dice.OrderBy(dice => dice).ToList();
 
         if (orderedHand[0] != 1) return false;
 
@@ -263,7 +263,7 @@ public class GameService: IGameService
 
     private void CheckGameOver(Game game)
     {
-        if(game.Players.Where(p => p.Dice.Count > 0).Count() == 1) game.GameOver = true;
+        if(game.Players.Where(p => p.GameProperties.Dice.Count > 0).Count() == 1) game.GameOver = true;
     }
 
        

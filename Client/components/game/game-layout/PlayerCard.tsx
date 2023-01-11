@@ -46,7 +46,7 @@ const PlayerCard = ({ player, disabled }: Props) => {
             }}
             title="Send Message"
           />
-          {currentUser.gameHost && (
+          {currentUser.gameProperties.gameHost && (
             <>
               <Divider />
               <Menu.Item onPress={() => connection.invoke(INVOKE_KICK_PLAYER, player)} title="Kick" />
@@ -62,7 +62,7 @@ const PlayerCard = ({ player, disabled }: Props) => {
           {player.userName}
         </Text>
       </NameContainer>
-      {player.gameHost && (
+      {player.gameProperties.gameHost && (
         <GameHostCrown>
           <MaterialCommunityIcons name="crown" size={18} color="yellow" />
         </GameHostCrown>
@@ -70,7 +70,7 @@ const PlayerCard = ({ player, disabled }: Props) => {
 
       {/* Experiment with viewing one dice with a value to represent nr of dice left */}
       <View style={{ position: "absolute", left: -5, top: -7 }}>
-        <ValueDice size={25} value={player.dice.length} />
+        <ValueDice size={25} value={player.gameProperties.dice.length} />
       </View>
     </Container>
   );
