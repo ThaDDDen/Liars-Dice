@@ -278,6 +278,15 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
     public async Task InvitePlayer(HubUser hubUser, string playerToInvite)
     {
+        if(_gameRepository.UserIsPlaying(playerToInvite))
+        {
+            await Clients.Caller.SendAsync("ReceiveError", new ResponseModel()
+            {
+                Status = "Error",
+                Message = $"{playerToInvite} is already playing a game." 
+            });
+            return;
+        }
         var game = _gameRepository.GetGameByPlayerName(hubUser.UserName);
 
         var user = _connectionRepository.GetConnectionByName(playerToInvite);

@@ -38,4 +38,16 @@ public class GameRepository: IGameRepository
 
         return _gameRepository[gameIndex];
     }
+
+    public bool UserIsPlaying(string userName)
+    {
+        foreach (var game in _gameRepository)
+        {
+            foreach (var player in game.Players)
+            {
+                if(player.UserName == userName) return true;
+            }
+        }
+        return false;
+    }
 }
