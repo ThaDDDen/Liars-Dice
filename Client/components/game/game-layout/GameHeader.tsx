@@ -17,7 +17,7 @@ interface Props {
 
 const GameHeader = ({ openChatModal }: Props) => {
   const { game, setGame } = useGame();
-  const { currentUser } = useUser();
+  const { currentUser, setGameMessages } = useUser();
   const { setResponseMessage } = useSnackBar();
   const { connection } = useConnection();
   const [tableNotFullDialogVisible, setTableNotFullDialogVisible] = useState(false);
@@ -97,6 +97,7 @@ const GameHeader = ({ openChatModal }: Props) => {
               mode="text"
               onPress={() => {
                 setGame(initialGameState);
+                setGameMessages([]);
                 currentUser.gameProperties.gameHost = false;
                 connection.invoke(INVOKE_LEAVE_GAME, currentUser);
               }}
