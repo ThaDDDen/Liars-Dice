@@ -3,6 +3,7 @@ import { createContext, ReactNode, useContext, useEffect, useState } from "react
 import { Game, GameInvitation, ResponseMessage, User, UserConnection, UserMessage } from "../types/types";
 import {
   BASE_URL,
+  INITIAL_GAME_PROPERTIES,
   INVOKE_ACCEPT_JOIN_REQUEST,
   INVOKE_JOIN_GAME,
   INVOKE_JOIN_LOBBY,
@@ -95,6 +96,7 @@ function ConnectionProvider({ children }: Props) {
 
       connection.on(RECEIVE_KICKED, () => {
         setGame(initialGameState);
+        setCurrentUser({ ...currentUser, gameProperties: INITIAL_GAME_PROPERTIES });
       });
 
       connection.on(RECEIVE_CONNECTED_USERS, (connectedUsers: UserConnection[]) => {

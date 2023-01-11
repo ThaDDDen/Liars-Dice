@@ -27,6 +27,13 @@ export const FOUR_SEAT_TABLE = [
   { position: "absolute", bottom: Dimensions.get("window").width * 0.05, left: 1, alignItems: "center" } as StyleProp<ViewStyle>,
 ];
 
+export const INITIAL_GAME_PROPERTIES = {
+  gameHost: false,
+  dice: [],
+  hasRolled: false,
+  isOut: false,
+};
+
 export const BASE_URL = "http://192.168.0.4:5141/";
 
 export const INVOKE_JOIN_LOBBY = "JoinLobby";
