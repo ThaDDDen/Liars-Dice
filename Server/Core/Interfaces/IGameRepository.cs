@@ -8,5 +8,6 @@ public interface IGameRepository
    Game GetGameByName(string gameName);
    Game GetGameByPlayerName(string playerName);
    Game UpdateGame(Game game);
+   bool UserIsPlaying(string userName);
    
 }
