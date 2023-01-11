@@ -75,8 +75,6 @@ const DialogProvider = ({ children }: Props) => {
     }
   };
 
-  console.log(playersRequestingToJoin);
-
   return (
     <DialogContext.Provider
       value={{
