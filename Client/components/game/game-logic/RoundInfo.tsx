@@ -119,7 +119,7 @@ const RoundInfo = () => {
       playWinnerSound();
       scaleInWinner();
     }
-  }, [game]);
+  }, [game.gameOver]);
 
   return (
     <>
