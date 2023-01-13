@@ -42,7 +42,9 @@ const CreateGame = () => {
             return (
               <>
                 <ContentCard title="Game name">
-                  <Input value={values.GameName} onChangeText={handleChange("GameName")} />
+                  <InputContainer>
+                    <Input value={values.GameName} onChangeText={handleChange("GameName")} />
+                  </InputContainer>
                 </ContentCard>
 
                 <ContentCard title="Dice count">
@@ -53,7 +55,7 @@ const CreateGame = () => {
                   <PlayerPicker playerCount={playerCount} setPlayerCount={setPlayerCount} />
                 </ContentCard>
 
-                <Button title={"Create Game"} mode={"contained"} onPress={() => handleSubmit()} />
+                <Button title={"Create Game"} mode={"contained"} onPress={() => handleSubmit()} styles={{ marginTop: 10 }} />
               </>
             );
           }}
@@ -69,10 +71,17 @@ const SettingsContainer = styled.View`
   padding: 10px;
 `;
 
-const Input = styled.TextInput`
-  background: white;
+const InputContainer = styled.View`
+  flex-direction: row;
+  border: 1px solid black;
   border-radius: 5px;
-  border: solid 1px black;
-  padding: 8px;
+  background: white;
+  margin: 0 8px;
+  margin-top: 10px;
+`;
+
+const Input = styled.TextInput`
+  flex: 1;
+  padding: 5px 10px;
   font-size: 18px;
 `;
