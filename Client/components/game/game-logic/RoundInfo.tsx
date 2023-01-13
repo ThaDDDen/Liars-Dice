@@ -2,8 +2,11 @@ import React, { useEffect, useRef } from "react";
 import { Animated, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
-import { useGame } from "../../../contexts/GameContext";
+import { useConnection } from "../../../contexts/ConnectionContext";
+import { initialGameState, useGame } from "../../../contexts/GameContext";
 import { useSound } from "../../../contexts/SoundContext";
+import { useUser } from "../../../contexts/UserContext";
+import { INITIAL_GAME_PROPERTIES, INVOKE_LEAVE_GAME } from "../../../utils/constants";
 import Button from "../../layout/Button";
 import WinnerSvg from "../../layout/WinnerSvg";
 import UserAvatar from "../../Lobby/UserAvatar";
@@ -13,7 +16,9 @@ const RoundInfo = () => {
   const { game } = useGame();
   const { colors } = useTheme();
   const { playWinnerSound } = useSound();
-
+  const { connection } = useConnection();
+  const { currentUser, setGameMessages, setCurrentUser } = useUser();
+  const { setGame } = useGame();
   const scaleInCurrentBetAnimation = useRef(new Animated.Value(0)).current;
   const scaleInCallAnimation = useRef(new Animated.Value(0)).current;
   const scaleInResultBetterAnimation = useRef(new Animated.Value(0)).current;
@@ -144,7 +149,18 @@ const RoundInfo = () => {
               <CenterText variant="bodySmall" style={{ marginTop: 10 }}>
                 {game.roundResult.roundWinner.userName} wins the game! 🎉
               </CenterText>
-              <Button toLower compact title="Leave Game" mode="text" onPress={() => {}} />
+              <Button
+                toLower
+                compact
+                title="Leave Game"
+                mode="text"
+                onPress={() => {
+                  setGame(initialGameState);
+                  setGameMessages([]);
+                  setCurrentUser({ ...currentUser, gameProperties: INITIAL_GAME_PROPERTIES });
+                  connection.invoke(INVOKE_LEAVE_GAME, currentUser);
+                }}
+              />
             </GameResultText>
           </GameResultContainer>
         </View>
