@@ -1,6 +1,5 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
-import { View } from "react-native";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useSnackBar } from "../../contexts/SnackContext";
@@ -10,7 +9,7 @@ import { INVOKE_CREATE_GAME } from "../../utils/constants";
 import Background from "../layout/Background";
 import Button from "../layout/Button";
 import ContentCard from "../layout/ContentCard";
-import SettingsHeader from "./game-assets/GameSettingsHeader";
+import GameSettingsHeader from "../layout/GameSettingsHeader";
 import DicePicker from "./game-settings/DicePicker";
 import PlayerPicker from "./game-settings/PlayerPicker";
 
@@ -23,9 +22,7 @@ const CreateGame = () => {
 
   return (
     <Background>
-      <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <SettingsHeader />
-      </View>
+      <GameSettingsHeader />
       <SettingsContainer>
         <Formik
           initialValues={{ GameName: "" }}
