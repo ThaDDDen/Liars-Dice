@@ -25,7 +25,7 @@ const registerSchema = yup.object().shape({
 });
 
 const Register = ({ navigation, route }: HomeNavProps) => {
-  const { setCurrentUser } = useUser();
+  const { setCurrentUser, setToken } = useUser();
   const { setResponseMessage } = useSnackBar();
 
   const emailRef = useRef<TextInput>(null);
@@ -47,10 +47,12 @@ const Register = ({ navigation, route }: HomeNavProps) => {
               var loginResponse = await postLogInModel({ username: values.username, password: values.password });
               setCurrentUser({
                 ...initialUserState,
+                id: loginResponse.id,
                 userName: values.username,
                 avatarCode: loginResponse.avatarCode,
                 connectionId: loginResponse.connectionId,
               });
+              setToken(loginResponse.token);
             } else {
               setResponseMessage(registerResponse as ResponseMessage);
             }
