@@ -108,6 +108,8 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         }
         await Groups.AddToGroupAsync(Context.ConnectionId, gameSettings.GameName);
 
+        // Note: The following values gets set to the client-side user upon receiveing the game.
+
         gameHost.GameProperties.GameHost = true;
         gameHost.GameProperties.Dice = diceList;
 
@@ -176,7 +178,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         await SendMessage(_gameBot, gameName, $"{player.UserName} has joined the game!");
     }
 
-    // JOIN GAME IS CURRENTLY NOT IN USE
+
     public async Task JoinGame(HubUser hubUser, string gameName)
     {
 
