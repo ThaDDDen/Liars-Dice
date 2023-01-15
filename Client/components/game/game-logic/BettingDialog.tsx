@@ -1,10 +1,11 @@
+import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Dialog, Portal, Text } from "react-native-paper";
+import { Dialog, Portal, Surface, Text, useTheme } from "react-native-paper";
 import { useConnection } from "../../../contexts/ConnectionContext";
 import { useGame } from "../../../contexts/GameContext";
 import { useUser } from "../../../contexts/UserContext";
-import { INVOKE_CALL, INVOKE_SET_BET } from "../../../utils/constants";
+import { diceValues, INVOKE_CALL, INVOKE_SET_BET, valuesToWords } from "../../../utils/constants";
 import { getDiceAmountArray, getDiceValueArray } from "../../../utils/gameFunctions";
 import Button from "../../layout/Button";
 import ValueDice from "../game-assets/ValueDice";
@@ -20,6 +21,7 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
   const { game } = useGame();
   const { connection } = useConnection();
   const { currentUser } = useUser();
+  const { colors } = useTheme();
 
   //BET VALUES AND AMOUNT
   const [diceAmount, setDiceAmount] = useState<number>(1);
@@ -72,37 +74,55 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
       <Dialog visible={bettingDialogVisible}>
         <Dialog.Title>Your turn!</Dialog.Title>
         <Dialog.Content>
-          <View style={{ flexDirection: "row", paddingHorizontal: 80, justifyContent: "space-around", marginBottom: 20 }}>
-            {maxBet !== game.currentBet?.diceAmount * game.currentBet?.diceValue && (
-              <>
-                <DiceBetAmountPicker setDiceAmount={setDiceAmount} dicePickerAmount={dicePickerAmount} />
-                <DiceBetValuePicker setDiceValue={setDiceValue} dicePickerValue={dicePickerValue} defaultValue={diceValue} />
-              </>
+          <View style={{ marginBottom: 10 }}>
+            {game.currentBet ? (
+              <Surface style={{ borderRadius: 5, padding: 5, alignItems: "center" }}>
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                  <Text variant="bodyLarge">
+                    {game.currentBet.better.userName} bet {game.currentBet.diceAmount} x{" "}
+                  </Text>
+                  <ValueDice value={game.currentBet.diceValue} size={22} />
+                  <Text variant="bodyLarge">!</Text>
+                </View>
+                <Text variant="bodyLarge">You can either raise their bet or call!</Text>
+              </Surface>
+            ) : (
+              <Surface style={{ borderRadius: 5, padding: 5, alignItems: "center" }}>
+                <Text>You start the betting this round!</Text>
+              </Surface>
             )}
           </View>
-          {game.currentBet && (
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Text variant="bodyLarge">
-                {game.currentBet.better.userName} bet {game.currentBet.diceAmount} x
-              </Text>
-              <ValueDice value={game.currentBet.diceValue} size={20} />
-            </View>
-          )}
+          <Surface style={{ borderRadius: 5, padding: 5 }}>
+            {maxBet !== game.currentBet?.diceAmount * game.currentBet?.diceValue && (
+              <View style={{ alignItems: "center", flexDirection: "row", paddingHorizontal: 80, justifyContent: "space-around" }}>
+                <View>
+                  <Text style={{ alignSelf: "center", marginBottom: 5 }}>Dice</Text>
+                  <DiceBetAmountPicker setDiceAmount={setDiceAmount} dicePickerAmount={dicePickerAmount} />
+                </View>
+                <Feather name="x" size={20} color={colors.onSurface} style={{ marginTop: 20 }} />
+                <View>
+                  <Text style={{ alignSelf: "center", marginBottom: 5 }}>Value</Text>
+                  <DiceBetValuePicker setDiceValue={setDiceValue} dicePickerValue={dicePickerValue} defaultValue={diceValue} />
+                </View>
+              </View>
+            )}
+          </Surface>
         </Dialog.Content>
-        <Dialog.Actions style={{ flexDirection: "column" }}>
+        <Dialog.Actions>
           {maxBet !== game.currentBet?.diceAmount * game.currentBet?.diceValue && (
             <Button
-              mode="text"
+              mode="outlined"
               onPress={() => {
                 connection.invoke(INVOKE_SET_BET, { gameName: game.gameName, better: currentUser, diceAmount: diceAmount, diceValue: diceValue });
                 setBettingDialogVisible(false);
               }}
-              title="Bet"
+              title={"Bet " + valuesToWords[diceAmount - 1] + " " + (diceAmount === 1 ? valuesToWords[diceValue - 1] : diceValues[diceValue - 2])}
+              styles={{ marginRight: 10 }}
             />
           )}
           {game.currentBet && (
             <Button
-              mode="text"
+              mode="contained"
               onPress={() => {
                 connection.invoke(INVOKE_CALL, currentUser);
                 setBettingDialogVisible(false);
