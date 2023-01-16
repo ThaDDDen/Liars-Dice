@@ -1,7 +1,8 @@
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { Dialog, Portal, Surface, Text, useTheme } from "react-native-paper";
+import { View } from "react-native";
+import { Dialog, Divider, Portal, Text, useTheme } from "react-native-paper";
+import styled from "styled-components/native";
 import { useConnection } from "../../../contexts/ConnectionContext";
 import { useGame } from "../../../contexts/GameContext";
 import { useUser } from "../../../contexts/UserContext";
@@ -72,41 +73,44 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
   return (
     <Portal>
       <Dialog visible={bettingDialogVisible}>
-        <Dialog.Title>Your turn!</Dialog.Title>
+        <Dialog.Title style={{ alignSelf: "center" }}>Your turn!</Dialog.Title>
         <Dialog.Content>
-          <View style={{ marginBottom: 10 }}>
+          <Divider bold />
+          <View>
             {game.currentBet ? (
-              <Surface style={{ borderRadius: 5, padding: 5, alignItems: "center" }}>
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <Text variant="bodyLarge">
+              <CurrentBetInfo>
+                <CurrentBet>
+                  <Text variant="titleMedium">
                     {game.currentBet.better.userName} bet {game.currentBet.diceAmount} x{" "}
                   </Text>
                   <ValueDice value={game.currentBet.diceValue} size={22} />
                   <Text variant="bodyLarge">!</Text>
-                </View>
+                </CurrentBet>
                 <Text variant="bodyLarge">You can either raise their bet or call!</Text>
-              </Surface>
+              </CurrentBetInfo>
             ) : (
-              <Surface style={{ borderRadius: 5, padding: 5, alignItems: "center" }}>
+              <CurrentBetInfo>
                 <Text>You start the betting this round!</Text>
-              </Surface>
+              </CurrentBetInfo>
             )}
           </View>
-          <Surface style={{ borderRadius: 5, padding: 5 }}>
+          <Divider bold />
+          <BetContainer>
             {maxBet !== game.currentBet?.diceAmount * game.currentBet?.diceValue && (
-              <View style={{ alignItems: "center", flexDirection: "row", paddingHorizontal: 80, justifyContent: "space-around" }}>
+              <PickerContainer>
                 <View>
-                  <Text style={{ alignSelf: "center", marginBottom: 5 }}>Dice</Text>
+                  <PickerTitle>Dice</PickerTitle>
                   <DiceBetAmountPicker setDiceAmount={setDiceAmount} dicePickerAmount={dicePickerAmount} />
                 </View>
                 <Feather name="x" size={20} color={colors.onSurface} style={{ marginTop: 20 }} />
                 <View>
-                  <Text style={{ alignSelf: "center", marginBottom: 5 }}>Value</Text>
+                  <PickerTitle>Value</PickerTitle>
                   <DiceBetValuePicker setDiceValue={setDiceValue} dicePickerValue={dicePickerValue} defaultValue={diceValue} />
                 </View>
-              </View>
+              </PickerContainer>
             )}
-          </Surface>
+          </BetContainer>
+          <Divider bold />
         </Dialog.Content>
         <Dialog.Actions>
           {maxBet !== game.currentBet?.diceAmount * game.currentBet?.diceValue && (
@@ -138,4 +142,31 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
 
 export default BettingDialog;
 
-const styles = StyleSheet.create({});
+const CurrentBetInfo = styled.View`
+  border-radius: 5px;
+  padding: 5px;
+  align-items: center;
+  margin-bottom: 5px;
+`;
+
+const CurrentBet = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const BetContainer = styled.View`
+  padding: 5px;
+  margin-bottom: 5px;
+`;
+
+const PickerContainer = styled.View`
+  align-items: center;
+  flex-direction: row;
+  padding: 0 80px;
+  justify-content: space-around;
+`;
+
+const PickerTitle = styled(Text)`
+  align-self: center;
+  margin-bottom: 5px;
+`;
