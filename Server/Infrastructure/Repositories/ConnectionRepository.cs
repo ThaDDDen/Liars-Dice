@@ -5,18 +5,18 @@ namespace Infrastructure.Repositories;
 
 public class ConnectionRepository: IConnectionRepository
 {
-    private readonly List<UserConnection> _connectionRepository;
+    private readonly List<HubUser> _connectionRepository;
 
     public ConnectionRepository()
     {
         _connectionRepository = new();
     }
 
-        public void AddConnection(UserConnection userConnection)
+    public void AddConnection(HubUser connection)
     {
-        if (!_connectionRepository.Any(c => c.User == userConnection.User && c.Room == userConnection.Room))
+        if (!_connectionRepository.Any(u => u == connection))
         {
-            _connectionRepository.Add(userConnection);
+            _connectionRepository.Add(connection);
         }
         else
         {
@@ -26,22 +26,22 @@ public class ConnectionRepository: IConnectionRepository
 
     public void RemoveConnection(string username)
     {
-        _connectionRepository.Remove(_connectionRepository.FirstOrDefault(x => x.User.UserName == username) ?? throw new ArgumentNullException("cant find userconnection"));
+        _connectionRepository.Remove(_connectionRepository.FirstOrDefault(u => u.UserName == username) ?? throw new ArgumentNullException("cant find userconnection"));
     }
 
-    public List<UserConnection> ConnectedUsers()
+    public List<HubUser> ConnectedUsers()
     {
         return _connectionRepository;
     }
 
-    public bool AlreadyConnected(string user, string room)
+    public bool AlreadyConnected(string user)
     {
-        return _connectionRepository.Any(c => c.User.UserName == user && c.Room == room);
+        return _connectionRepository.Any(u => u.UserName == user);
     }
 
-    public UserConnection GetConnectionByName(string name)
+    public HubUser GetConnectionByName(string name)
     {
-        return _connectionRepository.FirstOrDefault(uc => uc.User.UserName == name);
+        return _connectionRepository.FirstOrDefault(u => u.UserName == name);
     }
 
 }

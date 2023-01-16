@@ -1,6 +1,6 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { Game, GameInvitation, ResponseMessage, User, UserConnection, UserMessage } from "../types/types";
+import { Game, GameInvitation, ResponseMessage, User, UserMessage } from "../types/types";
 import {
   BASE_URL,
   INITIAL_GAME_PROPERTIES,
@@ -25,7 +25,7 @@ interface ConnectionContext {
   connection: HubConnection;
   closeConnection: () => void;
   joinLobby: (accessToken: string) => void;
-  connectedUsers: UserConnection[];
+  connectedUsers: User[];
 }
 
 const ConnectionContext = createContext<ConnectionContext>({
@@ -41,7 +41,7 @@ interface Props {
 
 function ConnectionProvider({ children }: Props) {
   const [connection, setConnection] = useState<HubConnection>({} as HubConnection);
-  const [connectedUsers, setConnectedUsers] = useState<UserConnection[]>([]);
+  const [connectedUsers, setConnectedUsers] = useState<User[]>([]);
   const { invitation, invitationAccepted, setInvitation, setInvitationAccepted, setPlayersRequestingToJoin, acceptedRequests, setAcceptedRequests } =
     useDialog();
   const { currentUser, setLobbyMessages, setGameMessages, setCurrentUser } = useUser();
@@ -99,7 +99,7 @@ function ConnectionProvider({ children }: Props) {
         setCurrentUser({ ...currentUser, gameProperties: INITIAL_GAME_PROPERTIES });
       });
 
-      connection.on(RECEIVE_CONNECTED_USERS, (connectedUsers: UserConnection[]) => {
+      connection.on(RECEIVE_CONNECTED_USERS, (connectedUsers: User[]) => {
         setConnectedUsers(connectedUsers);
       });
 

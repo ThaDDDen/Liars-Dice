@@ -6,16 +6,16 @@ import { useConnection } from "../../contexts/ConnectionContext";
 import { initialGameState, useGame } from "../../contexts/GameContext";
 import { useSnackBar } from "../../contexts/SnackContext";
 import { useUser } from "../../contexts/UserContext";
-import { UserConnection } from "../../types/types";
+import { User } from "../../types/types";
 import { INVOKE_INVITE_PLAYER } from "../../utils/constants";
 import UserAvatar from "./UserAvatar";
 
 interface Props {
-  userConnection: UserConnection;
+  user: User;
   closeModal: () => void;
 }
 
-const OnlineUserCard = ({ userConnection, closeModal }: Props) => {
+const OnlineUserCard = ({ user, closeModal }: Props) => {
   const { currentUser } = useUser();
   const { colors } = useTheme();
   const { connection } = useConnection();
@@ -23,29 +23,27 @@ const OnlineUserCard = ({ userConnection, closeModal }: Props) => {
   const { setResponseMessage } = useSnackBar();
 
   const invitePlayer = () => {
-    connection.invoke(INVOKE_INVITE_PLAYER, currentUser, userConnection.user.userName);
+    connection.invoke(INVOKE_INVITE_PLAYER, currentUser, user.userName);
     closeModal();
-    setResponseMessage({ status: "Success", message: `You have invited ${userConnection.user.userName} to join ${game.gameName}!` });
+    setResponseMessage({ status: "Success", message: `You have invited ${user.userName} to join ${game.gameName}!` });
   };
 
   return (
     <OnlineUserContainer>
-      <UserAvatar size={30} avatarCode={userConnection.user.avatarCode} />
-      <UserName>{userConnection.user.userName}</UserName>
+      <UserAvatar size={30} avatarCode={user.avatarCode} />
+      <UserName>{user.userName}</UserName>
 
-      {currentUser.userName !== userConnection.user.userName &&
-        game !== initialGameState &&
-        !game.players.find((p) => p.userName == userConnection.user.userName) && (
-          <MaterialCommunityIcons
-            name="plus-circle"
-            size={24}
-            color={colors.primary}
-            style={{ marginRight: 10 }}
-            onPress={() => {
-              invitePlayer();
-            }}
-          />
-        )}
+      {currentUser.userName !== user.userName && game !== initialGameState && !game.players.find((p) => p.userName == user.userName) && (
+        <MaterialCommunityIcons
+          name="plus-circle"
+          size={24}
+          color={colors.primary}
+          style={{ marginRight: 10 }}
+          onPress={() => {
+            invitePlayer();
+          }}
+        />
+      )}
     </OnlineUserContainer>
   );
 };
