@@ -3,9 +3,9 @@ using Core.Models.App;
 namespace Core.Interfaces;
 public interface IConnectionRepository
 {
-    void AddConnection(UserConnection userConnection);
+    void AddConnection(HubUser connection);
     void RemoveConnection(string username);
-    List<UserConnection> ConnectedUsers();
-    bool AlreadyConnected(string user, string room);
-    UserConnection GetConnectionByName(string name);
+    List<HubUser> ConnectedUsers();
+    bool AlreadyConnected(string user);
+    HubUser GetConnectionByName(string name);
 }

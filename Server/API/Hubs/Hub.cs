@@ -37,7 +37,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
     {
         var user = await _userManager.FindByNameAsync(Context.User.Identity.Name);
 
-        if (_connectionRepository.AlreadyConnected(user.UserName, "Lobby"))
+        if (_connectionRepository.AlreadyConnected(user.UserName))
         {
             await Clients.Caller.SendAsync("AlreadyConnected", _lobbyBot, "You are already connected to the lobby.");
             return;
@@ -45,16 +45,12 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
         await Groups.AddToGroupAsync(Context.ConnectionId, "Lobby");
 
-        _connectionRepository.AddConnection(new UserConnection
+        _connectionRepository.AddConnection(new HubUser()
         {
-            User = new HubUser()
-            {
-                Id = user.Id,
-                ConnectionId = Context.ConnectionId,
-                UserName = user.UserName,
-                AvatarCode = user.AvatarCode
-            },
-            Room = "Lobby"
+            Id = user.Id,
+            ConnectionId = Context.ConnectionId,
+            UserName = user.UserName,
+            AvatarCode = user.AvatarCode
         });
 
         await SendConnectedUsers();
@@ -86,7 +82,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
     public async Task SendConnectedUsers()
     {
-        var usersInLobby = _connectionRepository.ConnectedUsers().Where(x => x.Room == "Lobby");
+        var usersInLobby = _connectionRepository.ConnectedUsers();
         await Clients.Group("Lobby").SendAsync("ConnectedUsers", usersInLobby);
     }
 
@@ -164,14 +160,14 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
         var gameHost =  _connectionRepository.GetConnectionByName(_gameService.GetGameHost(game.GameName).UserName);
 
-        await Clients.Client(gameHost.User.ConnectionId).SendAsync("ReceiveJoinRequest", user);
+        await Clients.Client(gameHost.ConnectionId).SendAsync("ReceiveJoinRequest", user);
     }
 
     public async Task AcceptJoinRequest(HubUser player, string gameName)
     {
         var game = _gameRepository.GetGameByName(gameName);
 
-        await Groups.AddToGroupAsync(_connectionRepository.GetConnectionByName(player.UserName).User.ConnectionId, gameName);
+        await Groups.AddToGroupAsync(_connectionRepository.GetConnectionByName(player.UserName).ConnectionId, gameName);
         _gameService.AddPlayerToGame(game.GameName, player);
 
         await Clients.Group(gameName).SendAsync("ReceiveGame", game);
@@ -224,15 +220,15 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         var user = _connectionRepository.GetConnectionByName(player.UserName);
 
         await SendMessage(_gameBot, game.GameName, $"{player.UserName} has been kicked from the game!");
-        await Clients.Client(user.User.ConnectionId).SendAsync("Kicked");
-        await Clients.Client(user.User.ConnectionId).SendAsync("ReceiveError", new ResponseModel()
+        await Clients.Client(user.ConnectionId).SendAsync("Kicked");
+        await Clients.Client(user.ConnectionId).SendAsync("ReceiveError", new ResponseModel()
             {
                 Status = "Error",
                 Message = "You have been kicked out of the game 😫" 
             });
 
         _gameService.RemovePlayerFromGame(game.GameName, player.UserName);
-        await Groups.RemoveFromGroupAsync(user.User.ConnectionId, game.GameName);
+        await Groups.RemoveFromGroupAsync(user.ConnectionId, game.GameName);
 
         if(game.RoundStarted)
         {
@@ -293,7 +289,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
         var user = _connectionRepository.GetConnectionByName(playerToInvite);
 
-        await Clients.Client(user.User.ConnectionId).SendAsync("ReceiveGameInvitation", new GameInvitation { GameHost = hubUser.UserName, GameName = game.GameName });
+        await Clients.Client(user.ConnectionId).SendAsync("ReceiveGameInvitation", new GameInvitation { GameHost = hubUser.UserName, GameName = game.GameName });
     }
     public async Task RollDice(HubUser user)
     {
