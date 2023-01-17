@@ -22,7 +22,7 @@ public class GameRepository: IGameRepository
     }
     public Game GetGameByName(string gameName)
     {
-        return _gameRepository.FirstOrDefault(g => g.GameName == gameName);
+        return _gameRepository.FirstOrDefault(g => g.GameName.ToLower() == gameName.ToLower());
     }
 
     public Game GetGameByPlayerName(string playerName)
