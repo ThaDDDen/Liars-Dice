@@ -1,6 +1,7 @@
+import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Dialog, IconButton, Paragraph, Portal, Surface, Text, Tooltip } from "react-native-paper";
+import { Dialog, IconButton, Paragraph, Portal, Surface, Text } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../../contexts/ConnectionContext";
 import { initialGameState, useGame } from "../../../contexts/GameContext";
@@ -8,8 +9,7 @@ import { useSnackBar } from "../../../contexts/SnackContext";
 import { useUser } from "../../../contexts/UserContext";
 import { INITIAL_GAME_PROPERTIES, INVOKE_LEAVE_GAME, INVOKE_START_GAME, INVOKE_UPDATE_GAME_SETTINGS } from "../../../utils/constants";
 import Button from "../../layout/Button";
-import ContentCard from "../../layout/ContentCard";
-import GameHostPanel from "../game-settings/GameHostPanel";
+import OrangeDice from "../game-assets/OrangeDice";
 
 interface Props {
   openChatModal: () => void;
@@ -23,6 +23,7 @@ const GameHeader = ({ openChatModal }: Props) => {
   const [tableNotFullDialogVisible, setTableNotFullDialogVisible] = useState(false);
   const [gameHostPanelVisible, setGameHostPanelVisible] = useState(false);
   const [leaveDialogVisible, setLeaveDialogVisible] = useState(false);
+  const navigation = useNavigation();
 
   const startGame = () => {
     if (game.players.length === 1) {
@@ -49,28 +50,14 @@ const GameHeader = ({ openChatModal }: Props) => {
           <Text variant="headlineSmall">{game.gameName}</Text>
           <ButtonContainer>
             <IconButton icon="chat-outline" onPress={() => openChatModal()} style={{ margin: 0 }} />
-            <IconButton icon="exit-to-app" onPress={() => setLeaveDialogVisible(true)} />
             {currentUser.gameProperties.gameHost && (
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <IconButton iconColor={game.gameStarted ? "green" : undefined} icon="play" onPress={startGame} style={{ margin: 0 }} />
-                {game.gameStarted ? (
-                  <Tooltip title="You cannot change settings when game has started!">
-                    <IconButton disabled icon="cog" onPress={() => setGameHostPanelVisible((prev) => !prev)} style={{ margin: 0 }} />
-                  </Tooltip>
-                ) : (
-                  <IconButton disabled={game.gameStarted} icon="cog" onPress={() => setGameHostPanelVisible((prev) => !prev)} style={{ margin: 0 }} />
-                )}
               </View>
             )}
+            <OrangeDice size={"medium"} onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())} />
           </ButtonContainer>
         </GameHeaderContainer>
-        {gameHostPanelVisible && (
-          <GameSettingsContainer>
-            <ContentCard title="Game settings">
-              <GameHostPanel setGameHostPanelVisible={setGameHostPanelVisible} />
-            </ContentCard>
-          </GameSettingsContainer>
-        )}
       </View>
       <Portal>
         <Dialog visible={tableNotFullDialogVisible}>
@@ -118,7 +105,7 @@ const GameHeaderContainer = styled(Surface)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 0 10px;
+  padding: 5px 10px;
   border-radius: 10px;
 `;
 

@@ -12,7 +12,7 @@ import UserAvatar from "./UserAvatar";
 
 interface Props {
   user: User;
-  closeModal: () => void;
+  closeModal?: () => void;
 }
 
 const OnlineUserCard = ({ user, closeModal }: Props) => {
@@ -24,7 +24,7 @@ const OnlineUserCard = ({ user, closeModal }: Props) => {
 
   const invitePlayer = () => {
     connection.invoke(INVOKE_INVITE_PLAYER, currentUser, user.userName);
-    closeModal();
+    if (closeModal) closeModal();
     setResponseMessage({ status: "Success", message: `You have invited ${user.userName} to join ${game.gameName}!` });
   };
 
