@@ -1,3 +1,4 @@
+import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { Dimensions, View } from "react-native";
 import { DragSortableView } from "react-native-drag-sort";
@@ -22,6 +23,7 @@ interface Props {
 const GameLobby = ({ orderSorterVisible, setOrderSorterVisible, updatePlayerOrder }: Props) => {
   const { game } = useGame();
   const [players, setPlayers] = useState<User[]>(game.players);
+  const navigation = useNavigation();
 
   useEffect(() => {
     setPlayers(game.players);
@@ -62,6 +64,7 @@ const GameLobby = ({ orderSorterVisible, setOrderSorterVisible, updatePlayerOrde
             onPress={() => {
               updatePlayerOrder(players);
               setOrderSorterVisible(false);
+              navigation.dispatch(DrawerActions.toggleDrawer());
             }}
           >
             Done
