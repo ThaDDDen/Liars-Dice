@@ -36,7 +36,11 @@ const LobbyChat = () => {
           <ChatWindow ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}>
             {lobbyMessages.map((userMessage, index) => (
               <View key={index}>
-                <ChatMessage userMessage={userMessage} latestMessage={lobbyMessages.length === index + 1} />
+                <ChatMessage
+                  lastSender={index != 0 ? lobbyMessages[index - 1].user.userName == lobbyMessages[index].user.userName : false}
+                  userMessage={userMessage}
+                  latestMessage={lobbyMessages.length === index + 1}
+                />
               </View>
             ))}
           </ChatWindow>
