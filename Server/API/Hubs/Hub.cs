@@ -45,15 +45,19 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
         await Groups.AddToGroupAsync(Context.ConnectionId, "Lobby");
 
-        _connectionRepository.AddConnection(new HubUser()
+        var hubUser = new HubUser()
         {
             Id = user.Id,
             ConnectionId = Context.ConnectionId,
             UserName = user.UserName,
             AvatarCode = user.AvatarCode
-        });
+        };
+
+        _connectionRepository.AddConnection(hubUser);
 
         await SendConnectedUsers();
+
+        await Clients.Caller.SendAsync("ReceiveUser", hubUser);
 
         await SendMessage(_lobbyBot, "Lobby", $"{user.UserName} has joined the lobby.");
 
@@ -62,7 +66,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
     public async Task SendMessage(string sender, string room, string message)
     {
         AppUser user = null;
-        
+
         if (sender != _lobbyBot || sender != _gameBot)
         {
             user = await _userManager.FindByNameAsync(sender);
@@ -155,10 +159,10 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
                 Status = "Error",
                 Message = $"The game has already started."
             });
-            return; 
+            return;
         }
 
-        var gameHost =  _connectionRepository.GetConnectionByName(_gameService.GetGameHost(game.GameName).UserName);
+        var gameHost = _connectionRepository.GetConnectionByName(_gameService.GetGameHost(game.GameName).UserName);
 
         await Clients.Client(gameHost.ConnectionId).SendAsync("ReceiveJoinRequest", user);
     }
@@ -222,20 +226,20 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         await SendMessage(_gameBot, game.GameName, $"{player.UserName} has been kicked from the game!");
         await Clients.Client(user.ConnectionId).SendAsync("Kicked");
         await Clients.Client(user.ConnectionId).SendAsync("ReceiveError", new ResponseModel()
-            {
-                Status = "Error",
-                Message = "You have been kicked out of the game 😫" 
-            });
+        {
+            Status = "Error",
+            Message = "You have been kicked out of the game 😫"
+        });
 
         _gameService.RemovePlayerFromGame(game.GameName, player.UserName);
         await Groups.RemoveFromGroupAsync(user.ConnectionId, game.GameName);
 
-        if(game.RoundStarted)
+        if (game.RoundStarted)
         {
             await Clients.Group(game.GameName).SendAsync("ReceiveError", new ResponseModel()
             {
                 Status = "Error",
-                Message = $"{player.UserName} got kicked! The round will be restarted!" 
+                Message = $"{player.UserName} got kicked! The round will be restarted!"
             });
             _gameService.RestartRound(game.GameName);
         }
@@ -252,18 +256,18 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         await SendMessage(_gameBot, game.GameName, user.GameProperties.GameHost ? $"{user.UserName} has left the game! A new game host has randomly been assigned!" : $"{user.UserName} has left the game!");
 
 
-        if(game.RoundStarted)
+        if (game.RoundStarted)
         {
             await Clients.Group(game.GameName).SendAsync("ReceiveError", new ResponseModel()
             {
                 Status = "Error",
-                Message = $"{user.UserName} dissconnected. 😣 The round will be restarted!" 
+                Message = $"{user.UserName} dissconnected. 😣 The round will be restarted!"
             });
             _gameService.RestartRound(game.GameName);
         }
         await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
 
-        if(_gameService.GameIsEmpty(game.GameName)) _gameRepository.RemoveGame(game);
+        if (_gameService.GameIsEmpty(game.GameName)) _gameRepository.RemoveGame(game);
     }
 
     public async Task UpdatePlayerOrder(List<HubUser> players)
@@ -276,12 +280,12 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
     public async Task InvitePlayer(HubUser hubUser, string playerToInvite)
     {
-        if(_gameRepository.UserIsPlaying(playerToInvite))
+        if (_gameRepository.UserIsPlaying(playerToInvite))
         {
             await Clients.Caller.SendAsync("ReceiveError", new ResponseModel()
             {
                 Status = "Error",
-                Message = $"{playerToInvite} is already playing a game." 
+                Message = $"{playerToInvite} is already playing a game."
             });
             return;
         }
@@ -330,16 +334,16 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
             var game = _gameRepository.GetGameByPlayerName(user);
             _gameService.RemovePlayerFromGame(game.GameName, user);
 
-            if(game.RoundStarted)
+            if (game.RoundStarted)
             {
                 Clients.Group(game.GameName).SendAsync("ReceiveError", new ResponseModel()
                 {
                     Status = "Error",
-                    Message = $"{user} dissconnected. 😣 The round will be restarted!" 
+                    Message = $"{user} dissconnected. 😣 The round will be restarted!"
                 });
                 _gameService.RestartRound(game.GameName);
             }
-            
+
             Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
         }
 

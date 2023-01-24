@@ -129,6 +129,8 @@ export const INVOKE_REQUEST_TO_JOIN_GAME = "RequestToJoinGame";
 
 export const INVOKE_ACCEPT_JOIN_REQUEST = "AcceptJoinRequest";
 
+export const RECEIVE_USER = "ReceiveUser";
+
 export const RECEIVE_MESSAGE = "ReceiveMessage";
 
 export const RECEIVE_GAME_INVITATION = "ReceiveGameInvitation";

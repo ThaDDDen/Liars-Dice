@@ -7,7 +7,7 @@ import Button from "./layout/Button";
 import Logo from "./layout/Logo";
 
 const Home = ({ navigation }: HomeNavProps) => {
-  const { token, setCurrentUser, currentUser } = useUser();
+  const { token, setToken, setCurrentUser, currentUser } = useUser();
 
   const getAuth = async (token: string) => {
     if (token) {
@@ -17,12 +17,12 @@ const Home = ({ navigation }: HomeNavProps) => {
       });
       if (response.status === 200) {
         const deserializedResponse = await response.json();
+        console.log(deserializedResponse);
         setCurrentUser({
           ...initialUserState,
           id: deserializedResponse.id,
           userName: deserializedResponse.username,
           avatarCode: deserializedResponse.avatarCode,
-          connectionId: deserializedResponse.connectionId,
         });
       }
     }
