@@ -5,7 +5,7 @@ import { Text } from "react-native-paper";
 import styled from "styled-components/native";
 import * as yup from "yup";
 import { useSnackBar } from "../contexts/SnackContext";
-import { initialUserState, useUser } from "../contexts/UserContext";
+import { useUser } from "../contexts/UserContext";
 import { HomeNavProps } from "../screens/HomeScreen";
 import { LogInModel } from "../types/types";
 import { postLogInModel } from "../utils/authFunctions";
@@ -34,13 +34,6 @@ const LogIn = ({ navigation }: HomeNavProps) => {
           onSubmit={async (values) => {
             var response = await postLogInModel({ username: values.username, password: values.password });
             if (response.status === "Success") {
-              setCurrentUser({
-                ...initialUserState,
-                id: response.id,
-                userName: values.username,
-                avatarCode: response.avatarCode,
-                connectionId: response.connectionId,
-              });
               setToken(response.token);
             } else {
               setResponseMessage(response);

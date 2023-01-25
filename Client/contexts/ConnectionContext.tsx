@@ -15,6 +15,7 @@ import {
   RECEIVE_JOIN_REQUEST,
   RECEIVE_KICKED,
   RECEIVE_MESSAGE,
+  RECEIVE_USER,
 } from "../utils/constants";
 import { initialInvitationState, useDialog } from "./DialogContext";
 import { initialGameState, useGame } from "./GameContext";
@@ -101,6 +102,10 @@ function ConnectionProvider({ children }: Props) {
 
       connection.on(RECEIVE_CONNECTED_USERS, (connectedUsers: User[]) => {
         setConnectedUsers(connectedUsers);
+      });
+
+      connection.on(RECEIVE_USER, (user: User) => {
+        setCurrentUser(user);
       });
 
       connection.on(RECEIVE_GAME, (game: Game) => {
