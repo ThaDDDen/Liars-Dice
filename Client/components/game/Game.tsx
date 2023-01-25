@@ -8,9 +8,9 @@ import { useSound } from "../../contexts/SoundContext";
 import { useUser } from "../../contexts/UserContext";
 import { INVOKE_ROLL_DICE } from "../../utils/constants";
 import Background from "../layout/Background";
-import Button from "../layout/Button";
 import OnlineUserCard from "../Lobby/OnlineUserCard";
 import GameChat from "./game-chat/GameChat";
+import DiceCup from "./game-layout/DiceCup";
 import GameHeader from "./game-layout/GameHeader";
 import Table from "./game-layout/Table";
 import UserHand from "./game-layout/UserHand";
@@ -52,9 +52,7 @@ const Game = () => {
       {game.gameStarted && !game.gameOver && !currentUser.gameProperties.isOut && (
         <GameBar>
           {!currentUser.gameProperties.hasRolled && (
-            <Button
-              title={"roll"}
-              mode={"contained"}
+            <DiceCup
               onPress={() => {
                 connection.invoke(INVOKE_ROLL_DICE, currentUser);
                 playRollDice();
