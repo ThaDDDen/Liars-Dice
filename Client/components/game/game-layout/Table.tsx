@@ -3,7 +3,15 @@ import { Dimensions, ImageBackground, Pressable, View } from "react-native";
 import styled from "styled-components/native";
 import table from "../../../assets/images/table.png";
 import { useGame } from "../../../contexts/GameContext";
-import { EIGHT_SEAT_TABLE, FOUR_SEAT_TABLE, SIX_SEAT_TABLE } from "../../../utils/constants";
+import {
+  EIGHT_SEAT_TABLE,
+  FIVE_SEAT_TABLE,
+  FOUR_SEAT_TABLE,
+  SEVEN_SEAT_TABLE,
+  SIX_SEAT_TABLE,
+  THREE_SEAT_TABLE,
+  TWO_SEAT_TABLE,
+} from "../../../utils/constants";
 import UserAvatar from "../../Lobby/UserAvatar";
 import RoundInfo from "../game-logic/RoundInfo";
 import PlayerCard from "./PlayerCard";
@@ -21,7 +29,21 @@ const Table = ({ openOnlineUsersModal }: Props) => {
     return (
       <View
         key={index}
-        style={game.playerCount > 6 ? EIGHT_SEAT_TABLE[index] : game.playerCount > 4 ? SIX_SEAT_TABLE[index] : FOUR_SEAT_TABLE[index]}
+        style={
+          game.playerCount == 7
+            ? SEVEN_SEAT_TABLE[index]
+            : game.playerCount == 6
+            ? SIX_SEAT_TABLE[index]
+            : game.playerCount == 5
+            ? FIVE_SEAT_TABLE[index]
+            : game.playerCount == 4
+            ? FOUR_SEAT_TABLE[index]
+            : game.playerCount == 3
+            ? THREE_SEAT_TABLE[index]
+            : game.playerCount == 2
+            ? TWO_SEAT_TABLE[index]
+            : EIGHT_SEAT_TABLE[index]
+        }
       >
         <PlayerCard disabled={player.gameProperties.isOut} player={player} />
       </View>
@@ -32,11 +54,19 @@ const Table = ({ openOnlineUsersModal }: Props) => {
     <Pressable
       key={index}
       style={
-        game.playerCount > 6
-          ? EIGHT_SEAT_TABLE[index + game.players.length]
-          : game.playerCount > 4
+        game.playerCount == 7
+          ? SEVEN_SEAT_TABLE[index + game.players.length]
+          : game.playerCount == 6
           ? SIX_SEAT_TABLE[index + game.players.length]
-          : FOUR_SEAT_TABLE[index + game.players.length]
+          : game.playerCount == 5
+          ? FIVE_SEAT_TABLE[index + game.players.length]
+          : game.playerCount == 4
+          ? FOUR_SEAT_TABLE[index + game.players.length]
+          : game.playerCount == 3
+          ? THREE_SEAT_TABLE[index + game.players.length]
+          : game.playerCount == 2
+          ? TWO_SEAT_TABLE[index + game.players.length]
+          : EIGHT_SEAT_TABLE[index + game.players.length]
       }
       onPress={() => openOnlineUsersModal()}
     >
