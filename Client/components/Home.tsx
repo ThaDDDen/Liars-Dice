@@ -17,7 +17,6 @@ const Home = ({ navigation }: HomeNavProps) => {
       });
       if (response.status === 200) {
         const deserializedResponse = await response.json();
-        console.log(deserializedResponse);
         setCurrentUser({
           ...initialUserState,
           id: deserializedResponse.id,

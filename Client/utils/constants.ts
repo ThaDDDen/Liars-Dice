@@ -11,6 +11,16 @@ export const EIGHT_SEAT_TABLE = [
   { position: "absolute", top: Dimensions.get("window").width * 0.37, left: -34, alignItems: "center" } as StyleProp<ViewStyle>,
 ];
 
+export const SEVEN_SEAT_TABLE = [
+  { position: "absolute", top: Dimensions.get("window").width * 0.05, left: 1, alignItems: "center" } as StyleProp<ViewStyle>,
+  { position: "absolute", top: Dimensions.get("window").width * 0.05, right: 1, alignItems: "center" } as StyleProp<ViewStyle>,
+  { position: "absolute", top: Dimensions.get("window").width * 0.45, right: -34, alignItems: "center" } as StyleProp<ViewStyle>,
+  { position: "absolute", bottom: Dimensions.get("window").width * 0.25, right: -34, alignItems: "center" } as StyleProp<ViewStyle>,
+  { position: "absolute", bottom: Dimensions.get("window").width * -0.05, alignItems: "center" } as StyleProp<ViewStyle>,
+  { position: "absolute", bottom: Dimensions.get("window").width * 0.25, left: -34, alignItems: "center" } as StyleProp<ViewStyle>,
+  { position: "absolute", top: Dimensions.get("window").width * 0.45, left: -34, alignItems: "center" } as StyleProp<ViewStyle>,
+];
+
 export const SIX_SEAT_TABLE = [
   { position: "absolute", top: Dimensions.get("window").width * 0.05, left: 15, alignItems: "center" } as StyleProp<ViewStyle>,
   { position: "absolute", top: Dimensions.get("window").width * 0.05, right: 15, alignItems: "center" } as StyleProp<ViewStyle>,
@@ -20,11 +30,30 @@ export const SIX_SEAT_TABLE = [
   { position: "absolute", top: Dimensions.get("window").width * 0.37, left: -20, alignItems: "center" } as StyleProp<ViewStyle>,
 ];
 
+export const FIVE_SEAT_TABLE = [
+  { position: "absolute", top: Dimensions.get("window").width * 0.05, left: 15, alignItems: "center" } as StyleProp<ViewStyle>,
+  { position: "absolute", top: Dimensions.get("window").width * 0.05, right: 15, alignItems: "center" } as StyleProp<ViewStyle>,
+  { position: "absolute", bottom: Dimensions.get("window").width * 0.25, right: -20, alignItems: "center" } as StyleProp<ViewStyle>,
+  { position: "absolute", bottom: Dimensions.get("window").width * -0.05, alignItems: "center" } as StyleProp<ViewStyle>,
+  { position: "absolute", bottom: Dimensions.get("window").width * 0.25, left: -20, alignItems: "center" } as StyleProp<ViewStyle>,
+];
+
 export const FOUR_SEAT_TABLE = [
   { position: "absolute", top: Dimensions.get("window").width * 0.05, left: 1, alignItems: "center" } as StyleProp<ViewStyle>,
   { position: "absolute", top: Dimensions.get("window").width * 0.05, right: 1, alignItems: "center" } as StyleProp<ViewStyle>,
   { position: "absolute", bottom: Dimensions.get("window").width * 0.05, right: 1, alignItems: "center" } as StyleProp<ViewStyle>,
   { position: "absolute", bottom: Dimensions.get("window").width * 0.05, left: 1, alignItems: "center" } as StyleProp<ViewStyle>,
+];
+
+export const THREE_SEAT_TABLE = [
+  { position: "absolute", top: Dimensions.get("window").width * 0.15, left: -5, alignItems: "center" } as StyleProp<ViewStyle>,
+  { position: "absolute", top: Dimensions.get("window").width * 0.15, right: -5, alignItems: "center" } as StyleProp<ViewStyle>,
+  { position: "absolute", bottom: Dimensions.get("window").width * -0.05, alignItems: "center" } as StyleProp<ViewStyle>,
+];
+
+export const TWO_SEAT_TABLE = [
+  { position: "absolute", top: Dimensions.get("window").width * 0.05, left: 1, alignItems: "center" } as StyleProp<ViewStyle>,
+  { position: "absolute", bottom: Dimensions.get("window").width * 0.05, right: 1, alignItems: "center" } as StyleProp<ViewStyle>,
 ];
 
 export const valuesToWords = [
