@@ -1,23 +1,24 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
-import { Surface, Text, useTheme } from "react-native-paper";
+import React, { useState } from "react";
+import { Pressable, View } from "react-native";
+import { Divider, Menu, Surface, Text } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { initialGameState, useGame } from "../../contexts/GameContext";
 import { useSnackBar } from "../../contexts/SnackContext";
 import { useUser } from "../../contexts/UserContext";
 import { User } from "../../types/types";
-import { INVOKE_INVITE_PLAYER } from "../../utils/constants";
+import { INVOKE_INVITE_PLAYER, INVOKE_SEND_FRIEND_REQUEST } from "../../utils/constants";
 import UserAvatar from "./UserAvatar";
 
 interface Props {
   user: User;
   closeModal?: () => void;
+  online?: boolean;
 }
 
-const OnlineUserCard = ({ user, closeModal }: Props) => {
+const OnlineUserCard = ({ user, closeModal, online }: Props) => {
+  const [menuVisible, setMenuVisible] = useState(false);
   const { currentUser } = useUser();
-  const { colors } = useTheme();
   const { connection } = useConnection();
   const { game } = useGame();
   const { setResponseMessage } = useSnackBar();
@@ -28,23 +29,60 @@ const OnlineUserCard = ({ user, closeModal }: Props) => {
     setResponseMessage({ status: "Success", message: `You have invited ${user.userName} to join ${game.gameName}!` });
   };
 
-  return (
-    <OnlineUserContainer>
-      <UserAvatar size={30} avatarCode={user.avatarCode} />
-      <UserName>{user.userName}</UserName>
+  if (user.userName === currentUser.userName)
+    return (
+      <OnlineUserContainer>
+        <UserAvatar size={30} avatarCode={user.avatarCode} />
+        <UserName>{user.userName} (you)</UserName>
+      </OnlineUserContainer>
+    );
 
-      {currentUser.userName !== user.userName && game !== initialGameState && !game.players.find((p) => p.userName == user.userName) && (
-        <MaterialCommunityIcons
-          name="plus-circle"
-          size={24}
-          color={colors.primary}
-          style={{ marginRight: 10 }}
+  return (
+    <Menu
+      visible={menuVisible}
+      onDismiss={() => setMenuVisible(false)}
+      anchor={
+        <Pressable onPress={() => setMenuVisible((prev) => !prev)}>
+          <OnlineUserContainer>
+            <View style={{ flexDirection: "row", alignItems: "center", opacity: online ? 1 : 0.4 }}>
+              <UserAvatar size={30} avatarCode={user.avatarCode} />
+              <UserName>{user.userName}</UserName>
+            </View>
+          </OnlineUserContainer>
+        </Pressable>
+      }
+      style={{ zIndex: 500, position: "absolute" }}
+      anchorPosition="bottom"
+    >
+      {currentUser.userName !== user.userName && game !== initialGameState && online && !game.players.find((p) => p.userName == user.userName) && (
+        <>
+          <Menu.Item onPress={() => invitePlayer()} title="Invite to game" />
+          <Divider />
+        </>
+      )}
+
+      {currentUser.friends.find((friend) => friend.userName === user.userName) ? (
+        <Menu.Item
           onPress={() => {
-            invitePlayer();
+            console.log("HERE I REMOVE YO AS FREND! FUK U");
           }}
+          title="Remove friend"
+        />
+      ) : (
+        <Menu.Item
+          onPress={() => {
+            connection.invoke(INVOKE_SEND_FRIEND_REQUEST, currentUser.id, user.id);
+          }}
+          title="Send friend request"
         />
       )}
-    </OnlineUserContainer>
+      <Menu.Item
+        onPress={() => {
+          console.log("LIGGA?");
+        }}
+        title="Send Message"
+      />
+    </Menu>
   );
 };
 

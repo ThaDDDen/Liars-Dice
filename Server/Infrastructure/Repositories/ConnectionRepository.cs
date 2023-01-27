@@ -44,4 +44,9 @@ public class ConnectionRepository: IConnectionRepository
         return _connectionRepository.FirstOrDefault(u => u.UserName == name);
     }
 
+    public HubUser GetConnectionByUserId(string userId)
+    {
+        return _connectionRepository.FirstOrDefault(u => u.Id == userId);
+    }
+
 }

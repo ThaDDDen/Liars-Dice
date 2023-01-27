@@ -8,4 +8,5 @@ public interface IConnectionRepository
     List<HubUser> ConnectedUsers();
     bool AlreadyConnected(string user);
     HubUser GetConnectionByName(string name);
+    HubUser GetConnectionByUserId(string userId);
 }

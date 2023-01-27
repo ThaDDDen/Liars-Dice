@@ -4,6 +4,7 @@ export type User = {
   avatarCode: string;
   connectionId: string;
   gameProperties: GameProperties;
+  friends: User[];
 };
 
 export type GameProperties = {

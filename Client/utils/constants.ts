@@ -158,6 +158,10 @@ export const INVOKE_REQUEST_TO_JOIN_GAME = "RequestToJoinGame";
 
 export const INVOKE_ACCEPT_JOIN_REQUEST = "AcceptJoinRequest";
 
+export const INVOKE_ACCEPT_FRIEND_REQUEST = "AcceptFriendRequest";
+
+export const INVOKE_SEND_FRIEND_REQUEST = "SendFriendRequest";
+
 export const RECEIVE_USER = "ReceiveUser";
 
 export const RECEIVE_MESSAGE = "ReceiveMessage";
@@ -175,3 +179,7 @@ export const RECEIVE_GAME = "ReceiveGame";
 export const RECEIVE_KICKED = "Kicked";
 
 export const RECEIVE_JOIN_REQUEST = "ReceiveJoinRequest";
+
+export const RECEIVE_FRIEND_REQUEST = "ReceiveFriendRequest";
+
+export const RECEIVE_FRIENDS = "ReceiveFriends";

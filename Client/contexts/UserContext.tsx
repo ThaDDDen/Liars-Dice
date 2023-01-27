@@ -37,6 +37,7 @@ export const initialUserState = {
   avatarCode: "",
   connectionId: "",
   gameProperties: INITIAL_GAME_PROPERTIES,
+  friends: [],
 };
 
 function UserProvider({ children }: Props) {

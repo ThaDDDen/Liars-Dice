@@ -72,7 +72,7 @@ const Game = () => {
       <Modalize ref={usersOnlineModalize} rootStyle={{}} modalStyle={{ backgroundColor: colors.surface, padding: 5 }} adjustToContentHeight>
         <OnlinePlayersText variant="titleMedium">Invite players:</OnlinePlayersText>
         {connectedUsers.map((user, index) => (
-          <OnlineUserCard key={index} user={user} closeModal={() => usersOnlineModalize.current?.close()} />
+          <OnlineUserCard online key={index} user={user} closeModal={() => usersOnlineModalize.current?.close()} />
         ))}
       </Modalize>
 

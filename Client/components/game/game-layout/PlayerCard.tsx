@@ -6,7 +6,7 @@ import styled from "styled-components/native";
 import { useConnection } from "../../../contexts/ConnectionContext";
 import { useUser } from "../../../contexts/UserContext";
 import { User } from "../../../types/types";
-import { INVOKE_KICK_PLAYER } from "../../../utils/constants";
+import { INVOKE_KICK_PLAYER, INVOKE_SEND_FRIEND_REQUEST } from "../../../utils/constants";
 import UserAvatar from "../../Lobby/UserAvatar";
 import ValueDice from "../game-assets/ValueDice";
 
@@ -34,12 +34,22 @@ const PlayerCard = ({ player, disabled }: Props) => {
           style={{ zIndex: 500, position: "absolute" }}
           anchorPosition="bottom"
         >
-          <Menu.Item
-            onPress={() => {
-              console.log("HELLO BE MY FRIEND PLX");
-            }}
-            title="Send friend request"
-          />
+          {currentUser.friends.find((friend) => friend.userName === player.userName) ? (
+            <Menu.Item
+              onPress={() => {
+                console.log("HERE I REMOVE YO AS FREND! FUK U");
+              }}
+              title="Remove friend"
+            />
+          ) : (
+            <Menu.Item
+              onPress={() => {
+                connection.invoke(INVOKE_SEND_FRIEND_REQUEST, currentUser.id, player.id);
+              }}
+              title="Send friend request"
+            />
+          )}
+
           <Menu.Item
             onPress={() => {
               console.log("LIGGA?");
