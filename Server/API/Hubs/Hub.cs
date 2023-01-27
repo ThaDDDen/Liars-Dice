@@ -323,6 +323,37 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
     }
 
+    public async Task SendFriendRequest(string userId, string friendId)
+    {
+        var user = _connectionRepository.GetConnectionByUserId(userId);
+        var friendOnline = _connectionRepository.GetConnectionByUserId(friendId);
+        if (friendOnline != null)
+            await Clients.Client(friendOnline.ConnectionId).SendAsync("ReceiveFriendRequest", user.UserName);
+    }
+
+    public async Task AcceptFriendRequest(string userName, string friendName)
+    {
+        var user = _connectionRepository.GetConnectionByName(userName);
+        var friend  = _connectionRepository.GetConnectionByName(friendName);
+
+        var ok = await _appDataService.AddFriendAsync(user.Id, friend.Id);
+
+        if (ok)
+        {
+            await Clients.Caller.SendAsync("ReceiveError", new ResponseModel()
+            {
+                Status = "Success",
+                Message = $"You are now friends with {friendName} 💚"
+            });
+
+            await Clients.Client(friend.ConnectionId).SendAsync("ReceiveError", new ResponseModel()
+            {
+                Status = "Success",
+                Message = $"{userName} has accepted your friend request! 💚"
+            });
+        }
+    }
+
     public override Task OnDisconnectedAsync(Exception exception)
     {
         var user = Context.User.Identity.Name;

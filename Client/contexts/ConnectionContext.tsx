@@ -4,12 +4,14 @@ import { Game, GameInvitation, ResponseMessage, User, UserMessage } from "../typ
 import {
   BASE_URL,
   INITIAL_GAME_PROPERTIES,
+  INVOKE_ACCEPT_FRIEND_REQUEST,
   INVOKE_ACCEPT_JOIN_REQUEST,
   INVOKE_JOIN_GAME,
   INVOKE_JOIN_LOBBY,
   RECEIVE_ALREADY_CONNECTED,
   RECEIVE_CONNECTED_USERS,
   RECEIVE_ERROR,
+  RECEIVE_FRIEND_REQUEST,
   RECEIVE_GAME,
   RECEIVE_GAME_INVITATION,
   RECEIVE_JOIN_REQUEST,
@@ -43,8 +45,19 @@ interface Props {
 function ConnectionProvider({ children }: Props) {
   const [connection, setConnection] = useState<HubConnection>({} as HubConnection);
   const [connectedUsers, setConnectedUsers] = useState<User[]>([]);
-  const { invitation, invitationAccepted, setInvitation, setInvitationAccepted, setPlayersRequestingToJoin, acceptedRequests, setAcceptedRequests } =
-    useDialog();
+  const {
+    invitation,
+    invitationAccepted,
+    setInvitation,
+    setInvitationAccepted,
+    setPlayersRequestingToJoin,
+    acceptedRequests,
+    setAcceptedRequests,
+    friendRequests,
+    setFriendRequests,
+    acceptedFriendRequests,
+    setAcceptedFriendRequests,
+  } = useDialog();
   const { currentUser, setLobbyMessages, setGameMessages, setCurrentUser } = useUser();
   const { setResponseMessage } = useSnackBar();
   const { setGame } = useGame();
@@ -63,6 +76,13 @@ function ConnectionProvider({ children }: Props) {
       setAcceptedRequests(acceptedArrayCopy);
     }
   }, [acceptedRequests]);
+
+  useEffect(() => {
+    if (acceptedFriendRequests.length !== 0) {
+      connection.invoke(INVOKE_ACCEPT_FRIEND_REQUEST, currentUser.userName, acceptedFriendRequests[0]);
+      setAcceptedFriendRequests((prev) => prev.filter((f) => f !== acceptedFriendRequests[0]));
+    }
+  }, [acceptedFriendRequests]);
 
   const connectToHub = async (accessToken: string) => {
     try {
@@ -116,6 +136,10 @@ function ConnectionProvider({ children }: Props) {
 
       connection.on(RECEIVE_JOIN_REQUEST, (player: User) => {
         setPlayersRequestingToJoin((prev) => [...prev, player]);
+      });
+
+      connection.on(RECEIVE_FRIEND_REQUEST, (requesterName: string) => {
+        setFriendRequests((prev) => [...prev, requesterName]);
       });
 
       await connection.start();

@@ -16,6 +16,10 @@ interface DialogContext {
   setPlayersRequestingToJoin: React.Dispatch<React.SetStateAction<User[]>>;
   acceptedRequests: AcceptedRequest[];
   setAcceptedRequests: React.Dispatch<React.SetStateAction<AcceptedRequest[]>>;
+  friendRequests: string[];
+  setFriendRequests: React.Dispatch<React.SetStateAction<string[]>>;
+  acceptedFriendRequests: string[];
+  setAcceptedFriendRequests: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const DialogContext = createContext<DialogContext>({
@@ -27,6 +31,10 @@ const DialogContext = createContext<DialogContext>({
   setPlayersRequestingToJoin: () => console.warn("no provider found"),
   acceptedRequests: [],
   setAcceptedRequests: () => console.warn("no provider found."),
+  friendRequests: [],
+  setFriendRequests: () => console.warn("no provider found."),
+  acceptedFriendRequests: [],
+  setAcceptedFriendRequests: () => console.warn("no provider found."),
 });
 
 export const initialInvitationState: GameInvitation = {
@@ -37,10 +45,11 @@ export const initialInvitationState: GameInvitation = {
 const DialogProvider = ({ children }: Props) => {
   const [invitation, setInvitation] = useState<GameInvitation>(initialInvitationState);
   const [invitationDialogVisible, setInvitationDialogVisible] = useState(false);
-  const [joinRequestDialogVisible, setJoinRequestDialogVisible] = useState(false);
   const [invitationAccepted, setInvitationAccepted] = useState(false);
   const [playersRequestingToJoin, setPlayersRequestingToJoin] = useState<User[]>([]);
   const [acceptedRequests, setAcceptedRequests] = useState<AcceptedRequest[]>([]);
+  const [friendRequests, setFriendRequests] = useState<string[]>([]);
+  const [acceptedFriendRequests, setAcceptedFriendRequests] = useState<string[]>([]);
   const { game } = useGame();
 
   useEffect(() => {
@@ -56,6 +65,15 @@ const DialogProvider = ({ children }: Props) => {
     setInvitationAccepted(false);
     setInvitation(initialInvitationState);
     setInvitationDialogVisible(false);
+  };
+
+  const acceptFriendRequest = (friend: string) => {
+    setAcceptedFriendRequests((prev) => [...prev, friend]);
+    setFriendRequests((prev) => prev.filter((f) => f !== friend));
+  };
+
+  const rejectFriendRequest = (friend: string) => {
+    setFriendRequests((prev) => prev.filter((f) => f !== friend));
   };
 
   const acceptJoinRequest = (user: User) => {
@@ -86,6 +104,10 @@ const DialogProvider = ({ children }: Props) => {
         setPlayersRequestingToJoin,
         acceptedRequests,
         setAcceptedRequests,
+        friendRequests,
+        setFriendRequests,
+        acceptedFriendRequests,
+        setAcceptedFriendRequests,
       }}
     >
       {children}
@@ -117,6 +139,20 @@ const DialogProvider = ({ children }: Props) => {
             <Dialog.Actions>
               <Button onPress={() => acceptJoinRequest(playersRequestingToJoin[0])}>Accept!</Button>
               <Button onPress={() => rejectJoinRequest()}>Decline.</Button>
+            </Dialog.Actions>
+          </Dialog>
+        </Portal>
+      )}
+      {friendRequests.length !== 0 && (
+        <Portal>
+          <Dialog visible={friendRequests.length !== 0}>
+            <Dialog.Title>You have gotten a friend request!</Dialog.Title>
+            <Dialog.Content>
+              <Paragraph>{friendRequests[0]} would like to add you as a friend!</Paragraph>
+            </Dialog.Content>
+            <Dialog.Actions>
+              <Button onPress={() => acceptFriendRequest(friendRequests[0])}>Accept!</Button>
+              <Button onPress={() => rejectFriendRequest(friendRequests[0])}>Decline.</Button>
             </Dialog.Actions>
           </Dialog>
         </Portal>

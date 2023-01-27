@@ -6,7 +6,7 @@ import styled from "styled-components/native";
 import { useConnection } from "../../../contexts/ConnectionContext";
 import { useUser } from "../../../contexts/UserContext";
 import { User } from "../../../types/types";
-import { INVOKE_KICK_PLAYER } from "../../../utils/constants";
+import { INVOKE_KICK_PLAYER, INVOKE_SEND_FRIEND_REQUEST } from "../../../utils/constants";
 import UserAvatar from "../../Lobby/UserAvatar";
 import ValueDice from "../game-assets/ValueDice";
 
@@ -36,7 +36,7 @@ const PlayerCard = ({ player, disabled }: Props) => {
         >
           <Menu.Item
             onPress={() => {
-              console.log("HELLO BE MY FRIEND PLX");
+              connection.invoke(INVOKE_SEND_FRIEND_REQUEST, currentUser.id, player.id);
             }}
             title="Send friend request"
           />

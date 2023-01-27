@@ -13,14 +13,19 @@ public class AppDataService: IAppDataService
         _friends = friends;
     }
 
-    public async Task<FriendRelation> AddFriendAsync(string friendOneId, string friendTwoId)
+    public async Task<bool> AddFriendAsync(string friendOneId, string friendTwoId)
     {
-        var relation = await _friends.AddAsync(new FriendRelation()
+        var firstRelation = await _friends.AddAsync(new FriendRelation()
         {
             FriendOneId = friendOneId,
             FriendTwoId = friendTwoId
         });
-        return relation;
+        var secondRelation = await _friends.AddAsync(new FriendRelation()
+        {
+            FriendOneId = friendTwoId,
+            FriendTwoId = friendOneId
+        });
+        return firstRelation != null && secondRelation != null ;
     }
 
     public async Task<bool> RemoveFriendAsync(string friendOneId, string friendTwoId)
