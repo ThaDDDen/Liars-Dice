@@ -1,3 +1,4 @@
+using Core.Entities.AppEntities;
 using Core.Entities.AuthEntities;
 using Core.Interfaces;
 using Core.Models.App;
@@ -14,7 +15,6 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 {
     private readonly string _lobbyBot;
     private readonly string _gameBot;
-    // private readonly ConnectionRepository _connections;
     private readonly IGameService _gameService;
     private readonly IGameRepository _gameRepository;
     private readonly IConnectionRepository _connectionRepository;
@@ -24,7 +24,6 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
     public Hub(IConnectionRepository connectionRepository, IGameService gameService, IGameRepository gameRepository, IAppDataService appDataService, UserManager<AppUser> userManager)
     {
         _connectionRepository = connectionRepository;
-        // _games = games;
         _appDataService = appDataService;
         _gameRepository = gameRepository;
         _gameService = gameService;
@@ -50,7 +49,8 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
             Id = user.Id,
             ConnectionId = Context.ConnectionId,
             UserName = user.UserName,
-            AvatarCode = user.AvatarCode
+            AvatarCode = user.AvatarCode,
+            Friends = await _appDataService.GetFriendsAsync(user.Id)
         };
 
         _connectionRepository.AddConnection(hubUser);
@@ -62,7 +62,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         await SendMessage(_lobbyBot, "Lobby", $"{user.UserName} has joined the lobby.");
 
     }
-
+    
     public async Task SendMessage(string sender, string room, string message)
     {
         AppUser user = null;
@@ -345,12 +345,14 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
                 Status = "Success",
                 Message = $"You are now friends with {friendName} 💚"
             });
+            await Clients.Client(user.ConnectionId).SendAsync("ReceiveFriends", await _appDataService.GetFriendsAsync(user.Id));
 
             await Clients.Client(friend.ConnectionId).SendAsync("ReceiveError", new ResponseModel()
             {
                 Status = "Success",
                 Message = $"{userName} has accepted your friend request! 💚"
             });
+            await Clients.Client(friend.ConnectionId).SendAsync("ReceiveFriends", await _appDataService.GetFriendsAsync(friend.Id));
         }
     }
 

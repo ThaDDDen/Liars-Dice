@@ -1,5 +1,8 @@
 using Core.Entities.AppEntities;
+using Core.Entities.AuthEntities;
 using Core.Interfaces;
+using Core.Models.App;
+using Microsoft.AspNetCore.Identity;
 
 namespace Core.Services;
 
@@ -7,10 +10,12 @@ public class AppDataService: IAppDataService
 {
     private readonly IAppDataRepository<PrivateMessage> _messages;
     private readonly IAppDataRepository<FriendRelation> _friends;
-    public AppDataService(IAppDataRepository<PrivateMessage> messages, IAppDataRepository<FriendRelation> friends)
+    private readonly UserManager<AppUser> _userManager;
+    public AppDataService(IAppDataRepository<PrivateMessage> messages, IAppDataRepository<FriendRelation> friends, UserManager<AppUser> userManager)
     {
         _messages = messages;
         _friends = friends;
+        _userManager = userManager;
     }
 
     public async Task<bool> AddFriendAsync(string friendOneId, string friendTwoId)
@@ -55,5 +60,30 @@ public class AppDataService: IAppDataService
     public async Task<List<PrivateMessage>> GetMessagesAsync(string userId)
     {
         return await _messages.GetAllAsync();
+    }
+
+    public async Task<List<HubUser>> GetFriendsAsync(string userId)
+    {
+        var relations = await _friends.FindByConditionAsync(relation => relation.FriendOneId == userId);
+        var friendsIds = relations.Select(relation => relation.FriendTwoId).ToList();
+        
+        if (friendsIds != null)
+        {
+            List<HubUser> friends = new();
+
+            foreach (var friendId in friendsIds)
+            {
+                var friend = await _userManager.FindByIdAsync(friendId);
+                friends.Add(new HubUser()
+                {
+                    Id = friend.Id,
+                    UserName = friend.UserName,
+                    AvatarCode = friend.AvatarCode,
+                    ConnectionId = ""
+                });
+            }
+            return friends;
+        }
+        return null;
     }
 }

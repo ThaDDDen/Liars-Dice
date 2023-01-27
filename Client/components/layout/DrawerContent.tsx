@@ -1,8 +1,8 @@
 import { DrawerContentComponentProps, DrawerContentScrollView } from "@react-navigation/drawer";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { Pressable, ScrollView, StyleSheet, View } from "react-native";
-import { Drawer, IconButton, List, Switch, Text, useTheme } from "react-native-paper";
+import { Pressable, ScrollView, View } from "react-native";
+import { Badge, Drawer, IconButton, List, Switch, Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { initialGameState, useGame } from "../../contexts/GameContext";
@@ -56,6 +56,8 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   const updatePlayerOrder = (players: User[]) => {
     connection.invoke("UpdatePlayerOrder", players);
   };
+
+  // HELLO FUTURE THADD. CLEAN UP RENDERING. EXTRACT COMPONENTS AND ADD STYLED COMPONENTS. STOP BEEING LAZY PLx!1
 
   return (
     <>
@@ -149,10 +151,37 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
         <List.Accordion title="Players Online">
           <ScrollView style={{ maxHeight: 200, width: "100%", paddingTop: 10, backgroundColor: colors.elevation.level2 }}>
             {connectedUsers.map((user, index) => (
-              <OnlineUserCard key={index} user={user} />
+              <OnlineUserCard online key={user.id} user={user} />
             ))}
           </ScrollView>
         </List.Accordion>
+        <Drawer.Section title="Friends">
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginLeft: 15,
+              marginRight: 5,
+              marginTop: -10,
+            }}
+          >
+            {currentUser.friends.length > 0 ? (
+              <ScrollView style={{ maxHeight: 200, width: "100%", paddingTop: 10 }}>
+                {currentUser.friends.map((friend) => (
+                  <View key={friend.id}>
+                    <OnlineUserCard user={friend} online={connectedUsers.find((user) => user.userName === friend.userName) !== undefined} />
+                    {connectedUsers.find((user) => user.userName === friend.userName) && (
+                      <Badge size={10} style={{ position: "absolute", top: 2, left: 32, backgroundColor: "limegreen" }} />
+                    )}
+                  </View>
+                ))}
+              </ScrollView>
+            ) : (
+              <Text>You don't have any friends yet you fucking looser</Text>
+            )}
+          </View>
+        </Drawer.Section>
       </DrawerContentScrollView>
       <Button styles={{ margin: 10 }} onPress={() => handleLogout()} mode="outlined" title="Log out" />
 
@@ -162,8 +191,6 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 };
 
 export default DrawerContent;
-
-const styles = StyleSheet.create({});
 
 const SettingsRow = styled.View`
   flex-direction: row;

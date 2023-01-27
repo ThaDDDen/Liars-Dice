@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Pressable } from "react-native";
-import { Divider, Menu, Surface, Text, useTheme } from "react-native-paper";
+import { Pressable, View } from "react-native";
+import { Divider, Menu, Surface, Text } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { initialGameState, useGame } from "../../contexts/GameContext";
@@ -13,12 +13,12 @@ import UserAvatar from "./UserAvatar";
 interface Props {
   user: User;
   closeModal?: () => void;
+  online?: boolean;
 }
 
-const OnlineUserCard = ({ user, closeModal }: Props) => {
+const OnlineUserCard = ({ user, closeModal, online }: Props) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const { currentUser } = useUser();
-  const { colors } = useTheme();
   const { connection } = useConnection();
   const { game } = useGame();
   const { setResponseMessage } = useSnackBar();
@@ -44,27 +44,38 @@ const OnlineUserCard = ({ user, closeModal }: Props) => {
       anchor={
         <Pressable onPress={() => setMenuVisible((prev) => !prev)}>
           <OnlineUserContainer>
-            <UserAvatar size={30} avatarCode={user.avatarCode} />
-            <UserName>{user.userName}</UserName>
+            <View style={{ flexDirection: "row", alignItems: "center", opacity: online ? 1 : 0.4 }}>
+              <UserAvatar size={30} avatarCode={user.avatarCode} />
+              <UserName>{user.userName}</UserName>
+            </View>
           </OnlineUserContainer>
         </Pressable>
       }
       style={{ zIndex: 500, position: "absolute" }}
       anchorPosition="bottom"
     >
-      {currentUser.userName !== user.userName && game !== initialGameState && !game.players.find((p) => p.userName == user.userName) && (
+      {currentUser.userName !== user.userName && game !== initialGameState && online && !game.players.find((p) => p.userName == user.userName) && (
         <>
           <Menu.Item onPress={() => invitePlayer()} title="Invite to game" />
           <Divider />
         </>
       )}
 
-      <Menu.Item
-        onPress={() => {
-          connection.invoke(INVOKE_SEND_FRIEND_REQUEST, currentUser.id, user.id);
-        }}
-        title="Send friend request"
-      />
+      {currentUser.friends.find((friend) => friend.userName === user.userName) ? (
+        <Menu.Item
+          onPress={() => {
+            console.log("HERE I REMOVE YO AS FREND! FUK U");
+          }}
+          title="Remove friend"
+        />
+      ) : (
+        <Menu.Item
+          onPress={() => {
+            connection.invoke(INVOKE_SEND_FRIEND_REQUEST, currentUser.id, user.id);
+          }}
+          title="Send friend request"
+        />
+      )}
       <Menu.Item
         onPress={() => {
           console.log("LIGGA?");

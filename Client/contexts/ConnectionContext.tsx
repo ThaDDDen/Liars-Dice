@@ -11,6 +11,7 @@ import {
   RECEIVE_ALREADY_CONNECTED,
   RECEIVE_CONNECTED_USERS,
   RECEIVE_ERROR,
+  RECEIVE_FRIENDS,
   RECEIVE_FRIEND_REQUEST,
   RECEIVE_GAME,
   RECEIVE_GAME_INVITATION,
@@ -53,7 +54,6 @@ function ConnectionProvider({ children }: Props) {
     setPlayersRequestingToJoin,
     acceptedRequests,
     setAcceptedRequests,
-    friendRequests,
     setFriendRequests,
     acceptedFriendRequests,
     setAcceptedFriendRequests,
@@ -140,6 +140,10 @@ function ConnectionProvider({ children }: Props) {
 
       connection.on(RECEIVE_FRIEND_REQUEST, (requesterName: string) => {
         setFriendRequests((prev) => [...prev, requesterName]);
+      });
+
+      connection.on(RECEIVE_FRIENDS, (friends: User[]) => {
+        setCurrentUser({ ...currentUser, friends: friends });
       });
 
       await connection.start();

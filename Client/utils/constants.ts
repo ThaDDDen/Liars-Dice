@@ -181,3 +181,5 @@ export const RECEIVE_KICKED = "Kicked";
 export const RECEIVE_JOIN_REQUEST = "ReceiveJoinRequest";
 
 export const RECEIVE_FRIEND_REQUEST = "ReceiveFriendRequest";
+
+export const RECEIVE_FRIENDS = "ReceiveFriends";
