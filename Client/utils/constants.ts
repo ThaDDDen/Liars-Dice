@@ -162,6 +162,8 @@ export const INVOKE_ACCEPT_FRIEND_REQUEST = "AcceptFriendRequest";
 
 export const INVOKE_SEND_FRIEND_REQUEST = "SendFriendRequest";
 
+export const INVOKE_REMOVE_FRIEND = "RemoveFriend";
+
 export const RECEIVE_USER = "ReceiveUser";
 
 export const RECEIVE_MESSAGE = "ReceiveMessage";

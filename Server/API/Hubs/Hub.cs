@@ -356,6 +356,21 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         }
     }
 
+    public async Task RemoveFriend(string userId, string friendId)
+    {
+        await _appDataService.RemoveFriendAsync(userId, friendId);
+        await Clients.Caller.SendAsync("ReceiveFriends", await _appDataService.GetFriendsAsync(userId));
+        await Clients.Caller.SendAsync("ReceiveError", new ResponseModel()
+        {
+            Status = "Success",
+            Message = $"{(await _userManager.FindByIdAsync(friendId)).UserName} has been removed from you list of friends! 💔"
+        });
+
+        var friend = _connectionRepository.GetConnectionByUserId(friendId);
+
+        if (friend != null) await Clients.Client(friend.ConnectionId).SendAsync("ReceiveFriends", await _appDataService.GetFriendsAsync(friendId));
+    }
+
     public override Task OnDisconnectedAsync(Exception exception)
     {
         var user = Context.User.Identity.Name;
