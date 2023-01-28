@@ -7,7 +7,7 @@ import { initialGameState, useGame } from "../../contexts/GameContext";
 import { useSnackBar } from "../../contexts/SnackContext";
 import { useUser } from "../../contexts/UserContext";
 import { User } from "../../types/types";
-import { INVOKE_INVITE_PLAYER, INVOKE_SEND_FRIEND_REQUEST } from "../../utils/constants";
+import { INVOKE_INVITE_PLAYER, INVOKE_REMOVE_FRIEND, INVOKE_SEND_FRIEND_REQUEST } from "../../utils/constants";
 import UserAvatar from "./UserAvatar";
 
 interface Props {
@@ -64,7 +64,7 @@ const OnlineUserCard = ({ user, closeModal, online }: Props) => {
       {currentUser.friends.find((friend) => friend.userName === user.userName) ? (
         <Menu.Item
           onPress={() => {
-            console.log("HERE I REMOVE YO AS FREND! FUK U");
+            connection.invoke(INVOKE_REMOVE_FRIEND, currentUser.id, user.id);
           }}
           title="Remove friend"
         />

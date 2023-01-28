@@ -33,15 +33,12 @@ public class AppDataService: IAppDataService
         return firstRelation != null && secondRelation != null ;
     }
 
-    public async Task<bool> RemoveFriendAsync(string friendOneId, string friendTwoId)
+    public async Task<bool> RemoveFriendAsync(string userId, string friendId)
     {
-        var relation = await _friends.FindByConditionAsync(relation => relation.FriendOneId == friendOneId && relation.FriendTwoId == friendTwoId);
-        if (relation == null)
-        {
-            relation = await _friends.FindByConditionAsync(relation => relation.FriendOneId == friendTwoId && relation.FriendTwoId == friendOneId);
-        }
+        var userRelation = await _friends.FindByConditionAsync(relation => relation.FriendOneId == userId && relation.FriendTwoId == friendId);
+        var friendRelation = await _friends.FindByConditionAsync(relation => relation.FriendOneId == friendId && relation.FriendTwoId == userId);
 
-        return await _friends.DeleteAsync(relation.First());
+        return await _friends.DeleteAsync(userRelation.First()) && await _friends.DeleteAsync(friendRelation.First());
     }
 
     public async Task<PrivateMessage> AddMessageAsync(string senderId, string receiverId, string message)
