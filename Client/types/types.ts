@@ -18,6 +18,7 @@ export type GameSettings = {
   gameName: string;
   diceCount: number;
   playerCount: number;
+  betTime: number;
 };
 
 export type GameInvitation = {
@@ -60,6 +61,7 @@ export type Game = {
   currentBetter: User;
   gameStarted: boolean;
   roundStarted: boolean;
+  betTime: number;
   roundResult: RoundResult;
 };
 

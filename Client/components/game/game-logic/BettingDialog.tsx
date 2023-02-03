@@ -1,11 +1,11 @@
-import { Feather } from "@expo/vector-icons";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { Dialog, Divider, Portal, Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../../contexts/ConnectionContext";
 import { useGame } from "../../../contexts/GameContext";
-import { useUser } from "../../../contexts/UserContext";
+import { initialUserState, useUser } from "../../../contexts/UserContext";
 import { diceValues, INVOKE_CALL, INVOKE_SET_BET, valuesToWords } from "../../../utils/constants";
 import { getDiceAmountArray, getDiceValueArray } from "../../../utils/gameFunctions";
 import Button from "../../layout/Button";
@@ -16,10 +16,12 @@ import DiceBetValuePicker from "./DiceBetValuePicker";
 interface Props {
   bettingDialogVisible: boolean;
   setBettingDialogVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  betTime: number;
+  setBetTime: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props) => {
-  const { game } = useGame();
+const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible, betTime, setBetTime }: Props) => {
+  const { game, setGame } = useGame();
   const { connection } = useConnection();
   const { currentUser } = useUser();
   const { colors } = useTheme();
@@ -33,6 +35,15 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
   const [dicePickerValue, setDicePickerValue] = useState<number[]>([]);
 
   const maxBet = 6 * game.players.map((x) => x.gameProperties.dice.length).reduce((x, c) => x + c, 0);
+
+  const handleBet = () => {
+    setGame((prev) => {
+      return { ...prev, ...(prev.currentBetter = initialUserState) };
+    });
+    setBetTime(game.betTime);
+    setBettingDialogVisible(false);
+    connection.invoke(INVOKE_SET_BET, { gameName: game.gameName, better: currentUser, diceAmount: diceAmount, diceValue: diceValue });
+  };
 
   useEffect(() => {
     if (game.currentBet) {
@@ -70,10 +81,33 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
     setDiceValue(diceValueArray[0] as 2 | 3 | 4 | 5 | 6);
   }, [diceAmount]);
 
+  useEffect(() => {
+    if (game.currentBetter && betTime === 0 && game.currentBetter.userName === currentUser.userName) handleBet();
+  }, [betTime]);
+
   return (
     <Portal>
       <Dialog visible={bettingDialogVisible}>
-        <Dialog.Title style={{ alignSelf: "center" }}>Your turn!</Dialog.Title>
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            width: 40,
+            justifyContent: "space-between",
+            position: "absolute",
+            left: 25,
+            top: -10,
+          }}
+        >
+          <MaterialCommunityIcons name="timer-outline" size={24} color={colors.primary} />
+
+          <Text variant="titleLarge" style={{ color: betTime > 10 ? "green" : betTime > 5 ? "orange" : "red" }}>
+            {betTime}
+          </Text>
+        </View>
+        <Dialog.Title style={{ alignSelf: "center" }}>
+          <Text>Your turn!</Text>
+        </Dialog.Title>
         <Dialog.Content>
           <Divider bold />
           <View>
@@ -112,13 +146,13 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
           </BetContainer>
           <Divider bold />
         </Dialog.Content>
+
         <Dialog.Actions>
           {maxBet !== game.currentBet?.diceAmount * game.currentBet?.diceValue && (
             <Button
               mode="outlined"
               onPress={() => {
-                connection.invoke(INVOKE_SET_BET, { gameName: game.gameName, better: currentUser, diceAmount: diceAmount, diceValue: diceValue });
-                setBettingDialogVisible(false);
+                handleBet();
               }}
               title={"Bet " + valuesToWords[diceAmount - 1] + " " + (diceAmount === 1 ? valuesToWords[diceValue - 1] : diceValues[diceValue - 2])}
               styles={{ marginRight: 10 }}

@@ -1,5 +1,6 @@
 import React from "react";
 import { Dimensions, ImageBackground, Pressable, View } from "react-native";
+import { ColorFormat } from "react-native-countdown-circle-timer";
 import styled from "styled-components/native";
 import table from "../../../assets/images/table.png";
 import { useGame } from "../../../contexts/GameContext";
@@ -18,12 +19,15 @@ import PlayerCard from "./PlayerCard";
 
 interface Props {
   openOnlineUsersModal: () => void;
+  setBetTime: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Table = ({ openOnlineUsersModal }: Props) => {
+const Table = ({ openOnlineUsersModal, setBetTime }: Props) => {
   const { game } = useGame();
 
   const tableHeight = game.playerCount > 6 ? 0.6 : game.playerCount > 4 ? 0.4 : 0.35;
+
+  const countDownColors: ColorFormat[] = ["#ff0000", "#0000ff"];
 
   const playersInGameLobby = game.players.map((player, index) => {
     return (
@@ -45,7 +49,7 @@ const Table = ({ openOnlineUsersModal }: Props) => {
             : EIGHT_SEAT_TABLE[index]
         }
       >
-        <PlayerCard disabled={player.gameProperties.isOut} player={player} />
+        <PlayerCard setBetTime={setBetTime} disabled={player.gameProperties.isOut} player={player} />
       </View>
     );
   });

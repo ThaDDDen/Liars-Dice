@@ -92,6 +92,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
     public async Task CreateGame(GameSettings gameSettings, HubUser gameHost)
     {
+        Console.WriteLine(gameSettings.GameName);
         if (_gameRepository.GetGameByName(gameSettings.GameName) != null)
         {
             await Clients.Caller.SendAsync("ReceiveError", new ResponseModel
@@ -125,6 +126,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
         _gameService.UpdatePlayerCount(game.GameName, updatedGameSettings.PlayerCount);
         _gameService.UpdateDiceCount(game.GameName, updatedGameSettings.DiceCount);
+        _gameService.UpdateBetTime(updatedGameSettings.GameName, updatedGameSettings.BetTime);
 
         await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
     }

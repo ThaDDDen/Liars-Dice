@@ -30,6 +30,7 @@ export const initialGameState = {
   currentBetter: {} as User,
   gameStarted: false,
   roundStarted: false,
+  betTime: 0,
   roundResult: {} as RoundResult,
 };
 

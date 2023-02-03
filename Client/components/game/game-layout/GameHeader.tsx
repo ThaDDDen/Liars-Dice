@@ -38,7 +38,12 @@ const GameHeader = ({ openChatModal }: Props) => {
   };
 
   const reduceSeatsAndStart = () => {
-    connection.invoke(INVOKE_UPDATE_GAME_SETTINGS, { gameName: game.gameName, diceCount: game.diceCount, playerCount: game.players.length });
+    connection.invoke(INVOKE_UPDATE_GAME_SETTINGS, {
+      gameName: game.gameName,
+      diceCount: game.diceCount,
+      playerCount: game.players.length,
+      betTime: game.betTime,
+    });
     connection.invoke(INVOKE_START_GAME, currentUser);
     setTableNotFullDialogVisible(false);
   };
