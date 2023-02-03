@@ -6,15 +6,18 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Core.Services;
 
-public class AppDataService: IAppDataService
+public class AppDataService : IAppDataService
 {
     private readonly IAppDataRepository<PrivateMessage> _messages;
     private readonly IAppDataRepository<FriendRelation> _friends;
+
+    private readonly IAppDataRepository<Statistics> _statistics;
     private readonly UserManager<AppUser> _userManager;
-    public AppDataService(IAppDataRepository<PrivateMessage> messages, IAppDataRepository<FriendRelation> friends, UserManager<AppUser> userManager)
+    public AppDataService(IAppDataRepository<PrivateMessage> messages, IAppDataRepository<FriendRelation> friends, UserManager<AppUser> userManager, IAppDataRepository<Statistics> statistics)
     {
         _messages = messages;
         _friends = friends;
+        _statistics = statistics;
         _userManager = userManager;
     }
 
@@ -30,7 +33,7 @@ public class AppDataService: IAppDataService
             FriendOneId = friendTwoId,
             FriendTwoId = friendOneId
         });
-        return firstRelation != null && secondRelation != null ;
+        return firstRelation != null && secondRelation != null;
     }
 
     public async Task<bool> RemoveFriendAsync(string userId, string friendId)
@@ -63,7 +66,7 @@ public class AppDataService: IAppDataService
     {
         var relations = await _friends.FindByConditionAsync(relation => relation.FriendOneId == userId);
         var friendsIds = relations.Select(relation => relation.FriendTwoId).ToList();
-        
+
         if (friendsIds != null)
         {
             List<HubUser> friends = new();
@@ -82,5 +85,35 @@ public class AppDataService: IAppDataService
             return friends;
         }
         return null;
+    }
+
+    public async Task<bool> PostStatistics(string userId)
+    {
+        var statistics = await _statistics.AddAsync(new Statistics
+        {
+            UserId = userId
+        });
+
+        return statistics != null;
+    }
+
+    public async Task<Statistics> GetStatistics(string userId)
+    {
+        var statistics = (await _statistics.FindByConditionAsync(x => x.UserId == userId)).FirstOrDefault();
+        if (statistics != null)
+        {
+            return statistics;
+        }
+        return null;
+    }
+
+    public async Task<bool> UpdateStatistics(Statistics statistics)
+    {
+        if (statistics != null)
+        {
+            return await _statistics.UpdateAsync(statistics);
+        }
+        else return false;
+
     }
 }

@@ -3,20 +3,23 @@ using Core.Interfaces;
 
 namespace Core.Services;
 
-public class GameService: IGameService
+public class GameService : IGameService
 {
     private readonly Random _random;
     private IGameRepository _gameRepository;
 
-    public GameService(IGameRepository gameRepository)
+    private IAppDataService _appDataService;
+
+    public GameService(IGameRepository gameRepository, IAppDataService appDataService)
     {
         _random = new();
         _gameRepository = gameRepository;
+        _appDataService = appDataService;
     }
 
     public Game CreateGame(GameSettings gameSettings, HubUser gameHost)
     {
-        var game = new Game 
+        var game = new Game
         {
             Id = Guid.NewGuid(),
             Players = new(),
@@ -38,7 +41,7 @@ public class GameService: IGameService
 
         if (game.Players.Count() != game.PlayerCount)
         {
-            if (game.Players.Any(p => p.UserName == newPlayer.UserName)) return false;        
+            if (game.Players.Any(p => p.UserName == newPlayer.UserName)) return false;
 
             if (game.GameStarted) return false;
 
@@ -49,8 +52,8 @@ public class GameService: IGameService
                     newPlayer.GameProperties.Dice.Add(1);
                 }
             }
-                game.Players.Add(newPlayer);
-                return true;
+            game.Players.Add(newPlayer);
+            return true;
         }
         return false;
     }
@@ -60,7 +63,7 @@ public class GameService: IGameService
         var game = _gameRepository.GetGameByName(gameName);
         // If the player that's leaving is gameHost we assign //
         // a random gameHost from the remaining players       //
-        if(game.Players.FirstOrDefault(p => p.UserName == playerToRemove).GameProperties.GameHost && game.Players.Count != 1) 
+        if (game.Players.FirstOrDefault(p => p.UserName == playerToRemove).GameProperties.GameHost && game.Players.Count != 1)
         {
             game.Players.FirstOrDefault(p => p.UserName == playerToRemove).GameProperties.GameHost = false;
             game.Players.Where(p => p.UserName != playerToRemove).ToList()[_random.Next(0, game.Players.Where(p => p.UserName != playerToRemove).ToList().Count)].GameProperties.GameHost = true;
@@ -74,6 +77,7 @@ public class GameService: IGameService
         var game = _gameRepository.GetGameByName(gameName);
         user.GameProperties.Dice = game.Players.FirstOrDefault(x => x.UserName == user.UserName).GameProperties.Dice.Select(y => y = _random.Next(1, 7)).ToList();
         user.GameProperties.HasRolled = true;
+        SetDiceStatistics(user);
         CheckRolls(game);
     }
 
@@ -81,7 +85,7 @@ public class GameService: IGameService
     {
         var game = _gameRepository.GetGameByName(gameName);
         game.CurrentBet = gameBet;
-        SetBetter(game, gameBet);        
+        SetBetter(game, gameBet);
     }
 
     public void Call(string gameName, HubUser gameCaller)
@@ -98,7 +102,12 @@ public class GameService: IGameService
         {
             caller.GameProperties.Dice.RemoveAt(0);
 
-            if(caller.GameProperties.Dice.Count == 0) caller.GameProperties.IsOut = true;
+            if (caller.GameProperties.Dice.Count == 0)
+            {
+                caller.GameProperties.IsOut = true;
+                caller.Statistics.GamesPlayed += 1;
+                _appDataService.UpdateStatistics(caller.Statistics);
+            }
 
             roundResult.RoundLoser = caller;
             roundResult.RoundWinner = better;
@@ -108,7 +117,13 @@ public class GameService: IGameService
         {
             better.GameProperties.Dice.RemoveAt(0);
 
-            if(better.GameProperties.Dice.Count == 0) better.GameProperties.IsOut = true;
+            if (better.GameProperties.Dice.Count == 0)
+            {
+                better.GameProperties.IsOut = true;
+                better.Statistics.GamesPlayed += 1;
+                _appDataService.UpdateStatistics(better.Statistics);
+            }
+
 
             roundResult.RoundLoser = better;
             roundResult.RoundWinner = caller;
@@ -147,7 +162,7 @@ public class GameService: IGameService
             }
             player.GameProperties.Dice = newDiceList;
         }
-    }   
+    }
 
     public bool GameIsEmpty(string gameName)
     {
@@ -164,7 +179,7 @@ public class GameService: IGameService
     }
 
     public HubUser GetGameHost(string gameName)
-    {   
+    {
         var game = _gameRepository.GetGameByName(gameName);
         return game.Players.FirstOrDefault(p => p.GameProperties.GameHost);
     }
@@ -175,14 +190,14 @@ public class GameService: IGameService
         {
             game.RoundStarted = true;
 
-            if(!IsFirstRound(game))
+            if (!IsFirstRound(game))
             {
-                if(!game.Players.Any(p => p.UserName == game.CurrentBetter.UserName)) game.CurrentBetter = game.RoundResult.RoundLoser;
+                if (!game.Players.Any(p => p.UserName == game.CurrentBetter.UserName)) game.CurrentBetter = game.RoundResult.RoundLoser;
 
             }
 
             // Set random better if it's the first round // 
-            if (IsFirstRound(game)) game.CurrentBetter = game.Players[_random.Next(0, game.Players.Count)];        
+            if (IsFirstRound(game)) game.CurrentBetter = game.Players[_random.Next(0, game.Players.Count)];
         }
     }
 
@@ -199,7 +214,7 @@ public class GameService: IGameService
         var currentBetter = game.Players.FirstOrDefault(x => x.UserName == gameBet.Better.UserName);
 
         game.PreviousBetter = currentBetter;
-        
+
         if (currentBetter == game.Players.Where(p => !p.GameProperties.IsOut).Last())
         {
             game.CurrentBetter = game.Players.Where(p => !p.GameProperties.IsOut).First();
@@ -256,6 +271,7 @@ public class GameService: IGameService
 
         if (!orderedHand.Select((i, j) => i - j).Distinct().Skip(1).Any())
         {
+            SetStraighStatistics(player);
             return true;
         }
         return false;
@@ -263,8 +279,31 @@ public class GameService: IGameService
 
     private void CheckGameOver(Game game)
     {
-        if(game.Players.Where(p => p.GameProperties.Dice.Count > 0).Count() == 1) game.GameOver = true;
+        if (game.Players.Where(p => p.GameProperties.Dice.Count > 0).Count() == 1)
+        {
+            var winner = game.Players.FirstOrDefault(x => !x.GameProperties.IsOut);
+            winner.Statistics.GamesPlayed += 1;
+            winner.Statistics.GamesWon += 1;
+            _appDataService.UpdateStatistics(winner.Statistics);
+
+            game.GameOver = true;
+        }
     }
 
-       
+
+    //STATISTICS FUNCTIONS WILL MOVE LATER?
+    private void SetDiceStatistics(HubUser user)
+    {
+        user.Statistics.Ones += user.GameProperties.Dice.FindAll(x => x == 1).Count;
+        user.Statistics.Twoes += user.GameProperties.Dice.FindAll(x => x == 2).Count;
+        user.Statistics.Threes += user.GameProperties.Dice.FindAll(x => x == 3).Count;
+        user.Statistics.Fours += user.GameProperties.Dice.FindAll(x => x == 4).Count;
+        user.Statistics.Fives += user.GameProperties.Dice.FindAll(x => x == 5).Count;
+        user.Statistics.Sixes += user.GameProperties.Dice.FindAll(x => x == 6).Count;
+    }
+
+    private void SetStraighStatistics(HubUser user)
+    {
+        user.Statistics.Straights += 1;
+    }
 }

@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Core.Entities.AuthEntities;
+using Core.Interfaces;
 using Core.Models.App;
 using Core.Models.Auth;
 using Microsoft.AspNetCore.Identity;
@@ -19,11 +20,14 @@ public class AuthController : ControllerBase
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly IConfiguration _configuration;
 
-    public AuthController(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+    private readonly IAppDataService _appDataService;
+
+    public AuthController(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IAppDataService appDataService)
     {
         _userManager = userManager;
         _roleManager = roleManager;
         _configuration = configuration;
+        _appDataService = appDataService;
     }
 
     [HttpPost]
@@ -46,6 +50,8 @@ public class AuthController : ControllerBase
         var result = await _userManager.CreateAsync(user, model.Password);
         if (!result.Succeeded)
             return StatusCode(StatusCodes.Status500InternalServerError, new ResponseModel { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+
+        await _appDataService.PostStatistics(user.Id);
 
         return Ok(new ResponseModel { Status = "Success", Message = "User created successfully!" });
     }
@@ -81,7 +87,7 @@ public class AuthController : ControllerBase
                 avatarCode = user.AvatarCode
             });
         }
-        return Unauthorized(new ResponseModel { Status = "Error", Message = "Couldn't log you in. Please check username and password and try again."});
+        return Unauthorized(new ResponseModel { Status = "Error", Message = "Couldn't log you in. Please check username and password and try again." });
     }
 
     [HttpPut]

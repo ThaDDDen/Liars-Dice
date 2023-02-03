@@ -10,4 +10,5 @@ public class HubUser
     public string ConnectionId { get; set; } = "";
     public GameProperties GameProperties { get; set; } = new();
     public List<HubUser> Friends { get; set; } = new();
+    public Statistics Statistics { get; set; } = new();
 }

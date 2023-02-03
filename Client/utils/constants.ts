@@ -1,4 +1,5 @@
 import { Dimensions, StyleProp, ViewStyle } from "react-native";
+import { Statistics } from "../types/types";
 
 export const EIGHT_SEAT_TABLE = [
   { position: "absolute", top: Dimensions.get("window").width * 0.05, left: 1, alignItems: "center" } as StyleProp<ViewStyle>,
@@ -126,6 +127,19 @@ export const INITIAL_GAME_PROPERTIES = {
   dice: [],
   hasRolled: false,
   isOut: false,
+};
+
+export const INITIAL_STATISTICS_PROPERTIES: Statistics = {
+  userId: "",
+  ones: 0,
+  twoes: 0,
+  threes: 0,
+  fours: 0,
+  fives: 0,
+  sixes: 0,
+  straights: 0,
+  gamesPlayed: 0,
+  gamesWon: 0,
 };
 
 export const BASE_URL = "http://192.168.0.4:5141/";

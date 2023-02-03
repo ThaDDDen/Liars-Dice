@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import useAsyncStorage from "../hooks/useAsyncStorage";
 import { User, UserMessage } from "../types/types";
-import { INITIAL_GAME_PROPERTIES } from "../utils/constants";
+import { INITIAL_GAME_PROPERTIES, INITIAL_STATISTICS_PROPERTIES } from "../utils/constants";
 
 interface UserContext {
   currentUser: User;
@@ -38,6 +38,7 @@ export const initialUserState = {
   connectionId: "",
   gameProperties: INITIAL_GAME_PROPERTIES,
   friends: [],
+  statistics: INITIAL_STATISTICS_PROPERTIES,
 };
 
 function UserProvider({ children }: Props) {

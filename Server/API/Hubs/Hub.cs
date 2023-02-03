@@ -50,7 +50,8 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
             ConnectionId = Context.ConnectionId,
             UserName = user.UserName,
             AvatarCode = user.AvatarCode,
-            Friends = await _appDataService.GetFriendsAsync(user.Id)
+            Friends = await _appDataService.GetFriendsAsync(user.Id),
+            Statistics = await _appDataService.GetStatistics(user.Id)
         };
 
         _connectionRepository.AddConnection(hubUser);
@@ -60,9 +61,8 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         await Clients.Caller.SendAsync("ReceiveUser", hubUser);
 
         await SendMessage(_lobbyBot, "Lobby", $"{user.UserName} has joined the lobby.");
-
     }
-    
+
     public async Task SendMessage(string sender, string room, string message)
     {
         AppUser user = null;
@@ -334,7 +334,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
     public async Task AcceptFriendRequest(string userName, string friendName)
     {
         var user = _connectionRepository.GetConnectionByName(userName);
-        var friend  = _connectionRepository.GetConnectionByName(friendName);
+        var friend = _connectionRepository.GetConnectionByName(friendName);
 
         var ok = await _appDataService.AddFriendAsync(user.Id, friend.Id);
 

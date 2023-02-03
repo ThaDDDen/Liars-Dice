@@ -78,7 +78,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddSignalR();
 
 builder.Services.AddSingleton<IGameRepository, GameRepository>();
-builder.Services.AddSingleton<IGameService, GameService>();
+builder.Services.AddScoped<IGameService, GameService>();
 builder.Services.AddSingleton<IConnectionRepository, ConnectionRepository>();
 builder.Services.AddScoped<IAppDataService, AppDataService>();
 builder.Services.AddScoped(typeof(IAppDataRepository<>), typeof(AppDataRepository<>));

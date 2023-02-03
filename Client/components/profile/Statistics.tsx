@@ -2,8 +2,10 @@ import { Entypo, FontAwesome5 } from "@expo/vector-icons";
 import React from "react";
 import { View } from "react-native";
 import { Text } from "react-native-paper";
+import { useUser } from "../../contexts/UserContext";
 
 const Statistics = () => {
+  const { currentUser } = useUser();
   return (
     <>
       <View style={{ marginLeft: 10, marginTop: 10, flexDirection: "row", alignItems: "baseline" }}>
@@ -12,7 +14,7 @@ const Statistics = () => {
           Games won
         </Text>
         <Text style={{ marginRight: 15 }} variant="headlineSmall">
-          4
+          {currentUser.statistics.gamesWon}
         </Text>
       </View>
       <View style={{ marginLeft: 10, marginTop: 10, paddingLeft: 3, flexDirection: "row", alignItems: "baseline" }}>
@@ -21,7 +23,7 @@ const Statistics = () => {
           Games played
         </Text>
         <Text style={{ marginRight: 15 }} variant="headlineSmall">
-          18
+          {currentUser.statistics.gamesPlayed}
         </Text>
       </View>
     </>
