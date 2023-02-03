@@ -4,10 +4,10 @@ import { View } from "react-native";
 import { Dialog, IconButton, Paragraph, Portal, Surface, Text } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../../contexts/ConnectionContext";
-import { initialGameState, useGame } from "../../../contexts/GameContext";
+import { useGame } from "../../../contexts/GameContext";
 import { useSnackBar } from "../../../contexts/SnackContext";
 import { useUser } from "../../../contexts/UserContext";
-import { INITIAL_GAME_PROPERTIES, INVOKE_LEAVE_GAME, INVOKE_START_GAME, INVOKE_UPDATE_GAME_SETTINGS } from "../../../utils/constants";
+import { INVOKE_START_GAME, INVOKE_UPDATE_GAME_SETTINGS } from "../../../utils/constants";
 import Button from "../../layout/Button";
 import OrangeDice from "../game-assets/OrangeDice";
 
@@ -73,7 +73,9 @@ const GameHeader = ({ openChatModal }: Props) => {
           </Dialog.Actions>
         </Dialog>
       </Portal>
-      <Portal>
+      {/* TODO: The following button has moved to drawer. Also move the dialog */}
+
+      {/* <Portal>
         <Dialog visible={leaveDialogVisible}>
           <Dialog.Title>You're about to leave!</Dialog.Title>
           <Dialog.Content>
@@ -94,7 +96,7 @@ const GameHeader = ({ openChatModal }: Props) => {
             <Button mode="text" onPress={() => setLeaveDialogVisible(false)} title="No, I want to play!" />
           </Dialog.Actions>
         </Dialog>
-      </Portal>
+      </Portal> */}
     </>
   );
 };

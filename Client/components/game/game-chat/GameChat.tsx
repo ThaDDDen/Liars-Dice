@@ -16,7 +16,11 @@ const GameChat = () => {
 
   const gameMessagesJsx = gameMessages.map((userMessage, index) => (
     <View key={index}>
-      <ChatMessage userMessage={userMessage} latestMessage={gameMessages.length === index + 1} />
+      <ChatMessage
+        lastSender={index != 0 ? gameMessages[index - 1].user.userName == gameMessages[index].user.userName : false}
+        userMessage={userMessage}
+        latestMessage={gameMessages.length === index + 1}
+      />
     </View>
   ));
 

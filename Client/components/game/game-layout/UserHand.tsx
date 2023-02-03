@@ -7,6 +7,7 @@ interface Props {
 }
 const UserHand = ({ dice }: Props) => {
   return (
+    // TODO: styled component
     <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: 10 }}>
       {dice && dice.map((value, index) => <Dice size={55} key={index} value={value} />)}
     </View>
