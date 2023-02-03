@@ -10,12 +10,14 @@ import Background from "../layout/Background";
 import Button from "../layout/Button";
 import ContentCard from "../layout/ContentCard";
 import GameSettingsHeader from "../layout/GameSettingsHeader";
+import BetTimeSlider from "./game-settings/BetTimeSlider";
 import DicePicker from "./game-settings/DicePicker";
 import PlayerPicker from "./game-settings/PlayerPicker";
 
 const CreateGame = () => {
   const [diceAmount, setDiceAmount] = useState(6);
   const [playerCount, setPlayerCount] = useState(5);
+  const [betTime, setBetTime] = useState<number>(30);
   const { setResponseMessage } = useSnackBar();
   const { connection } = useConnection();
   const { currentUser } = useUser();
@@ -30,7 +32,7 @@ const CreateGame = () => {
             if (values.GameName && values.GameName.length >= 3 && values.GameName.length <= 15) {
               connection.invoke(
                 INVOKE_CREATE_GAME,
-                { gameName: values.GameName, diceCount: diceAmount, playerCount: playerCount } as GameSettings,
+                { gameName: values.GameName, diceCount: diceAmount, playerCount: playerCount, betTime: betTime } as GameSettings,
                 currentUser
               );
             } else {
@@ -49,6 +51,9 @@ const CreateGame = () => {
 
                 <ContentCard title="Dice count">
                   <DicePicker diceAmount={diceAmount} setDiceAmount={setDiceAmount} />
+                </ContentCard>
+                <ContentCard title="Betting time">
+                  <BetTimeSlider betTime={betTime} setBetTime={setBetTime} />
                 </ContentCard>
 
                 <ContentCard title="Player count">

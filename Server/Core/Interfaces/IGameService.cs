@@ -11,6 +11,7 @@ public interface IGameService
    void Call(string gameName, HubUser gameCaller);
    void UpdatePlayerCount(string gameName, int newPlayerCount);
    void UpdateDiceCount(string gameName, int newDiceCount);
+   void UpdateBetTime(string gameName,int time);
    bool GameIsEmpty(string gameName);
    void RestartRound(string gameName);
    HubUser GetGameHost(string gameName);

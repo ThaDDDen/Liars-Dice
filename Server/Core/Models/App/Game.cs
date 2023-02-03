@@ -13,7 +13,8 @@ public class Game
     public HubUser PreviousBetter { get; set; } = null;
     public HubUser CurrentBetter { get; set; } = null;
     public bool GameStarted { get; set; }
-    public bool RoundStarted { get; set; }
+    public bool RoundStarted { get; set; }    
+    public int BetTime { get; set; } = 30;
     public RoundResult RoundResult { get; set; }
     
 }

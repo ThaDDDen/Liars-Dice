@@ -9,6 +9,7 @@ import { initialGameState, useGame } from "../../contexts/GameContext";
 import { useUser } from "../../contexts/UserContext";
 import { User } from "../../types/types";
 import { INITIAL_GAME_PROPERTIES, INVOKE_LEAVE_GAME, INVOKE_UPDATE_GAME_SETTINGS } from "../../utils/constants";
+import BetTimeSlider from "../game/game-settings/BetTimeSlider";
 import PlayOrderSorter from "../game/game-settings/PlayOrderSorter";
 import OnlineUserCard from "../Lobby/OnlineUserCard";
 import Button from "./Button";
@@ -22,6 +23,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   const { colors } = useTheme();
   const [diceCount, setDiceCount] = useState(0);
   const [playerCount, setPlayerCount] = useState(0);
+  const [betTime, setBetTime] = useState(game.betTime);
   const [orderSorterVisible, setOrderSorterVisible] = useState(false);
   const navigation = useNavigation();
   const [isSoundEffectsOn, setIsSoundEffectsOn] = React.useState(false);
@@ -33,7 +35,11 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
     }
   }, [game]);
 
-  const changesMade = diceCount !== game.diceCount || playerCount !== game.playerCount;
+  useEffect(() => {
+    setBetTime(game.betTime);
+  }, [game.betTime]);
+
+  const changesMade = diceCount !== game.diceCount || playerCount !== game.playerCount || betTime !== game.betTime;
 
   const handleToggleSoundEffects = () => setIsSoundEffectsOn(!isSoundEffectsOn);
 
@@ -98,6 +104,11 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
                         }}
                       />
                     </SettingsRow>
+                    <SettingsRow>
+                      <View style={{ flex: 1 }}>
+                        <BetTimeSlider betTime={betTime} setBetTime={setBetTime} />
+                      </View>
+                    </SettingsRow>
                     {changesMade && (
                       <SettingsRow>
                         <Button
@@ -109,6 +120,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
                               gameName: game.gameName,
                               diceCount: diceCount,
                               playerCount: playerCount,
+                              betTime: betTime,
                             });
                             navigation.dispatch(DrawerActions.toggleDrawer());
                           }}

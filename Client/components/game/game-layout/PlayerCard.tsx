@@ -1,9 +1,11 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Pressable, Text, View } from "react-native";
+import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { Divider, Menu, Surface } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../../contexts/ConnectionContext";
+import { useGame } from "../../../contexts/GameContext";
 import { useUser } from "../../../contexts/UserContext";
 import { User } from "../../../types/types";
 import { INVOKE_KICK_PLAYER, INVOKE_REMOVE_FRIEND, INVOKE_SEND_FRIEND_REQUEST } from "../../../utils/constants";
@@ -13,15 +15,41 @@ import ValueDice from "../game-assets/ValueDice";
 interface Props {
   player: User;
   disabled?: boolean;
+  setBetTime: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const PlayerCard = ({ player, disabled }: Props) => {
+const PlayerCard = ({ player, disabled, setBetTime }: Props) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const { currentUser } = useUser();
   const { connection } = useConnection();
+  const [countDownKey, setCountDownKey] = useState(0);
+  const { game } = useGame();
+  // const [countDownDuration, setCountDownDuration] = useState(game.betTime);
 
   return (
     <Container>
+      {game.currentBetter && game.roundStarted && game.currentBetter.userName === player.userName && (
+        <View style={{ position: "absolute" }}>
+          <CountdownCircleTimer
+            size={60}
+            strokeWidth={5}
+            isPlaying={game.currentBetter.userName === player.userName}
+            duration={game.betTime}
+            key={countDownKey}
+            colors={["#1eef41", "#d3ef1e", "#efa21e", "#ef1e1e"]}
+            colorsTime={[22.5, 15, 7.5, 0]}
+            onComplete={() => {
+              // setCountDownKey((prev) => prev + 1);
+              setBetTime(0);
+              return { shouldRepeat: false };
+            }}
+            onUpdate={(remainingTime) => setBetTime(remainingTime)}
+            updateInterval={0}
+          >
+            {({ remainingTime, color }) => <Text style={{ color, fontSize: 40, zIndex: 4000 }}>{remainingTime}</Text>}
+          </CountdownCircleTimer>
+        </View>
+      )}
       {currentUser.userName !== player.userName ? (
         <Menu
           visible={menuVisible}
