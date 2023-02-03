@@ -178,7 +178,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
                 ))}
               </ScrollView>
             ) : (
-              <Text>You don't have any friends yet you fucking looser</Text>
+              <Text>You don't have any friends yet.</Text>
             )}
           </View>
         </Drawer.Section>
