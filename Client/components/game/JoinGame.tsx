@@ -22,8 +22,6 @@ const JoinGame = () => {
         <Formik
           initialValues={{ GameName: "" }}
           onSubmit={(values) => {
-            // JOINING GAME IS CURRENTLY REPLACE WITH SENDING REQUEST TO JOINT GAME
-            // connection.invoke(INVOKE_JOIN_GAME, currentUser, values.GameName);
             connection.invoke(INVOKE_REQUEST_TO_JOIN_GAME, currentUser, values.GameName);
             setResponseMessage({ status: "Success", message: `A request to join "${values.GameName}" has been sent to the game host.` });
           }}

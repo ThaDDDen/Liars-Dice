@@ -1,16 +1,15 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { Pressable, Text, View } from "react-native";
-import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
-import { Divider, Menu, Surface } from "react-native-paper";
+import { Text } from "react-native";
+import { Surface } from "react-native-paper";
 import styled from "styled-components/native";
-import { useConnection } from "../../../contexts/ConnectionContext";
 import { useGame } from "../../../contexts/GameContext";
 import { useUser } from "../../../contexts/UserContext";
 import { User } from "../../../types/types";
-import { INVOKE_KICK_PLAYER, INVOKE_REMOVE_FRIEND, INVOKE_SEND_FRIEND_REQUEST } from "../../../utils/constants";
 import UserAvatar from "../../Lobby/UserAvatar";
 import ValueDice from "../game-assets/ValueDice";
+import CountDownCircle from "./CountDownCircle";
+import PlayerCardMenu from "./PlayerCardMenu";
 
 interface Props {
   player: User;
@@ -21,104 +20,50 @@ interface Props {
 const PlayerCard = ({ player, disabled, setBetTime }: Props) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const { currentUser } = useUser();
-  const { connection } = useConnection();
-  const [countDownKey, setCountDownKey] = useState(0);
   const { game } = useGame();
-  // const [countDownDuration, setCountDownDuration] = useState(game.betTime);
+
+  const IS_PLAYERS_TURN = game.currentBetter && game.roundStarted && game.currentBetter.userName === player.userName;
+  const PLAYER_IS_NOT_CURRENT_USER = currentUser.userName !== player.userName;
 
   return (
     <Container>
-      {game.currentBetter && game.roundStarted && game.currentBetter.userName === player.userName && (
-        <View style={{ position: "absolute" }}>
-          <CountdownCircleTimer
-            size={60}
-            strokeWidth={5}
-            isPlaying={game.currentBetter.userName === player.userName}
-            duration={game.betTime}
-            key={countDownKey}
-            colors={["#1eef41", "#d3ef1e", "#efa21e", "#ef1e1e"]}
-            colorsTime={[22.5, 15, 7.5, 0]}
-            onComplete={() => {
-              // setCountDownKey((prev) => prev + 1);
-              setBetTime(0);
-              return { shouldRepeat: false };
-            }}
-            onUpdate={(remainingTime) => setBetTime(remainingTime)}
-            updateInterval={0}
-          >
-            {({ remainingTime, color }) => <Text style={{ color, fontSize: 40, zIndex: 4000 }}>{remainingTime}</Text>}
-          </CountdownCircleTimer>
-        </View>
-      )}
-      {currentUser.userName !== player.userName ? (
-        <Menu
-          visible={menuVisible}
-          onDismiss={() => setMenuVisible(false)}
-          anchor={
-            <Pressable onPress={() => setMenuVisible((prev) => !prev)}>
-              <UserAvatar size={50} avatarCode={player.avatarCode} disabled={disabled} />
-            </Pressable>
-          }
-          style={{ zIndex: 500, position: "absolute" }}
-          anchorPosition="bottom"
-        >
-          {currentUser.friends.find((friend) => friend.userName === player.userName) ? (
-            <Menu.Item
-              onPress={() => {
-                connection.invoke(INVOKE_REMOVE_FRIEND, currentUser.id, player.id);
-              }}
-              title="Remove friend"
-            />
-          ) : (
-            <Menu.Item
-              onPress={() => {
-                connection.invoke(INVOKE_SEND_FRIEND_REQUEST, currentUser.id, player.id);
-              }}
-              title="Send friend request"
-            />
-          )}
-
-          <Menu.Item
-            onPress={() => {
-              console.log("LIGGA?");
-            }}
-            title="Send Message"
-          />
-          {currentUser.gameProperties.gameHost && (
-            <>
-              <Divider />
-              <Menu.Item onPress={() => connection.invoke(INVOKE_KICK_PLAYER, player)} title="Kick" />
-            </>
-          )}
-        </Menu>
+      {IS_PLAYERS_TURN && <CountDownCircle isPlaying={IS_PLAYERS_TURN} setBetTime={setBetTime} />}
+      {PLAYER_IS_NOT_CURRENT_USER ? (
+        <PlayerCardMenu player={player} menuVisible={menuVisible} setMenuVisible={setMenuVisible} disabled={disabled} />
       ) : (
         <UserAvatar size={50} avatarCode={player.avatarCode} disabled={disabled} />
       )}
-
       <NameContainer>
-        <Text numberOfLines={1} style={{ width: "100%", paddingHorizontal: 2 }}>
-          {player.userName}
-        </Text>
+        <PlayerName numberOfLines={1}>{player.userName}</PlayerName>
       </NameContainer>
       {player.gameProperties.gameHost && (
         <GameHostCrown>
           <MaterialCommunityIcons name="crown" size={18} color="yellow" />
         </GameHostCrown>
       )}
-
-      {/* Experiment with viewing one dice with a value to represent nr of dice left */}
-      <View style={{ position: "absolute", left: -5, top: -7 }}>
+      <DiceCountContainer>
         <ValueDice size={25} value={player.gameProperties.dice.length} />
-      </View>
+      </DiceCountContainer>
     </Container>
   );
 };
 
 export default PlayerCard;
 
+const DiceCountContainer = styled.View`
+  position: absolute;
+  left: -5px;
+  top: -7px;
+`;
+
 const Container = styled.View`
   justify-content: center;
   align-items: center;
+`;
+
+const PlayerName = styled(Text)`
+  width: 100%;
+  padding: 0 2px;
 `;
 
 const GameHostCrown = styled.View`
