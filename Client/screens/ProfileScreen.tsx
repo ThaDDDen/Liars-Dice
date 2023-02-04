@@ -9,22 +9,17 @@ import AvatarPicker from "../components/profile/AvatarPicker";
 import Statistics from "../components/profile/Statistics";
 import ThemePicker from "../components/profile/ThemePicker";
 import { useConnection } from "../contexts/ConnectionContext";
-import { initialGameState, useGame } from "../contexts/GameContext";
 import { useUser } from "../contexts/UserContext";
 import { RootStackParams } from "../navigation/RootStackNavigator";
 
 type NavigationProps = NativeStackScreenProps<RootStackParams>;
 
 const ProfileScreen = ({ navigation }: NavigationProps) => {
-  const { logout, setToken, setLobbyMessages, currentUser } = useUser();
-  const { setGame } = useGame();
+  const { logout, currentUser } = useUser();
   const { closeConnection } = useConnection();
 
   const handleLogout = () => {
     logout();
-    setToken("");
-    setLobbyMessages([]);
-    setGame(initialGameState);
     closeConnection();
   };
 

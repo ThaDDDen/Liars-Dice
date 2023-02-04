@@ -1,17 +1,19 @@
 import React from "react";
-import { View } from "react-native";
+import styled from "styled-components/native";
 import Dice from "../game-assets/ValueDice";
 
 interface Props {
   dice: number[] | undefined;
 }
 const UserHand = ({ dice }: Props) => {
-  return (
-    // TODO: styled component
-    <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center", marginBottom: 10 }}>
-      {dice && dice.map((value, index) => <Dice size={55} key={index} value={value} />)}
-    </View>
-  );
+  return <DiceContainer>{dice && dice.map((value, index) => <Dice size={55} key={index} value={value} />)}</DiceContainer>;
 };
 
 export default UserHand;
+
+const DiceContainer = styled.View`
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+`;

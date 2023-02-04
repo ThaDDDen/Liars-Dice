@@ -2,7 +2,7 @@ import { DrawerContentComponentProps, DrawerContentScrollView } from "@react-nav
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
-import { Badge, Drawer, IconButton, List, Switch, Text, useTheme } from "react-native-paper";
+import { Badge, Dialog, Drawer, IconButton, List, Paragraph, Portal, Switch, Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { initialGameState, useGame } from "../../contexts/GameContext";
@@ -16,7 +16,7 @@ import Button from "./Button";
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
   const { connectedUsers } = useConnection();
-  const { logout, setToken, setLobbyMessages, currentUser, setGameMessages, setCurrentUser } = useUser();
+  const { logout, currentUser, setGameMessages, setCurrentUser } = useUser();
   const { connection } = useConnection();
   const { game, setGame } = useGame();
   const { closeConnection } = useConnection();
@@ -26,6 +26,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   const [betTime, setBetTime] = useState(game.betTime);
   const [orderSorterVisible, setOrderSorterVisible] = useState(false);
   const navigation = useNavigation();
+  const [leaveDialogVisible, setLeaveDialogVisible] = useState(false);
   const [isSoundEffectsOn, setIsSoundEffectsOn] = React.useState(false);
 
   useEffect(() => {
@@ -45,13 +46,11 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
   const handleLogout = () => {
     logout();
-    setToken("");
-    setLobbyMessages([]);
-    setGame(initialGameState);
     closeConnection();
   };
 
   const handleLeaveGame = () => {
+    setLeaveDialogVisible(false);
     setGame(initialGameState);
     setGameMessages([]);
     setCurrentUser({ ...currentUser, gameProperties: INITIAL_GAME_PROPERTIES });
@@ -137,7 +136,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
                   </>
                 )}
                 <SettingsRow>
-                  <Pressable onPress={() => handleLeaveGame()} style={{ paddingVertical: 5 }}>
+                  <Pressable onPress={() => setLeaveDialogVisible(true)} style={{ paddingVertical: 5 }}>
                     <Text>Leave Game</Text>
                   </Pressable>
                 </SettingsRow>
@@ -196,6 +195,18 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
         </Drawer.Section>
       </DrawerContentScrollView>
       <Button styles={{ margin: 10 }} onPress={() => handleLogout()} mode="outlined" title="Log out" />
+      <Portal>
+        <Dialog visible={leaveDialogVisible}>
+          <Dialog.Title>You're about to leave!</Dialog.Title>
+          <Dialog.Content>
+            <Paragraph>Are you sure you want to leave the game?</Paragraph>
+          </Dialog.Content>
+          <Dialog.Actions style={{ flexDirection: "column" }}>
+            <Button mode="text" onPress={() => handleLeaveGame()} title="Chicken out and leave! 🐥" />
+            <Button mode="text" onPress={() => setLeaveDialogVisible(false)} title="No, I want to play!" />
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
 
       <PlayOrderSorter orderSorterVisible={orderSorterVisible} setOrderSorterVisible={setOrderSorterVisible} updatePlayerOrder={updatePlayerOrder} />
     </>
