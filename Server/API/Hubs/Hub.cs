@@ -92,7 +92,6 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
     public async Task CreateGame(GameSettings gameSettings, HubUser gameHost)
     {
-        Console.WriteLine(gameSettings.GameName);
         if (_gameRepository.GetGameByName(gameSettings.GameName) != null)
         {
             await Clients.Caller.SendAsync("ReceiveError", new ResponseModel
