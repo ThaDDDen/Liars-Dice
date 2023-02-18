@@ -26,6 +26,7 @@ public class GameService : IGameService
             GameName = gameSettings.GameName,
             DiceCount = gameSettings.DiceCount,
             PlayerCount = gameSettings.PlayerCount,
+            BetTime = gameSettings.BetTime,
             RoundResult = new(),
             Round = 1,
         };
@@ -162,6 +163,13 @@ public class GameService : IGameService
             }
             player.GameProperties.Dice = newDiceList;
         }
+    }
+
+    public void UpdateBetTime(string gameName, int time)
+    {
+        var game = _gameRepository.GetGameByName(gameName);
+        
+        game.BetTime = time;
     }
 
     public bool GameIsEmpty(string gameName)

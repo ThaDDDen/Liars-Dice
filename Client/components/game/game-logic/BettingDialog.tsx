@@ -1,38 +1,52 @@
-import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
-import { Dialog, Divider, Portal, Text, useTheme } from "react-native-paper";
-import styled from "styled-components/native";
+import { LayoutChangeEvent, View } from "react-native";
+import { Dialog, Portal, Text } from "react-native-paper";
 import { useConnection } from "../../../contexts/ConnectionContext";
 import { useGame } from "../../../contexts/GameContext";
-import { useUser } from "../../../contexts/UserContext";
-import { diceValues, INVOKE_CALL, INVOKE_SET_BET, valuesToWords } from "../../../utils/constants";
-import { getDiceAmountArray, getDiceValueArray } from "../../../utils/gameFunctions";
+import { initialUserState, useUser } from "../../../contexts/UserContext";
+import { INVOKE_CALL, INVOKE_SET_BET } from "../../../utils/constants";
 import Button from "../../layout/Button";
-import ValueDice from "../game-assets/ValueDice";
-import DiceBetAmountPicker from "./DiceBetAmountPicker";
-import DiceBetValuePicker from "./DiceBetValuePicker";
+import ContentCard from "../../layout/ContentCard";
+import CurrentBet from "../game-layout/CurrentBet";
+import UserHand from "../game-layout/UserHand";
+import BetPickers from "./BetPickers";
 
 interface Props {
   bettingDialogVisible: boolean;
   setBettingDialogVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  betTime: number;
+  setBetTime: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props) => {
-  const { game } = useGame();
+const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible, betTime, setBetTime }: Props) => {
+  const { game, setGame } = useGame();
   const { connection } = useConnection();
   const { currentUser } = useUser();
-  const { colors } = useTheme();
+  const [handWidth, setHandWidth] = useState(0);
+
+  const onLayout = (event: LayoutChangeEvent) => {
+    setHandWidth(event.nativeEvent.layout.width);
+  };
 
   //BET VALUES AND AMOUNT
   const [diceAmount, setDiceAmount] = useState<number>(1);
   const [diceValue, setDiceValue] = useState<2 | 3 | 4 | 5 | 6>(2);
 
-  //PICKER ARRAY VALUES AND AMOUNT
-  const [dicePickerAmount, setDicePickerAmount] = useState<number[]>([]);
-  const [dicePickerValue, setDicePickerValue] = useState<number[]>([]);
-
   const maxBet = 6 * game.players.map((x) => x.gameProperties.dice.length).reduce((x, c) => x + c, 0);
+
+  const handleBet = () => {
+    setGame((prev) => {
+      return { ...prev, ...(prev.currentBetter = initialUserState) };
+    });
+    setBetTime(game.betTime);
+    setBettingDialogVisible(false);
+    connection.invoke(INVOKE_SET_BET, { gameName: game.gameName, better: currentUser, diceAmount: diceAmount, diceValue: diceValue });
+  };
+
+  const handleCall = () => {
+    connection.invoke(INVOKE_CALL, currentUser);
+    setBettingDialogVisible(false);
+  };
 
   useEffect(() => {
     if (game.currentBet) {
@@ -47,126 +61,56 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible }: Props)
       setDiceAmount(1);
       setDiceValue(2);
     }
-    const diceValueArray = getDiceValueArray(game.currentBet, diceAmount);
-    setDicePickerValue(diceValueArray);
-  }, [game]);
-
-  // ---- IF SOMEONE LEAVES DURING ROUND STARTED CLOSE MODAL ----
-  useEffect(() => {
+    // if someone leaves mid-round
     if (!game.roundStarted) setBettingDialogVisible(false);
-  }, [game]);
-
-  // --------- SET ALLOWED DICE AMOUNT PICKER ARRAY --------
-  useEffect(() => {
-    const diceAmountArray = getDiceAmountArray(game.players, game.currentBet);
-    setDicePickerAmount(diceAmountArray);
   }, [game]);
 
   // ------ SET ALLOWED DICE VALUE PICKER ARRAY ------
   useEffect(() => {
-    const diceValueArray = getDiceValueArray(game.currentBet, diceAmount);
-
-    setDicePickerValue(diceValueArray);
-    setDiceValue(diceValueArray[0] as 2 | 3 | 4 | 5 | 6);
+    if (game.currentBet) {
+      if (diceAmount === game.currentBet.diceAmount) {
+        if (diceValue <= game.currentBet.diceValue) {
+          setDiceValue((game.currentBet.diceValue + 1) as 2 | 3 | 4 | 5 | 6);
+        }
+      }
+    }
   }, [diceAmount]);
+
+  useEffect(() => {
+    if (game.currentBetter && betTime === 0 && game.currentBetter.userName === currentUser.userName) handleBet();
+  }, [betTime]);
 
   return (
     <Portal>
-      <Dialog visible={bettingDialogVisible}>
-        <Dialog.Title style={{ alignSelf: "center" }}>Your turn!</Dialog.Title>
+      <Dialog visible={bettingDialogVisible} style={{ borderRadius: 5, marginHorizontal: 10 }}>
+        <Dialog.Title style={{ alignSelf: "center", marginTop: 10, marginBottom: 0 }}>
+          <Text variant="titleMedium">{game.currentBet ? "Your turn!" : "You start betting this round!"}</Text>
+        </Dialog.Title>
         <Dialog.Content>
-          <Divider bold />
           <View>
-            {game.currentBet ? (
-              <CurrentBetInfo>
-                <CurrentBet>
-                  <Text variant="titleMedium">
-                    {game.currentBet.better.userName} bet {game.currentBet.diceAmount} x{" "}
-                  </Text>
-                  <ValueDice value={game.currentBet.diceValue} size={22} />
-                  <Text variant="bodyLarge">!</Text>
-                </CurrentBet>
-                <Text variant="bodyLarge">You can either raise their bet or call!</Text>
-              </CurrentBetInfo>
-            ) : (
-              <CurrentBetInfo>
-                <Text>You start the betting this round!</Text>
-              </CurrentBetInfo>
-            )}
+            {game.currentBet && <CurrentBet bet={game.currentBet} />}
+            <ContentCard title="Your bet">
+              {maxBet !== game.currentBet?.diceAmount * game.currentBet?.diceValue && (
+                <BetPickers game={game} diceValue={diceValue} setDiceValue={setDiceValue} diceAmount={diceAmount} setDiceAmount={setDiceAmount} />
+              )}
+              <View style={{ flexDirection: "row" }}>
+                {maxBet !== game.currentBet?.diceAmount * game.currentBet?.diceValue && (
+                  <Button mode="outlined" onPress={() => handleBet()} title={`Bet ${diceAmount} x ${diceValue}`} />
+                )}
+                {game.currentBet && <Button mode="contained" onPress={() => handleCall()} title="Call" />}
+              </View>
+            </ContentCard>
+
+            <ContentCard title="Your hand">
+              <View onLayout={onLayout}>
+                <UserHand size={handWidth / 6} dice={currentUser.gameProperties.dice} />
+              </View>
+            </ContentCard>
           </View>
-          <Divider bold />
-          <BetContainer>
-            {maxBet !== game.currentBet?.diceAmount * game.currentBet?.diceValue && (
-              <PickerContainer>
-                <View>
-                  <PickerTitle>Dice</PickerTitle>
-                  <DiceBetAmountPicker setDiceAmount={setDiceAmount} dicePickerAmount={dicePickerAmount} />
-                </View>
-                <Feather name="x" size={20} color={colors.onSurface} style={{ marginTop: 20 }} />
-                <View>
-                  <PickerTitle>Value</PickerTitle>
-                  <DiceBetValuePicker setDiceValue={setDiceValue} dicePickerValue={dicePickerValue} defaultValue={diceValue} />
-                </View>
-              </PickerContainer>
-            )}
-          </BetContainer>
-          <Divider bold />
         </Dialog.Content>
-        <Dialog.Actions>
-          {maxBet !== game.currentBet?.diceAmount * game.currentBet?.diceValue && (
-            <Button
-              mode="outlined"
-              onPress={() => {
-                connection.invoke(INVOKE_SET_BET, { gameName: game.gameName, better: currentUser, diceAmount: diceAmount, diceValue: diceValue });
-                setBettingDialogVisible(false);
-              }}
-              title={"Bet " + valuesToWords[diceAmount - 1] + " " + (diceAmount === 1 ? valuesToWords[diceValue - 1] : diceValues[diceValue - 2])}
-              styles={{ marginRight: 10 }}
-            />
-          )}
-          {game.currentBet && (
-            <Button
-              mode="contained"
-              onPress={() => {
-                connection.invoke(INVOKE_CALL, currentUser);
-                setBettingDialogVisible(false);
-              }}
-              title="Call"
-            />
-          )}
-        </Dialog.Actions>
       </Dialog>
     </Portal>
   );
 };
 
 export default BettingDialog;
-
-const CurrentBetInfo = styled.View`
-  border-radius: 5px;
-  padding: 5px;
-  align-items: center;
-  margin-bottom: 5px;
-`;
-
-const CurrentBet = styled.View`
-  flex-direction: row;
-  align-items: center;
-`;
-
-const BetContainer = styled.View`
-  padding: 5px;
-  margin-bottom: 5px;
-`;
-
-const PickerContainer = styled.View`
-  align-items: center;
-  flex-direction: row;
-  padding: 0 80px;
-  justify-content: space-around;
-`;
-
-const PickerTitle = styled(Text)`
-  align-self: center;
-  margin-bottom: 5px;
-`;

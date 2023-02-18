@@ -125,6 +125,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
         _gameService.UpdatePlayerCount(game.GameName, updatedGameSettings.PlayerCount);
         _gameService.UpdateDiceCount(game.GameName, updatedGameSettings.DiceCount);
+        _gameService.UpdateBetTime(updatedGameSettings.GameName, updatedGameSettings.BetTime);
 
         await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
     }

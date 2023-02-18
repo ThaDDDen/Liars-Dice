@@ -56,7 +56,13 @@ const OnlineUserCard = ({ user, closeModal, online }: Props) => {
     >
       {currentUser.userName !== user.userName && game !== initialGameState && online && !game.players.find((p) => p.userName == user.userName) && (
         <>
-          <Menu.Item onPress={() => invitePlayer()} title="Invite to game" />
+          <Menu.Item
+            onPress={() => {
+              invitePlayer();
+              setMenuVisible(false);
+            }}
+            title="Invite to game"
+          />
           <Divider />
         </>
       )}
@@ -65,6 +71,7 @@ const OnlineUserCard = ({ user, closeModal, online }: Props) => {
         <Menu.Item
           onPress={() => {
             connection.invoke(INVOKE_REMOVE_FRIEND, currentUser.id, user.id);
+            setMenuVisible(false);
           }}
           title="Remove friend"
         />
@@ -72,6 +79,7 @@ const OnlineUserCard = ({ user, closeModal, online }: Props) => {
         <Menu.Item
           onPress={() => {
             connection.invoke(INVOKE_SEND_FRIEND_REQUEST, currentUser.id, user.id);
+            setMenuVisible(false);
           }}
           title="Send friend request"
         />
@@ -79,6 +87,7 @@ const OnlineUserCard = ({ user, closeModal, online }: Props) => {
       <Menu.Item
         onPress={() => {
           console.log("LIGGA?");
+          setMenuVisible(false);
         }}
         title="Send Message"
       />

@@ -2,6 +2,7 @@ import { createContext, ReactNode, useContext, useState } from "react";
 import useAsyncStorage from "../hooks/useAsyncStorage";
 import { User, UserMessage } from "../types/types";
 import { INITIAL_GAME_PROPERTIES, INITIAL_STATISTICS_PROPERTIES } from "../utils/constants";
+import { initialGameState, useGame } from "./GameContext";
 
 interface UserContext {
   currentUser: User;
@@ -46,9 +47,13 @@ function UserProvider({ children }: Props) {
   const [lobbyMessages, setLobbyMessages] = useState<UserMessage[]>([]);
   const [gameMessages, setGameMessages] = useState<UserMessage[]>([]);
   const [token, setToken] = useAsyncStorage("user", "");
+  const { setGame } = useGame();
 
   const logout = () => {
     setCurrentUser(initialUserState);
+    setToken("");
+    setLobbyMessages([]);
+    setGame(initialGameState);
   };
 
   return (

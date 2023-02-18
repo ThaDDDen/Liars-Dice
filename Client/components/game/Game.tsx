@@ -21,6 +21,7 @@ const Game = () => {
   const { currentUser } = useUser();
   const { connection, connectedUsers } = useConnection();
   const { colors } = useTheme();
+  const [betTime, setBetTime] = useState(game.betTime);
   const { playRollDice } = useSound();
 
   const [bettingDialogVisible, setBettingDialogVisible] = useState(false);
@@ -29,10 +30,7 @@ const Game = () => {
   const usersOnlineModalize = useRef<Modalize>(null);
 
   useEffect(() => {
-    if (game.currentBetter && game.roundStarted)
-      if (currentUser.userName === game.currentBetter.userName) {
-        setBettingDialogVisible(true);
-      }
+    if (game.currentBetter && game.roundStarted) setBettingDialogVisible(currentUser.userName === game.currentBetter.userName);
   }, [game]);
 
   //------- OPEN MODAL FUNCTIONS -------
@@ -48,7 +46,7 @@ const Game = () => {
   return (
     <Background>
       <GameHeader openChatModal={openChatModal} />
-      <Table openOnlineUsersModal={openOnlineUsersModal} />
+      <Table openOnlineUsersModal={openOnlineUsersModal} setBetTime={setBetTime} />
       {game.gameStarted && !game.gameOver && !currentUser.gameProperties.isOut && (
         <GameBar>
           {!currentUser.gameProperties.hasRolled && (
@@ -76,7 +74,12 @@ const Game = () => {
         ))}
       </Modalize>
 
-      <BettingDialog bettingDialogVisible={bettingDialogVisible} setBettingDialogVisible={setBettingDialogVisible} />
+      <BettingDialog
+        betTime={betTime}
+        setBetTime={setBetTime}
+        bettingDialogVisible={bettingDialogVisible}
+        setBettingDialogVisible={setBettingDialogVisible}
+      />
     </Background>
   );
 };
