@@ -4,9 +4,10 @@ import Dice from "../game-assets/ValueDice";
 
 interface Props {
   dice: number[] | undefined;
+  size?: number;
 }
-const UserHand = ({ dice }: Props) => {
-  return <DiceContainer>{dice && dice.map((value, index) => <Dice size={55} key={index} value={value} />)}</DiceContainer>;
+const UserHand = ({ dice, size }: Props) => {
+  return <DiceContainer>{dice && dice.map((value, index) => <Dice size={size ? size : 55} key={index} value={value} />)}</DiceContainer>;
 };
 
 export default UserHand;
