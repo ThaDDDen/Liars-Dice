@@ -10,4 +10,7 @@ public interface IAppDataService
     Task<PrivateMessage> AddMessageAsync(string senderId, string receiverId, string message);
     Task<List<PrivateMessage>> GetMessagesAsync(string userId);
     Task<List<HubUser>> GetFriendsAsync(string userId);
+    Task<bool> PostStatistics(string userId);
+    Task<Statistics> GetStatistics(string userId);
+    Task<bool> UpdateStatistics(Statistics statistics);
 }

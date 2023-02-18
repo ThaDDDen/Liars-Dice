@@ -5,6 +5,7 @@ export type User = {
   connectionId: string;
   gameProperties: GameProperties;
   friends: User[];
+  statistics: Statistics;
 };
 
 export type GameProperties = {
@@ -31,6 +32,19 @@ export type GameBet = {
   better: User;
   diceAmount: number;
   diceValue: number;
+};
+
+export type Statistics = {
+  userId: string;
+  ones: number;
+  twoes: number;
+  threes: number;
+  fours: number;
+  fives: number;
+  sixes: number;
+  straights: number;
+  gamesPlayed: number;
+  gamesWon: number;
 };
 
 export type UserMessage = {
