@@ -21,7 +21,7 @@ const BetTimeSlider = ({ betTime, setBetTime }: Props) => {
         value={betTime as number}
         onValueChange={(value) => setBetTime(Number(value))}
         minimumValue={5}
-        maximumValue={1000}
+        maximumValue={60}
       />
     </View>
   );
