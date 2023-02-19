@@ -143,7 +143,7 @@ function ConnectionProvider({ children }: Props) {
       });
 
       connection.on(RECEIVE_FRIENDS, (friends: User[]) => {
-        setCurrentUser({ ...currentUser, friends: friends });
+        setCurrentUser((prev) => ({ ...prev, friends: friends }));
       });
 
       await connection.start();
