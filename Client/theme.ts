@@ -1,16 +1,45 @@
 import { DarkTheme as NavigationDarkTheme, DefaultTheme as NavigationLightTheme, Theme as NavigationTheme } from "@react-navigation/native";
-import { MD3DarkTheme as PaperDarkTheme, MD3LightTheme as PaperLightTheme, MD3Theme as PaperTheme } from "react-native-paper";
+import { configureFonts, MD3DarkTheme as PaperDarkTheme, MD3LightTheme as PaperLightTheme, MD3Theme as PaperTheme } from "react-native-paper";
 
-import { ColorSchemeName } from "react-native";
+import { ColorSchemeName, Platform } from "react-native";
 
 // if we want more themes add in ,"theme1" | "theme2" | "theme3">
 export type AppColorSchemeName = Record<keyof ColorSchemeName, "theme1" | "thadtheme">;
 
 export type Theme = NavigationTheme & PaperTheme;
 
+Platform.select({
+  web: 'Manrope-Regular, "Helvetica Neue", Helvetica, Arial, sans-serif',
+  ios: "System",
+  default: "sans-serif", // and 'sans-serif-medium' for `fontWeight:"500"`
+});
+
+const fontConfig = {
+  fontFamily: "Manrope-Regular",
+  titleSmall: {
+    fontFamily: "Manrope-Medium",
+  },
+  titleMedium: {
+    fontFamily: "Manrope-Medium",
+  },
+  labelSmall: {
+    fontFamily: "Manrope-Medium",
+  },
+  labelMedium: {
+    fontFamily: "Manrope-SemiBold",
+    lineHeight: 13,
+    letterSpacing: 1,
+    fontSize: 12,
+  },
+  labelLarge: {
+    fontFamily: "Manrope-Medium",
+  },
+};
+
 export const LightTheme: Theme = {
   ...PaperLightTheme,
   ...NavigationLightTheme,
+  fonts: configureFonts({ config: fontConfig }),
   colors: {
     ...PaperLightTheme.colors,
     ...NavigationLightTheme.colors,
@@ -60,6 +89,7 @@ export const LightTheme: Theme = {
 export const DarkTheme: Theme = {
   ...PaperDarkTheme,
   ...NavigationDarkTheme,
+  fonts: configureFonts({ config: fontConfig }),
   colors: {
     ...PaperDarkTheme.colors,
     ...NavigationDarkTheme.colors,
@@ -109,6 +139,7 @@ export const DarkTheme: Theme = {
 export const Theme1: Theme = {
   ...PaperDarkTheme,
   ...NavigationDarkTheme,
+  fonts: configureFonts({ config: fontConfig }),
   colors: {
     ...PaperDarkTheme.colors,
     ...NavigationDarkTheme.colors,
@@ -159,6 +190,7 @@ export const Theme1: Theme = {
 export const ThadTheme: Theme = {
   ...PaperDarkTheme,
   ...NavigationDarkTheme,
+  fonts: configureFonts({ config: fontConfig }),
   colors: {
     ...PaperDarkTheme.colors,
     ...NavigationDarkTheme.colors,
