@@ -40,7 +40,9 @@
     "react-native-web": "~0.18.9",
     "react-native-wheel-scrollview-picker": "^2.0.1",
     "styled-components": "^5.3.6",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "expo-font": "~11.0.1",
+    "expo-splash-screen": "~0.17.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

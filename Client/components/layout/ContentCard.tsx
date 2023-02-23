@@ -10,7 +10,7 @@ interface Props {
 const ContentCard = ({ title, children }: Props) => {
   return (
     <Container>
-      <Title variant="labelLarge">{title}</Title>
+      <Title variant="labelMedium">{title.toUpperCase()}</Title>
       {children}
     </Container>
   );

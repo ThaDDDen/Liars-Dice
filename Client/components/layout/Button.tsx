@@ -15,7 +15,15 @@ interface Props {
 }
 const Button = ({ title, mode, onPress, toLower, styles, compact, icon }: Props) => {
   return (
-    <PaperButton compact={compact} style={styles} mode={mode} onPress={onPress} uppercase={!toLower} icon={icon}>
+    <PaperButton
+      compact={compact}
+      style={styles}
+      mode={mode}
+      onPress={onPress}
+      uppercase={!toLower}
+      icon={icon}
+      labelStyle={{ fontFamily: "Manrope-Bold" }}
+    >
       {title}
     </PaperButton>
   );
