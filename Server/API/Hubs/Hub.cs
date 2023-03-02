@@ -76,6 +76,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         {
             User = new HubUser()
             {
+                Id = user != null ? user.Id : "BotId",
                 UserName = user != null ? user.UserName : sender == _lobbyBot ? _lobbyBot : _gameBot,
                 AvatarCode = user != null ? user.AvatarCode : "BotAvatar"
             },
@@ -219,21 +220,22 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         }
     }
 
-    public async Task KickPlayer(HubUser player)
+    public async Task KickPlayer(string playerId)
     {
+
+        var player = _connectionRepository.GetConnectionByUserId(playerId);
         var game = _gameRepository.GetGameByPlayerName(player.UserName);
-        var user = _connectionRepository.GetConnectionByName(player.UserName);
 
         await SendMessage(_gameBot, game.GameName, $"{player.UserName} has been kicked from the game!");
-        await Clients.Client(user.ConnectionId).SendAsync("Kicked");
-        await Clients.Client(user.ConnectionId).SendAsync("ReceiveError", new ResponseModel()
+        await Clients.Client(player.ConnectionId).SendAsync("Kicked");
+        await Clients.Client(player.ConnectionId).SendAsync("ReceiveError", new ResponseModel()
         {
             Status = "Error",
             Message = "You have been kicked out of the game 😫"
         });
 
         _gameService.RemovePlayerFromGame(game.GameName, player.UserName);
-        await Groups.RemoveFromGroupAsync(user.ConnectionId, game.GameName);
+        await Groups.RemoveFromGroupAsync(player.ConnectionId, game.GameName);
 
         if (game.RoundStarted)
         {
@@ -370,6 +372,20 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         var friend = _connectionRepository.GetConnectionByUserId(friendId);
 
         if (friend != null) await Clients.Client(friend.ConnectionId).SendAsync("ReceiveFriends", await _appDataService.GetFriendsAsync(friendId));
+    }
+
+    public async Task GetProfile(string userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        var profile = new Profile()
+        {
+            Id = user.Id,
+            UserName = user.UserName,
+            AvatarCode = user.AvatarCode,
+            Statistics = await _appDataService.GetStatistics(user.Id)
+        };
+        
+        await Clients.Caller.SendAsync("ReceiveProfile", profile);
     }
 
     public override Task OnDisconnectedAsync(Exception exception)

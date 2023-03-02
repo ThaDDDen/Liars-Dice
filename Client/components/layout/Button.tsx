@@ -12,8 +12,9 @@ interface Props {
   styles?: StyleProp<ViewStyle>;
   compact?: boolean;
   icon?: IconSource;
+  buttonColor?: string;
 }
-const Button = ({ title, mode, onPress, toLower, styles, compact, icon }: Props) => {
+const Button = ({ title, mode, onPress, toLower, styles, compact, icon, buttonColor }: Props) => {
   return (
     <PaperButton
       compact={compact}
@@ -21,6 +22,7 @@ const Button = ({ title, mode, onPress, toLower, styles, compact, icon }: Props)
       mode={mode}
       onPress={onPress}
       uppercase={!toLower}
+      buttonColor={buttonColor ? buttonColor : undefined}
       icon={icon}
       labelStyle={{ fontFamily: "Manrope-Bold" }}
     >

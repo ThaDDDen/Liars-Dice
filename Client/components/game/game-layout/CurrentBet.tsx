@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
 import { GameBet } from "../../../types/types";
-import ContentCard from "../../layout/ContentCard";
+import OldContetCard from "../../layout/OldContentCard";
 import UserAvatar from "../../Lobby/UserAvatar";
 import ValueDice from "../game-assets/ValueDice";
 
@@ -12,7 +12,7 @@ interface Props {
 
 const CurrentBet = ({ bet }: Props) => {
   return (
-    <ContentCard title={`${bet.better.userName} raised`}>
+    <OldContetCard title={`${bet.better.userName} raised`}>
       <View style={{ flexDirection: "row", alignItems: "center", marginTop: 4, justifyContent: "space-around" }}>
         <View style={{ marginLeft: 10 }}>
           <UserAvatar avatarCode={bet.better.avatarCode} size={80} />
@@ -24,7 +24,7 @@ const CurrentBet = ({ bet }: Props) => {
           </View>
         </View>
       </View>
-    </ContentCard>
+    </OldContetCard>
   );
 };
 

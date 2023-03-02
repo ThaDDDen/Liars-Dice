@@ -1,9 +1,11 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigatorScreenParams, useNavigation } from "@react-navigation/native";
+import { NavigatorScreenParams, useIsFocused, useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useEffect } from "react";
-import { Image, View } from "react-native";
+import { Dimensions, Image } from "react-native";
 import { useTheme } from "react-native-paper";
+import { MD3Colors } from "react-native-paper/lib/typescript/types";
+import styled from "styled-components/native";
 import lobby from "../assets/images/lobby_chat.png";
 import dice from "../assets/images/white_dice/white_dice_tabstack.png";
 import UserAvatar from "../components/Lobby/UserAvatar";
@@ -28,6 +30,8 @@ const BottomTabStack = () => {
   const { colors } = useTheme();
   const { game } = useGame();
   const navigation = useNavigation<GameScreenNavProp>();
+  const isFocused = useIsFocused();
+  const deviceWidth = Dimensions.get("window").width;
 
   useEffect(() => {
     if (game.id) {
@@ -47,8 +51,11 @@ const BottomTabStack = () => {
     <TabStack.Navigator
       initialRouteName="Lobby"
       screenOptions={{
-        tabBarActiveBackgroundColor: colors.primaryContainer,
+        tabBarActiveBackgroundColor: colors.secondary,
+        tabBarInactiveBackgroundColor: colors.surface,
         tabBarActiveTintColor: colors.onPrimaryContainer,
+        tabBarShowLabel: false,
+        tabBarStyle: { height: 49 },
       }}
     >
       <TabStack.Screen
@@ -57,9 +64,16 @@ const BottomTabStack = () => {
         options={{
           headerTitleAlign: "center",
           headerShown: false,
-          tabBarIcon: ({ color, size, focused }) => (
-            <Image source={lobby} style={{ width: size, height: size * 1.2, resizeMode: "contain", opacity: focused ? 1 : 0.5 }} />
-          ),
+          tabBarIcon: ({ size, focused }) => {
+            if (!focused) {
+              return <Image source={lobby} style={{ width: size, height: size * 1.2, resizeMode: "contain" }} />;
+            }
+            return (
+              <FocusedContainer colors={colors} width={deviceWidth / 3}>
+                <Image source={lobby} style={{ width: size * 2, height: size * 2.4, resizeMode: "contain" }} />
+              </FocusedContainer>
+            );
+          },
         }}
       />
       <TabStack.Screen
@@ -67,10 +81,16 @@ const BottomTabStack = () => {
         component={GameStack}
         options={{
           headerShown: false,
-          tabBarStyle: { overflow: "hidden" },
-          tabBarIcon: ({ color, size, focused }) => (
-            <Image source={dice} style={{ width: size, height: size * 1.2, resizeMode: "contain", opacity: focused ? 1 : 0.5 }} />
-          ),
+          tabBarIcon: ({ size, focused }) => {
+            if (!focused) {
+              return <Image source={dice} style={{ width: size, height: size * 1.2 }} />;
+            }
+            return (
+              <FocusedContainer colors={colors} width={deviceWidth / 3}>
+                <Image source={dice} style={{ padding: 2, width: size * 2, height: size * 2.4 }} />
+              </FocusedContainer>
+            );
+          },
         }}
       />
       <TabStack.Screen
@@ -79,11 +99,18 @@ const BottomTabStack = () => {
         options={{
           headerTitleAlign: "center",
           headerShown: false,
-          tabBarIcon: ({ color, size, focused }) => (
-            <View style={{ opacity: focused ? 1 : 0.5 }}>
-              <UserAvatar avatarCode={currentUser.avatarCode} size={size} />
-            </View>
-          ),
+          tabBarItemStyle: isFocused ? { borderRadius: 0, marginTop: 0 } : {},
+          // tabBarStyle: { transform: [{ scale: 1.1 }] },
+          tabBarIcon: ({ focused }) => {
+            if (!focused) {
+              return <UserAvatar avatarCode={currentUser.avatarCode} size={30} />;
+            }
+            return (
+              <FocusedContainer colors={colors} width={deviceWidth / 3}>
+                <UserAvatar avatarCode={currentUser.avatarCode} size={60} />
+              </FocusedContainer>
+            );
+          },
         }}
       />
     </TabStack.Navigator>
@@ -91,3 +118,16 @@ const BottomTabStack = () => {
 };
 
 export default BottomTabStack;
+
+const FocusedContainer = styled.View<{ colors: MD3Colors; width: number }>`
+  background-color: ${({ colors }) => colors.secondary};
+  width: ${({ width }) => width}px;
+  padding: 5px;
+  border-radius: 10px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+  margin-bottom: -10px;
+  align-items: center;
+  justify-content: center;
+  margin-top: -30px;
+`;
