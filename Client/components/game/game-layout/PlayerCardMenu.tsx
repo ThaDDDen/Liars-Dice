@@ -1,4 +1,3 @@
-import { Pressable, View } from "react-native";
 import { Divider, Menu } from "react-native-paper";
 import { useConnection } from "../../../contexts/ConnectionContext";
 import { useUser } from "../../../contexts/UserContext";
@@ -24,9 +23,9 @@ const PlayerCardMenu = ({ player, menuVisible, setMenuVisible, disabled }: Props
       visible={menuVisible}
       onDismiss={() => setMenuVisible(false)}
       anchor={
-        <Pressable onPress={() => setMenuVisible((prev) => !prev)}>
-          <UserAvatar size={50} avatarCode={player.avatarCode} disabled={disabled} />
-        </Pressable>
+        // <Pressable onPress={() => setMenuVisible((prev) => !prev)}>
+        <UserAvatar size={50} user={player} disabled={disabled} />
+        // </Pressable>
       }
       style={{ zIndex: 500, position: "absolute" }}
       anchorPosition="bottom"
@@ -56,7 +55,7 @@ const PlayerCardMenu = ({ player, menuVisible, setMenuVisible, disabled }: Props
       {PLAYER_IS_GAME_HOST && (
         <>
           <Divider />
-          <Menu.Item onPress={() => connection.invoke(INVOKE_KICK_PLAYER, player)} title="Kick" />
+          <Menu.Item onPress={() => connection.invoke(INVOKE_KICK_PLAYER, player.id)} title="Kick" />
         </>
       )}
     </Menu>

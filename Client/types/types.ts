@@ -8,11 +8,25 @@ export type User = {
   statistics: Statistics;
 };
 
+export type Profile = {
+  id: string;
+  userName: string;
+  avatarCode: string;
+  statistics: Statistics;
+};
+
 export type GameProperties = {
   gameHost: boolean;
   dice: number[];
   hasRolled: boolean;
   isOut: boolean;
+};
+export type LoadedProfile = {
+  profile: Profile;
+  onInvite: () => void;
+  onKick: () => void;
+  onAddFriend: () => void;
+  onRemoveFriend: () => void;
 };
 
 export type GameSettings = {

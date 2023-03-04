@@ -1,5 +1,7 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
+import { View } from "react-native";
+import { Surface, Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useSnackBar } from "../../contexts/SnackContext";
@@ -9,7 +11,7 @@ import { INVOKE_CREATE_GAME } from "../../utils/constants";
 import Background from "../layout/Background";
 import Button from "../layout/Button";
 import ContentCard from "../layout/ContentCard";
-import GameSettingsHeader from "../layout/GameSettingsHeader";
+import GameSettingsHeader from "./game-assets/GameSettingsHeader";
 import BetTimeSlider from "./game-settings/BetTimeSlider";
 import DicePicker from "./game-settings/DicePicker";
 import PlayerPicker from "./game-settings/PlayerPicker";
@@ -21,10 +23,12 @@ const CreateGame = () => {
   const { setResponseMessage } = useSnackBar();
   const { connection } = useConnection();
   const { currentUser } = useUser();
+  const { colors } = useTheme();
 
   return (
     <Background>
       <GameSettingsHeader />
+
       <SettingsContainer>
         <Formik
           initialValues={{ GameName: `${currentUser.userName}'s game` }}
@@ -42,26 +46,38 @@ const CreateGame = () => {
         >
           {({ handleChange, handleSubmit, values, errors }) => {
             return (
-              <>
-                <ContentCard title="Game name">
-                  <InputContainer>
-                    <Input value={values.GameName} onChangeText={handleChange("GameName")} />
-                  </InputContainer>
-                </ContentCard>
+              <ContentBackground backgroundColor={colors.primaryContainer}>
+                <ContentHeader>
+                  <Text style={{ fontFamily: "Manrope-Regular", fontSize: 15 }}>GAME SETTINGS</Text>
+                </ContentHeader>
+                <View>
+                  <ContentCard compact borderColor={colors.primaryContainer} label="Game name">
+                    <InputContainer>
+                      <Input value={values.GameName} onChangeText={handleChange("GameName")} />
+                    </InputContainer>
+                  </ContentCard>
 
-                <ContentCard title="Dice count">
-                  <DicePicker diceAmount={diceAmount} setDiceAmount={setDiceAmount} />
-                </ContentCard>
-                <ContentCard title="Betting time">
-                  <BetTimeSlider betTime={betTime} setBetTime={setBetTime} />
-                </ContentCard>
+                  <ContentCard compact borderColor={colors.primaryContainer} label="Dice count">
+                    <DicePicker diceAmount={diceAmount} setDiceAmount={setDiceAmount} />
+                  </ContentCard>
 
-                <ContentCard title="Player count">
-                  <PlayerPicker playerCount={playerCount} setPlayerCount={setPlayerCount} />
-                </ContentCard>
+                  <ContentCard compact borderColor={colors.primaryContainer} label="Betting time">
+                    <BetTimeSlider betTime={betTime} setBetTime={setBetTime} />
+                  </ContentCard>
 
-                <Button title={"Create Game"} mode={"contained"} onPress={() => handleSubmit()} styles={{ marginTop: 10 }} />
-              </>
+                  <ContentCard compact borderColor={colors.primaryContainer} label="Player count">
+                    <PlayerPicker playerCount={playerCount} setPlayerCount={setPlayerCount} />
+                  </ContentCard>
+                </View>
+
+                <Button
+                  title={"Create Game"}
+                  mode={"contained"}
+                  buttonColor={colors.secondary}
+                  onPress={() => handleSubmit()}
+                  styles={{ marginHorizontal: 70, marginBottom: 30, marginTop: 10 }}
+                />
+              </ContentBackground>
             );
           }}
         </Formik>
@@ -72,8 +88,26 @@ const CreateGame = () => {
 
 export default CreateGame;
 
+const ContentBackground = styled.View<{ backgroundColor: string }>`
+  background-color: ${({ backgroundColor }) => backgroundColor};
+  margin: -20px;
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  bottom: 0;
+`;
+
+const ContentHeader = styled(Surface)`
+  border-radius: 15px;
+  margin: -15px 10px 15px 10px;
+  flex-direction: row;
+  justify-content: center;
+  padding: 10px;
+`;
+
 const SettingsContainer = styled.View`
   padding: 10px;
+  flex: 1;
+  flex-direction: column-reverse;
 `;
 
 const InputContainer = styled.View`

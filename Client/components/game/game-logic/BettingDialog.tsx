@@ -6,7 +6,7 @@ import { useGame } from "../../../contexts/GameContext";
 import { initialUserState, useUser } from "../../../contexts/UserContext";
 import { INVOKE_CALL, INVOKE_SET_BET } from "../../../utils/constants";
 import Button from "../../layout/Button";
-import ContentCard from "../../layout/ContentCard";
+import OldContetCard from "../../layout/OldContentCard";
 import CurrentBet from "../game-layout/CurrentBet";
 import UserHand from "../game-layout/UserHand";
 import BetPickers from "./BetPickers";
@@ -89,7 +89,7 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible, betTime,
         <Dialog.Content>
           <View>
             {game.currentBet && <CurrentBet bet={game.currentBet} />}
-            <ContentCard title="Your bet">
+            <OldContetCard title="Your bet">
               {maxBet !== game.currentBet?.diceAmount * game.currentBet?.diceValue && (
                 <BetPickers game={game} diceValue={diceValue} setDiceValue={setDiceValue} diceAmount={diceAmount} setDiceAmount={setDiceAmount} />
               )}
@@ -99,13 +99,13 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible, betTime,
                 )}
                 {game.currentBet && <Button mode="contained" onPress={() => handleCall()} title="Call" />}
               </View>
-            </ContentCard>
+            </OldContetCard>
 
-            <ContentCard title="Your hand">
+            <OldContetCard title="Your hand">
               <View onLayout={onLayout}>
                 <UserHand size={handWidth / 6} dice={currentUser.gameProperties.dice} />
               </View>
-            </ContentCard>
+            </OldContetCard>
           </View>
         </Dialog.Content>
       </Dialog>

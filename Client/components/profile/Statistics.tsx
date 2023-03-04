@@ -1,22 +1,24 @@
-import { Entypo, FontAwesome5 } from "@expo/vector-icons";
-import React from "react";
-import { View } from "react-native";
+import React, { useState } from "react";
+import { Image, LayoutChangeEvent, View } from "react-native";
 import { BarChart } from "react-native-chart-kit";
-import { Text, useTheme } from "react-native-paper";
-import { useUser } from "../../contexts/UserContext";
+import { useTheme } from "react-native-paper";
+import diceOne from "../../assets/images/white_dice/white_dice_1.png";
+import diceTwo from "../../assets/images/white_dice/white_dice_2.png";
+import diceThree from "../../assets/images/white_dice/white_dice_3.png";
+import diceFour from "../../assets/images/white_dice/white_dice_4.png";
+import diceFive from "../../assets/images/white_dice/white_dice_5.png";
+import diceSix from "../../assets/images/white_dice/white_dice_6.png";
+import { Statistics as StatisticsType } from "../../types/types";
 
-const Statistics = () => {
-  const { currentUser } = useUser();
+interface Props {
+  statistics: StatisticsType;
+}
+
+const Statistics = ({ statistics }: Props) => {
   const { colors } = useTheme();
+  const [containerWidth, setContainerWidth] = useState(0);
 
-  const rolledDice = [
-    currentUser.statistics.ones,
-    currentUser.statistics.twoes,
-    currentUser.statistics.threes,
-    currentUser.statistics.fours,
-    currentUser.statistics.fives,
-    currentUser.statistics.sixes,
-  ];
+  const rolledDice = [statistics.ones, statistics.twoes, statistics.threes, statistics.fours, statistics.fives, statistics.sixes];
 
   const data2 = {
     labels: ["ones", "twos", "threes", "fours", "fives", "sixes"],
@@ -39,11 +41,11 @@ const Statistics = () => {
   };
 
   const chartConfig = {
-    height: 200,
+    // height: 200,
     backgroundGradientFrom: colors.surface,
     backgroundGradientFromOpacity: 1,
-    backgroundGradientTo: colors.primary,
-    backgroundGradientToOpacity: 0.4,
+    backgroundGradientTo: colors.surface,
+    backgroundGradientToOpacity: 1,
 
     fillShadowGradientFrom: colors.primary,
     fillShadowGradientFromOpacity: 1,
@@ -51,21 +53,24 @@ const Statistics = () => {
     fillShadowGradientToOpacity: 1,
     fillShadowGradientToOffset: 1,
     fillShadowGradientTo: colors.onPrimary,
+    propsForLabels: {
+      fontSize: 17,
+    },
     color: (opacity = 1) => colors.onBackground,
     strokeWidth: 0, // optional, default 3
-    barPercentage: 0.8,
+    barPercentage: 1,
     decimalPlaces: 0,
-    propsForBackgroundLines: {
-      strokeWidth: 0.2,
-      stroke: colors.primary,
-      strokeDasharray: "0",
-    },
     barRadius: 5,
+  };
+
+  const onLayout = (event: LayoutChangeEvent) => {
+    setContainerWidth(event.nativeEvent.layout.width);
+    console.log(containerWidth);
   };
 
   return (
     <>
-      <View style={{ marginLeft: 10, marginTop: 10, flexDirection: "row", alignItems: "baseline" }}>
+      {/* <View style={{ marginLeft: 10, marginTop: 10, flexDirection: "row", alignItems: "baseline" }}>
         <Entypo name="trophy" size={30} color="#FFFF47" />
         <Text style={{ marginLeft: 10, marginRight: "auto" }} variant="headlineSmall">
           Games won
@@ -82,28 +87,37 @@ const Statistics = () => {
         <Text style={{ marginRight: 15 }} variant="headlineSmall">
           {currentUser.statistics.gamesPlayed}
         </Text>
-      </View>
-      <View style={{ justifyContent: "center", alignItems: "center" }}>
-        <Text>Dice statistics</Text>
+      </View> */}
+      <View style={{ justifyContent: "center", alignItems: "center" }} onLayout={onLayout}>
+        {/* <Text>Dice statistics</Text> */}
         <BarChart
           style={{ borderRadius: 10, paddingRight: 0 }}
           data={data2}
-          width={340}
-          height={230}
+          width={containerWidth}
+          height={200}
           chartConfig={chartConfig}
           verticalLabelRotation={0}
           fromZero
           yAxisLabel=""
           yAxisSuffix=""
-          xLabelsOffset={-8}
-          segments={10}
+          // xLabelsOffset={-8}
+          // segments={15}
           showBarTops={false}
-          withInnerLines={true}
+          withInnerLines={false}
           withHorizontalLabels={false}
+          withVerticalLabels={false}
           showValuesOnTopOfBars
           withCustomBarColorFromData={false}
           flatColor={true}
         />
+        <View style={{ flexDirection: "row", width: containerWidth, marginTop: -30 }}>
+          <Image source={diceOne} style={{ width: 30, height: 30, marginHorizontal: containerWidth / 23 }} />
+          <Image source={diceTwo} style={{ width: 30, height: 30, marginHorizontal: containerWidth / 23 }} />
+          <Image source={diceThree} style={{ width: 30, height: 30, marginHorizontal: containerWidth / 23 }} />
+          <Image source={diceFour} style={{ width: 30, height: 30, marginHorizontal: containerWidth / 23 }} />
+          <Image source={diceFive} style={{ width: 30, height: 30, marginHorizontal: containerWidth / 23 }} />
+          <Image source={diceSix} style={{ width: 30, height: 30, marginHorizontal: containerWidth / 23 }} />
+        </View>
       </View>
     </>
   );

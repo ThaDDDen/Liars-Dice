@@ -1,5 +1,5 @@
 import { Dimensions, StyleProp, ViewStyle } from "react-native";
-import { Statistics } from "../types/types";
+import { LoadedProfile, Profile, Statistics } from "../types/types";
 
 export const EIGHT_SEAT_TABLE = [
   { position: "absolute", top: Dimensions.get("window").width * 0.05, left: 1, alignItems: "center" } as StyleProp<ViewStyle>,
@@ -56,6 +56,21 @@ export const TWO_SEAT_TABLE = [
   { position: "absolute", top: Dimensions.get("window").width * 0.05, left: 1, alignItems: "center" } as StyleProp<ViewStyle>,
   { position: "absolute", bottom: Dimensions.get("window").width * 0.05, right: 1, alignItems: "center" } as StyleProp<ViewStyle>,
 ];
+
+export const initialProfileState: Profile = {
+  id: "",
+  userName: "",
+  avatarCode: "",
+  statistics: {} as Statistics,
+};
+
+export const initialLoadedProfileState: LoadedProfile = {
+  profile: {} as Profile,
+  onAddFriend: () => {},
+  onRemoveFriend: () => {},
+  onInvite: () => {},
+  onKick: () => {},
+};
 
 export const valuesToWords = [
   "one",

@@ -1,5 +1,8 @@
-import { View } from "react-native";
+import { Pressable } from "react-native";
 import { useGame } from "../../../contexts/GameContext";
+import { useProfileModalize } from "../../../contexts/ProfileModalizeContext";
+import { useUser } from "../../../contexts/UserContext";
+import { User } from "../../../types/types";
 import {
   EIGHT_SEAT_TABLE,
   FIVE_SEAT_TABLE,
@@ -16,13 +19,20 @@ interface Props {
 }
 
 const Players = ({ setBetTime }: Props) => {
+  const { setFetchUser } = useProfileModalize();
   const { game } = useGame();
+  const { currentUser } = useUser();
+
+  const handlePressUser = (player: User) => {
+    if (player.id !== currentUser.id) setFetchUser(player);
+  };
 
   return (
     <>
       {game.players.map((player, index) => (
-        <View
+        <Pressable
           key={index}
+          onPress={() => handlePressUser(player)}
           style={
             game.playerCount == 7
               ? SEVEN_SEAT_TABLE[index]
@@ -40,7 +50,7 @@ const Players = ({ setBetTime }: Props) => {
           }
         >
           <PlayerCard setBetTime={setBetTime} disabled={player.gameProperties.isOut} player={player} />
-        </View>
+        </Pressable>
       ))}
     </>
   );

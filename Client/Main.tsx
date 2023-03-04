@@ -5,6 +5,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import ConnectionProvider from "./contexts/ConnectionContext";
 import DialogProvider from "./contexts/DialogContext";
 import GameProvider from "./contexts/GameContext";
+import ProfileModalizeProvider from "./contexts/ProfileModalizeContext";
 import SnackProvider from "./contexts/SnackContext";
 import SoundProvider from "./contexts/SoundContext";
 import { useTheme } from "./contexts/ThemeContext";
@@ -36,8 +37,10 @@ const Main = () => {
               <UserProvider>
                 <DialogProvider>
                   <ConnectionProvider>
-                    <StatusBar style={statusBarColor} />
-                    <Navigation colorScheme={colorScheme} />
+                    <ProfileModalizeProvider>
+                      <StatusBar style={statusBarColor} />
+                      <Navigation colorScheme={colorScheme} />
+                    </ProfileModalizeProvider>
                   </ConnectionProvider>
                 </DialogProvider>
               </UserProvider>
