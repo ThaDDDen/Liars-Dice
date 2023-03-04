@@ -40,7 +40,7 @@ const PlaceHolders = ({ openOnlineUsersModal }: Props) => {
           }
           onPress={() => openOnlineUsersModal()}
         >
-          <UserAvatar size={50} avatarCode="PlaceHolder" />
+          <UserAvatar size={50} placeholder />
         </Pressable>
       ))}
     </>

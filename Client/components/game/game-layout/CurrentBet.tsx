@@ -15,7 +15,7 @@ const CurrentBet = ({ bet }: Props) => {
     <OldContetCard title={`${bet.better.userName} raised`}>
       <View style={{ flexDirection: "row", alignItems: "center", marginTop: 4, justifyContent: "space-around" }}>
         <View style={{ marginLeft: 10 }}>
-          <UserAvatar avatarCode={bet.better.avatarCode} size={80} />
+          <UserAvatar user={bet.better} size={80} />
         </View>
         <View>
           <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>

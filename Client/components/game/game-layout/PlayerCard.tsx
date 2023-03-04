@@ -31,7 +31,7 @@ const PlayerCard = ({ player, disabled, setBetTime }: Props) => {
       {PLAYER_IS_NOT_CURRENT_USER ? (
         <PlayerCardMenu player={player} menuVisible={menuVisible} setMenuVisible={setMenuVisible} disabled={disabled} />
       ) : (
-        <UserAvatar size={50} avatarCode={player.avatarCode} disabled={disabled} />
+        <UserAvatar size={50} user={player} disabled={disabled} />
       )}
       <NameContainer>
         <PlayerName numberOfLines={1}>{player.userName}</PlayerName>

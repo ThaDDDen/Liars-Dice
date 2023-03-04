@@ -103,11 +103,11 @@ const BottomTabStack = () => {
           // tabBarStyle: { transform: [{ scale: 1.1 }] },
           tabBarIcon: ({ focused }) => {
             if (!focused) {
-              return <UserAvatar avatarCode={currentUser.avatarCode} size={30} />;
+              return <UserAvatar user={currentUser} size={30} />;
             }
             return (
               <FocusedContainer colors={colors} width={deviceWidth / 3}>
-                <UserAvatar avatarCode={currentUser.avatarCode} size={60} />
+                <UserAvatar user={currentUser} size={60} />
               </FocusedContainer>
             );
           },

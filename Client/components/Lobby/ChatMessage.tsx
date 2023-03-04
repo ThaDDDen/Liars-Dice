@@ -17,7 +17,7 @@ const ChatMessage = ({ userMessage, latestMessage, lastSender }: Props) => {
     <ChatMessageContainer latestMessage={latestMessage} lastSender={lastSender}>
       {!lastSender && (
         <AvatarContainer>
-          <UserAvatar size={40} avatarCode={userMessage.user.avatarCode} />
+          <UserAvatar size={40} user={userMessage.user} />
         </AvatarContainer>
       )}
       <View style={{ marginLeft: 10 }}>
