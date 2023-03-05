@@ -7,7 +7,7 @@ import ContentCard from "../components/layout/ContentCard";
 import ProfileAvatar from "../components/profile/ProfileAvatar";
 import Statistics from "../components/profile/Statistics";
 import { Profile, User } from "../types/types";
-import { initialProfileState, INVOKE_INVITE_PLAYER, INVOKE_KICK_PLAYER } from "../utils/constants";
+import { initialProfileState, INVOKE_INVITE_PLAYER, INVOKE_KICK_PLAYER, INVOKE_REMOVE_FRIEND, INVOKE_SEND_FRIEND_REQUEST } from "../utils/constants";
 import { useConnection } from "./ConnectionContext";
 import { initialGameState, useGame } from "./GameContext";
 import { initialUserState, useUser } from "./UserContext";
@@ -38,6 +38,8 @@ const ProfileModalizeProvider = ({ children }: Props) => {
   const [fetchUser, setFetchUser] = useState<User>(initialUserState);
 
   const profileModalize = useRef<Modalize>(null);
+
+  const USER_IS_FRIEND = currentUser.friends.find((x) => x.id === loadedProfile.id);
 
   useEffect(() => {
     if (fetchUser !== initialUserState) {
@@ -76,6 +78,14 @@ const ProfileModalizeProvider = ({ children }: Props) => {
 
   const handleKickPlayer = () => {
     connection.invoke(INVOKE_KICK_PLAYER, loadedProfile.id);
+  };
+
+  const handleSendFriendRequest = () => {
+    connection.invoke(INVOKE_SEND_FRIEND_REQUEST, currentUser.id, loadedProfile.id);
+  };
+
+  const handleRemoveFriend = () => {
+    connection.invoke(INVOKE_REMOVE_FRIEND, currentUser.id, loadedProfile.id);
   };
 
   const openProfileModalize = () => {
@@ -126,8 +136,12 @@ const ProfileModalizeProvider = ({ children }: Props) => {
                         </Tooltip>
                       </View>
                     ) : (
-                      <LeftButton backgroundColor={colors.surface} onPress={() => handleLeftButtonPress()}>
-                        <LeftButtonText textColor={colors.onPrimary}>
+                      <LeftButton
+                        disabled={currentUser.gameProperties.gameHost ? false : true}
+                        backgroundColor={colors.surface}
+                        onPress={() => handleLeftButtonPress()}
+                      >
+                        <LeftButtonText textColor={currentUser.gameProperties.gameHost ? colors.onPrimary : colors.surfaceDisabled}>
                           {game !== initialGameState &&
                           currentUser.userName !== loadedProfile.userName &&
                           !game.players.find((p) => p.userName === loadedProfile.userName)
@@ -136,8 +150,13 @@ const ProfileModalizeProvider = ({ children }: Props) => {
                         </LeftButtonText>
                       </LeftButton>
                     )}
-                    <RightButton backgroundColor={colors.secondary}>
-                      <RightButtonText>ADD FRIEND</RightButtonText>
+                    <RightButton
+                      backgroundColor={colors.secondary}
+                      onPress={() => {
+                        USER_IS_FRIEND ? handleRemoveFriend() : handleSendFriendRequest();
+                      }}
+                    >
+                      <RightButtonText>{USER_IS_FRIEND ? "UNFRIEND" : "ADD FRIEND"}</RightButtonText>
                     </RightButton>
                   </TopButtons>
                   <ContentCard borderColor="#161545" label="rolls">
@@ -191,10 +210,10 @@ const RightButton = styled.Pressable<{ backgroundColor: string }>`
   padding: 5px 10px 10px 10px;
   border-top-left-radius: 0px;
 `;
+
 const LeftButtonText = styled(Text)<{ textColor: string }>`
   font-size: 26px;
   font-family: "Manrope-Bold";
-
   color: ${({ textColor }) => textColor};
 `;
 
