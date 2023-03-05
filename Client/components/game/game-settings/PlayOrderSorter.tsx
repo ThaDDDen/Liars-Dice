@@ -51,7 +51,7 @@ const GameLobby = ({ orderSorterVisible, setOrderSorterVisible, updatePlayerOrde
               renderItem={(item, index) => {
                 return (
                   <PlayerContainer>
-                    <UserAvatar size={30} avatarCode={item.avatarCode} />
+                    <UserAvatar size={30} user={item} />
                     <Text style={{ marginHorizontal: 10 }}>{item.userName}</Text>
                   </PlayerContainer>
                 );
