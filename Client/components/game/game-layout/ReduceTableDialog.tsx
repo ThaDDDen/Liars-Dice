@@ -1,9 +1,9 @@
-import { Dialog, Paragraph, Portal, Text } from "react-native-paper";
+import { Portal, Text } from "react-native-paper";
 import { useConnection } from "../../../contexts/ConnectionContext";
 import { useGame } from "../../../contexts/GameContext";
 import { useUser } from "../../../contexts/UserContext";
 import { INVOKE_START_GAME, INVOKE_UPDATE_GAME_SETTINGS } from "../../../utils/constants";
-import Button from "../../layout/Button";
+import CustomDialog from "../../layout/CustomDialog";
 
 interface Props {
   dialogVisible: boolean;
@@ -27,18 +27,20 @@ const ReduceTableDialog = ({ dialogVisible, setDialogVisible }: Props) => {
   };
   return (
     <Portal>
-      <Dialog visible={dialogVisible}>
-        <Dialog.Title>Table is not full!</Dialog.Title>
-        <Dialog.Content>
-          <Paragraph>
-            You are trying to start the game before all seats are taken. Would you like to reduce the amount of seats and start the game?
-          </Paragraph>
-        </Dialog.Content>
-        <Dialog.Actions style={{ flexDirection: "column" }}>
-          <Button mode="text" onPress={() => reduceSeatsAndStart()} title="Reduce seats and start!" />
-          <Button mode="text" onPress={() => setDialogVisible(false)} title="Wait for more players!" />
-        </Dialog.Actions>
-      </Dialog>
+      <CustomDialog
+        visible={dialogVisible}
+        headerLabel={"GAME NOT FULL"}
+        content={
+          <Text style={{ fontFamily: "Manrope-SemiBold", letterSpacing: 0.25, lineHeight: 23, textAlign: "center" }}>
+            You are about to start the game with seats still avalible. You can reduce the amount of seats and start the game or wait for more people
+            to join.
+          </Text>
+        }
+        leftButtonLabel={"START"}
+        leftButtonAction={reduceSeatsAndStart}
+        rightButtonLabel={"WAIT"}
+        rightButtonAction={() => setDialogVisible(false)}
+      />
     </Portal>
   );
 };

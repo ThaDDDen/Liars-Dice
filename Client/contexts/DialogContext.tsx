@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { Button, Dialog, Paragraph, Portal } from "react-native-paper";
+import { Portal, Text } from "react-native-paper";
+import CustomDialog from "../components/layout/CustomDialog";
 import { AcceptedRequest, GameInvitation, User } from "../types/types";
 import { useGame } from "./GameContext";
 
@@ -113,48 +114,53 @@ const DialogProvider = ({ children }: Props) => {
       {children}
       {invitation !== initialInvitationState && (
         <Portal>
-          <Dialog visible={invitationDialogVisible}>
-            <Dialog.Title>You have been invited to a game!</Dialog.Title>
-            <Dialog.Content>
-              <Paragraph>
+          <CustomDialog
+            visible={invitationDialogVisible}
+            headerLabel={"INVITATION"}
+            content={
+              <Text style={{ fontFamily: "Manrope-SemiBold", letterSpacing: 0.25, lineHeight: 23, textAlign: "center" }}>
                 {invitation.gameHost} has invited you to their game "{invitation.gameName}"! Would you like to join?
-              </Paragraph>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={() => acceptInvitation()}>Lets play!</Button>
-              <Button onPress={() => rejectInvitation()}>Nah.</Button>
-            </Dialog.Actions>
-          </Dialog>
+              </Text>
+            }
+            leftButtonLabel={"JOIN"}
+            leftButtonAction={acceptInvitation}
+            rightButtonLabel={"HIDE"}
+            rightButtonAction={rejectInvitation}
+          />
         </Portal>
       )}
       {playersRequestingToJoin.length !== 0 && (
         <Portal>
-          <Dialog visible={playersRequestingToJoin.length !== 0}>
-            <Dialog.Title>Someone wants to play!</Dialog.Title>
-            <Dialog.Content>
-              <Paragraph>
-                {playersRequestingToJoin[0].userName} {playersRequestingToJoin.length} wants to join your game!
-              </Paragraph>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={() => acceptJoinRequest(playersRequestingToJoin[0])}>Accept!</Button>
-              <Button onPress={() => rejectJoinRequest()}>Decline.</Button>
-            </Dialog.Actions>
-          </Dialog>
+          <CustomDialog
+            visible={playersRequestingToJoin.length !== 0}
+            headerLabel={"JOIN REQUEST"}
+            content={
+              <Text style={{ fontFamily: "Manrope-SemiBold", letterSpacing: 0.25, lineHeight: 23, textAlign: "center" }}>
+                {playersRequestingToJoin[0].userName} wants to join your game!
+              </Text>
+            }
+            leftButtonLabel={"OK"}
+            leftButtonAction={() => acceptJoinRequest(playersRequestingToJoin[0])}
+            rightButtonLabel={"DENY"}
+            rightButtonAction={rejectJoinRequest}
+          />
         </Portal>
       )}
       {friendRequests.length !== 0 && (
         <Portal>
-          <Dialog visible={friendRequests.length !== 0}>
-            <Dialog.Title>You have gotten a friend request!</Dialog.Title>
-            <Dialog.Content>
-              <Paragraph>{friendRequests[0]} would like to add you as a friend!</Paragraph>
-            </Dialog.Content>
-            <Dialog.Actions>
-              <Button onPress={() => acceptFriendRequest(friendRequests[0])}>Accept!</Button>
-              <Button onPress={() => rejectFriendRequest(friendRequests[0])}>Decline.</Button>
-            </Dialog.Actions>
-          </Dialog>
+          <CustomDialog
+            visible={friendRequests.length !== 0}
+            headerLabel={"FRIEND REQUEST"}
+            content={
+              <Text style={{ fontFamily: "Manrope-SemiBold", letterSpacing: 0.25, lineHeight: 23, textAlign: "center" }}>
+                {friendRequests[0]} would like to add you as a friend!
+              </Text>
+            }
+            leftButtonLabel={"ACCEPT"}
+            leftButtonAction={() => acceptFriendRequest(friendRequests[0])}
+            rightButtonLabel={"DENY"}
+            rightButtonAction={() => rejectFriendRequest(friendRequests[0])}
+          />
         </Portal>
       )}
     </DialogContext.Provider>
