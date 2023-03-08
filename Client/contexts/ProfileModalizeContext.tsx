@@ -39,7 +39,7 @@ const ProfileModalizeProvider = ({ children }: Props) => {
 
   const profileModalize = useRef<Modalize>(null);
 
-  const USER_IS_FRIEND = currentUser.friends.find((x) => x.id === loadedProfile.id);
+  const isFriend = currentUser.friends.find((f) => f.id === loadedProfile.id);
 
   useEffect(() => {
     if (fetchUser !== initialUserState) {
@@ -96,6 +96,15 @@ const ProfileModalizeProvider = ({ children }: Props) => {
     profileModalize.current?.close();
   };
 
+  const handleSendFriendRequest = () => {
+    if (!isFriend) {
+      connection.invoke(INVOKE_SEND_FRIEND_REQUEST, currentUser.id, loadedProfile.id);
+    } else {
+      connection.invoke(INVOKE_REMOVE_FRIEND, currentUser.id, loadedProfile.id);
+    }
+    closeProfileModalize();
+  };
+
   const handleLeftButtonPress = () => {
     if (currentUser.userName !== loadedProfile.userName && !game.players.find((p) => p.userName === loadedProfile.userName)) {
       handleInvitePlayer();
@@ -150,13 +159,8 @@ const ProfileModalizeProvider = ({ children }: Props) => {
                         </LeftButtonText>
                       </LeftButton>
                     )}
-                    <RightButton
-                      backgroundColor={colors.secondary}
-                      onPress={() => {
-                        USER_IS_FRIEND ? handleRemoveFriend() : handleSendFriendRequest();
-                      }}
-                    >
-                      <RightButtonText>{USER_IS_FRIEND ? "UNFRIEND" : "ADD FRIEND"}</RightButtonText>
+                    <RightButton backgroundColor={colors.secondary} onPress={() => handleSendFriendRequest()}>
+                      <RightButtonText>{isFriend ? "UNFRIEND" : "ADD FRIEND"}</RightButtonText>
                     </RightButton>
                   </TopButtons>
                   <ContentCard borderColor="#161545" label="rolls">
