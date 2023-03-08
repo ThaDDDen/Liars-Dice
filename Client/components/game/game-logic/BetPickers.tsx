@@ -1,6 +1,7 @@
 import { Slider } from "@miblanchard/react-native-slider";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
+import { useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import { Game, GameBet } from "../../../types/types";
 import ValueDice from "../game-assets/ValueDice";
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const BetPickers = ({ diceAmount, setDiceAmount, diceValue, setDiceValue, game }: Props) => {
+  const { colors } = useTheme();
   const diceLeft = game.diceCount * game.playerCount - game.round + 1;
   const nextSmallestBet: GameBet | null = game.currentBet
     ? {
@@ -44,8 +46,11 @@ const BetPickers = ({ diceAmount, setDiceAmount, diceValue, setDiceValue, game }
     <PickerContainer>
       <View style={{ width: "100%" }}>
         <Slider
-          renderAboveThumbComponent={() => <Text>{diceAmount}</Text>}
+          renderAboveThumbComponent={() => (
+            <Text style={{ marginLeft: 5, fontFamily: "Manrope-Bold", fontSize: 16, color: "white" }}>{diceAmount}</Text>
+          )}
           step={1}
+          renderThumbComponent={() => <View style={{ width: 25, height: 25, borderRadius: 20, backgroundColor: colors.primary }} />}
           value={diceAmount}
           onValueChange={(amount) => {
             setDiceAmount(Number(amount));
@@ -56,7 +61,7 @@ const BetPickers = ({ diceAmount, setDiceAmount, diceValue, setDiceValue, game }
       </View>
 
       <View>
-        <PickerTitle>Value</PickerTitle>
+        {/* <PickerTitle>Value</PickerTitle> */}
         <View style={{ flexDirection: "row", maxWidth: 90, justifyContent: "center" }}>{dices}</View>
       </View>
     </PickerContainer>

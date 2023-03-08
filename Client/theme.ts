@@ -1,5 +1,6 @@
 import { DarkTheme as NavigationDarkTheme, DefaultTheme as NavigationLightTheme, Theme as NavigationTheme } from "@react-navigation/native";
 import { configureFonts, MD3DarkTheme as PaperDarkTheme, MD3LightTheme as PaperLightTheme, MD3Theme as PaperTheme } from "react-native-paper";
+// import {MD3Dar}
 
 import { ColorSchemeName, Platform } from "react-native";
 
@@ -28,10 +29,8 @@ const fontConfig = {
     fontSize: 13,
   },
   labelMedium: {
-    fontFamily: "Manrope-SemiBold",
-    lineHeight: 20,
-    letterSpacing: 1,
-    fontSize: 15,
+    fontFamily: "Manrope-Bold",
+    fontSize: 16,
   },
   labelLarge: {
     fontFamily: "Manrope-Medium",

@@ -2,7 +2,7 @@ import { DrawerContentComponentProps, DrawerContentScrollView } from "@react-nav
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
-import { Badge, Dialog, Drawer, IconButton, List, Paragraph, Portal, Switch, Text, useTheme } from "react-native-paper";
+import { Badge, Drawer, IconButton, List, Portal, Switch, Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { initialGameState, useGame } from "../../contexts/GameContext";
@@ -13,6 +13,7 @@ import BetTimeSlider from "../game/game-settings/BetTimeSlider";
 import PlayOrderSorter from "../game/game-settings/PlayOrderSorter";
 import OnlineUserCard from "../Lobby/OnlineUserCard";
 import Button from "./Button";
+import CustomDialog from "./CustomDialog";
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
   const { connectedUsers } = useConnection();
@@ -196,16 +197,19 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
       </DrawerContentScrollView>
       <Button styles={{ margin: 10 }} onPress={() => handleLogout()} mode="outlined" title="Log out" />
       <Portal>
-        <Dialog visible={leaveDialogVisible}>
-          <Dialog.Title>You're about to leave!</Dialog.Title>
-          <Dialog.Content>
-            <Paragraph>Are you sure you want to leave the game?</Paragraph>
-          </Dialog.Content>
-          <Dialog.Actions style={{ flexDirection: "column" }}>
-            <Button mode="text" onPress={() => handleLeaveGame()} title="Chicken out and leave! 🐥" />
-            <Button mode="text" onPress={() => setLeaveDialogVisible(false)} title="No, I want to play!" />
-          </Dialog.Actions>
-        </Dialog>
+        <CustomDialog
+          visible={leaveDialogVisible}
+          headerLabel={"LEAVE GAME"}
+          content={
+            <Text style={{ fontFamily: "Manrope-SemiBold", letterSpacing: 0.25, lineHeight: 23, textAlign: "center" }}>
+              Are you sure you want to leave the game?
+            </Text>
+          }
+          leftButtonLabel={"LEAVE"}
+          leftButtonAction={handleLeaveGame}
+          rightButtonLabel={"STAY"}
+          rightButtonAction={() => setLeaveDialogVisible(false)}
+        />
       </Portal>
 
       <PlayOrderSorter orderSorterVisible={orderSorterVisible} setOrderSorterVisible={setOrderSorterVisible} updatePlayerOrder={updatePlayerOrder} />
