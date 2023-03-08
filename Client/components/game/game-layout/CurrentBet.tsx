@@ -1,8 +1,7 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-paper";
+import styled from "styled-components/native";
 import { GameBet } from "../../../types/types";
-import OldContetCard from "../../layout/OldContentCard";
 import UserAvatar from "../../Lobby/UserAvatar";
 import ValueDice from "../game-assets/ValueDice";
 
@@ -12,22 +11,30 @@ interface Props {
 
 const CurrentBet = ({ bet }: Props) => {
   return (
-    <OldContetCard title={`${bet.better.userName} raised`}>
-      <View style={{ flexDirection: "row", alignItems: "center", marginTop: 4, justifyContent: "space-around" }}>
-        <View style={{ marginLeft: 10 }}>
-          <UserAvatar user={bet.better} size={80} />
-        </View>
-        <View>
-          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-            <Text variant="displaySmall">{bet.diceAmount} x </Text>
-            <ValueDice value={bet.diceValue} size={40} />
-          </View>
-        </View>
-      </View>
-    </OldContetCard>
+    <>
+      <UserAvatar user={bet.better} size={45} />
+      <UserName>{bet.better.userName} bet</UserName>
+      <BetBox>
+        <BetText>{bet.diceAmount} x </BetText>
+        <ValueDice value={bet.diceValue} size={35} />
+      </BetBox>
+    </>
   );
 };
 
 export default CurrentBet;
 
-const styles = StyleSheet.create({});
+const UserName = styled(Text)`
+  font-family: "Manrope-SemiBold";
+  font-size: 16px;
+`;
+
+const BetBox = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const BetText = styled(Text)`
+  font-family: "Manrope-SemiBold";
+  font-size: 25px;
+`;
