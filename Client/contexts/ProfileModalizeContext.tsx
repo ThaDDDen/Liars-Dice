@@ -80,14 +80,6 @@ const ProfileModalizeProvider = ({ children }: Props) => {
     connection.invoke(INVOKE_KICK_PLAYER, loadedProfile.id);
   };
 
-  const handleSendFriendRequest = () => {
-    connection.invoke(INVOKE_SEND_FRIEND_REQUEST, currentUser.id, loadedProfile.id);
-  };
-
-  const handleRemoveFriend = () => {
-    connection.invoke(INVOKE_REMOVE_FRIEND, currentUser.id, loadedProfile.id);
-  };
-
   const openProfileModalize = () => {
     profileModalize.current?.open();
   };

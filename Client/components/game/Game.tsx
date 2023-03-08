@@ -57,7 +57,7 @@ const Game = () => {
               }}
             />
           )}
-          {currentUser.gameProperties.hasRolled && game.currentBetter.id !== currentUser.id && (
+          {currentUser.gameProperties.hasRolled && game.currentBetter?.id !== currentUser.id && (
             <UserHand dice={game.players.find((x) => x.userName === currentUser.userName)?.gameProperties.dice} />
           )}
         </GameBar>
