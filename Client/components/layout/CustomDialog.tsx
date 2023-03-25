@@ -28,7 +28,7 @@ const CustomDialog = ({
   const { colors } = useTheme();
   return (
     <Dialog visible={visible} style={{ backgroundColor: colors.surface, borderRadius: 15 }}>
-      <LabelBox compact={false} background={colors.primary} borderColor={colors.primaryContainer}>
+      <LabelBox compact={false} background={colors.primary} borderColor={colors.surface}>
         <Text variant="labelMedium">{headerLabel}</Text>
       </LabelBox>
       <View style={{ marginTop: 30, marginBottom: 10 }}>

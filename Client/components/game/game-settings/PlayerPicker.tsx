@@ -26,14 +26,14 @@ const PlayerPicker = ({ playerCount, setPlayerCount }: Props) => {
   return (
     <PlayerSetting>
       <IconButton
-        style={{ borderRadius: 5, backgroundColor: colors.surfaceVariant }}
+        style={{ borderRadius: 5, backgroundColor: colors.surface }}
         icon="minus"
         size={20}
         onPress={() => playerCount !== 2 && setPlayerCount((prev) => prev - 1)}
       />
       <PlayerContainer>{playerCountSelector}</PlayerContainer>
       <IconButton
-        style={{ borderRadius: 5, backgroundColor: colors.surfaceVariant }}
+        style={{ borderRadius: 5, backgroundColor: colors.surface }}
         icon="plus"
         size={20}
         onPress={() => playerCount !== 8 && setPlayerCount((prev) => prev + 1)}

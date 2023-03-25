@@ -1,6 +1,6 @@
 import React from "react";
 import { Pressable, View } from "react-native";
-import { Surface, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
 import styled from "styled-components/native";
 import { useProfileModalize } from "../../contexts/ProfileModalizeContext";
 import { useUser } from "../../contexts/UserContext";
@@ -39,7 +39,7 @@ const OnlineUserCard = ({ user, online }: Props) => {
 
 export default OnlineUserCard;
 
-const OnlineUserContainer = styled(Surface)`
+const OnlineUserContainer = styled.View`
   flex-direction: row;
   align-items: center;
   margin: 0 5px 10px 5px;
@@ -49,5 +49,7 @@ const OnlineUserContainer = styled(Surface)`
 
 const UserName = styled(Text)`
   margin-left: 15px;
+  font-family: "Manrope-Bold";
+  font-size: 16px;
   flex: 1;
 `;

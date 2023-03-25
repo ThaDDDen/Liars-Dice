@@ -1,7 +1,9 @@
+// import { MaterialIcons } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useTheme } from "react-native-paper";
-import DrawerContent from "../components/layout/DrawerContent";
+import LeftDrawerContent from "../components/layout/LeftDrawerContent";
+import RightDrawerContent from "../components/layout/RightDrawerContent";
 import { initialUserState, useUser } from "../contexts/UserContext";
 import HomeScreen from "../screens/HomeScreen";
 import LogInScreen from "../screens/LogInScreen";
@@ -13,13 +15,28 @@ export type RootStackParams = {
   LogIn: undefined;
   Register: undefined;
   BottomTabStack: undefined;
+  LeftSideDrawer: undefined;
 };
 
 export const RootStack = createNativeStackNavigator<RootStackParams>();
-const Drawer = createDrawerNavigator<RootStackParams>();
+const RightDrawer = createDrawerNavigator<RootStackParams>();
+const LeftDrawer = createDrawerNavigator<RootStackParams>();
+
+const LeftDrawerScreen = () => {
+  const { colors } = useTheme();
+  return (
+    <LeftDrawer.Navigator
+      id={"leftDrawer"}
+      screenOptions={{ drawerStyle: { backgroundColor: colors.surface }, drawerPosition: "left", drawerType: "back" }}
+      drawerContent={(props) => <LeftDrawerContent {...props} />}
+    >
+      <RootStack.Screen name="BottomTabStack" component={BottomTabStack} options={{ headerShown: false }} />
+    </LeftDrawer.Navigator>
+  );
+};
 
 const RootNavigation = () => {
-  const { currentUser } = useUser(); // just to try, will make userContext to set currentUser
+  const { currentUser } = useUser();
   const { colors } = useTheme();
 
   if (currentUser === initialUserState) {
@@ -33,13 +50,18 @@ const RootNavigation = () => {
   }
 
   return (
-    <Drawer.Navigator
-      screenOptions={{ drawerStyle: { backgroundColor: colors.surface } }}
+    <RightDrawer.Navigator
+      id="rightDrawer"
+      screenOptions={{
+        drawerStyle: { backgroundColor: colors.surface },
+        drawerPosition: "right",
+        drawerType: "back",
+      }}
       initialRouteName="BottomTabStack"
-      drawerContent={(props) => <DrawerContent {...props} />}
+      drawerContent={(props) => <RightDrawerContent {...props} />}
     >
-      <RootStack.Screen name="BottomTabStack" component={BottomTabStack} options={{ headerShown: false }} />
-    </Drawer.Navigator>
+      <RightDrawer.Screen name="LeftSideDrawer" component={LeftDrawerScreen} options={{ headerShown: false }} />
+    </RightDrawer.Navigator>
   );
 };
 

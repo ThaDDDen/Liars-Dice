@@ -1,3 +1,5 @@
+// COMPONENT IS CURRENTLY UNUSED
+
 import React from "react";
 import styled from "styled-components/native";
 import randomDice from "../../../assets/images/white_dice/white_dice_random.png";

@@ -1,3 +1,5 @@
+// COMPONENT IS CURRENTLY UNUSED
+
 import multiavatar from "@multiavatar/multiavatar";
 import React, { useState } from "react";
 import { View } from "react-native";

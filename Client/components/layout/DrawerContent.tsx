@@ -1,3 +1,5 @@
+// COMPONENT IS CURRENTLY UNUSED
+
 import { DrawerContentComponentProps, DrawerContentScrollView } from "@react-navigation/drawer";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
