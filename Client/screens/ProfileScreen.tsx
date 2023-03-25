@@ -1,11 +1,10 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { View } from "react-native";
-import { Dialog, Portal, Surface, Text, useTheme } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import Background from "../components/layout/Background";
 import ContentCard from "../components/layout/ContentCard";
-import DoubleButtons from "../components/layout/DoubleButtons";
 import ProfileAvatar from "../components/profile/ProfileAvatar";
 import Statistics from "../components/profile/Statistics";
 import ThemePicker from "../components/profile/ThemePicker";
@@ -29,11 +28,20 @@ const ProfileScreen = ({ navigation }: NavigationProps) => {
     <Background>
       <Container>
         <ProfileAvatar />
-        <View style={{ flex: 1, backgroundColor: "#161545", margin: -10, marginTop: 50, borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
-          <Surface style={{ borderRadius: 15, marginBottom: 5, marginTop: -40, marginHorizontal: 10, flexDirection: "row" }}>
+        <View style={{ flex: 1, backgroundColor: colors.surface, margin: -10, marginTop: 50, borderTopLeftRadius: 24, borderTopRightRadius: 24 }}>
+          <View
+            style={{
+              backgroundColor: colors.primaryContainer,
+              borderRadius: 15,
+              marginBottom: 5,
+              marginTop: -40,
+              marginHorizontal: 10,
+              flexDirection: "row",
+            }}
+          >
             <View
               style={{
-                backgroundColor: colors.surface,
+                backgroundColor: colors.primaryContainer,
                 width: "50%",
                 borderRadius: 15,
                 alignItems: "center",
@@ -58,40 +66,13 @@ const ProfileScreen = ({ navigation }: NavigationProps) => {
               <Text style={{ fontFamily: "Manrope-Regular", fontSize: 35 }}>{currentUser.statistics.gamesWon}</Text>
               <Text style={{ fontFamily: "Manrope-SemiBold", fontSize: 16 }}>GAMES WON</Text>
             </View>
-          </Surface>
+          </View>
           <ContentCard borderColor="#161545" label="rolls">
             <Statistics statistics={currentUser.statistics} />
           </ContentCard>
           <ThemePicker />
         </View>
       </Container>
-      {/* <Portal>
-        <Dialog visible={true} style={{ backgroundColor: colors.surface, borderRadius: 15 }}>
-          <LabelBox compact={false} background={colors.primary} borderColor={colors.primaryContainer}>
-            <Text variant="labelMedium">INVITATION</Text>
-          </LabelBox>
-          <View
-            style={{
-              backgroundColor: colors.primaryContainer,
-              marginVertical: 30,
-              marginHorizontal: 10,
-              padding: 5,
-              borderRadius: 10,
-              alignItems: "center",
-            }}
-          >
-            <Text style={{ fontFamily: "Manrope-SemiBold", letterSpacing: 0.25, lineHeight: 23, textAlign: "center" }}>
-              Longname has invited you to their game "Longname's game".
-            </Text>
-          </View>
-          <DoubleButtons
-            leftButtonLabel={"JOIN"}
-            leftButtonAction={() => console.log("joining game")}
-            rightButtonLabel={"HIDE"}
-            rightButtonAction={() => console.log("hiding invitation")}
-          />
-        </Dialog>
-      </Portal> */}
     </Background>
   );
 };

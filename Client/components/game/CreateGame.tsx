@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import React, { useState } from "react";
 import { View } from "react-native";
-import { Surface, Text, useTheme } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useSnackBar } from "../../contexts/SnackContext";
@@ -46,8 +46,8 @@ const CreateGame = () => {
         >
           {({ handleChange, handleSubmit, values, errors }) => {
             return (
-              <ContentBackground backgroundColor={colors.primaryContainer}>
-                <ContentHeader>
+              <ContentBackground backgroundColor={colors.surface}>
+                <ContentHeader backgroundColor={colors.primaryContainer}>
                   <Text style={{ fontFamily: "Manrope-Regular", fontSize: 15 }}>GAME SETTINGS</Text>
                 </ContentHeader>
                 <View>
@@ -73,7 +73,7 @@ const CreateGame = () => {
                 <Button
                   title={"Create Game"}
                   mode={"contained"}
-                  buttonColor={colors.secondary}
+                  buttonColor={colors.primary}
                   onPress={() => handleSubmit()}
                   styles={{ marginHorizontal: 70, marginBottom: 30, marginTop: 10 }}
                 />
@@ -96,7 +96,8 @@ const ContentBackground = styled.View<{ backgroundColor: string }>`
   bottom: 0;
 `;
 
-const ContentHeader = styled(Surface)`
+const ContentHeader = styled.View<{ backgroundColor: string }>`
+  background-color: ${({ backgroundColor }) => backgroundColor};
   border-radius: 15px;
   margin: -15px 10px 15px 10px;
   flex-direction: row;

@@ -13,7 +13,6 @@ import Button from "../layout/Button";
 const JoinGame = () => {
   const { currentUser } = useUser();
   const { connection } = useConnection();
-  const { colors } = useTheme();
   const { setResponseMessage } = useSnackBar();
 
   return (

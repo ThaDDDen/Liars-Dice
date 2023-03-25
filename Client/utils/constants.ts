@@ -137,6 +137,8 @@ export const valuesToWords = [
 
 export const diceValues = ["twoes", "threes", "fours", "fives", "sixes"];
 
+export const CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
 export const INITIAL_GAME_PROPERTIES = {
   gameHost: false,
   dice: [],

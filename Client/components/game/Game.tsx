@@ -11,7 +11,6 @@ import Background from "../layout/Background";
 import OnlineUserCard from "../Lobby/OnlineUserCard";
 import GameChat from "./game-chat/GameChat";
 import DiceCup from "./game-layout/DiceCup";
-import GameHeader from "./game-layout/GameHeader";
 import Table from "./game-layout/Table";
 import UserHand from "./game-layout/UserHand";
 import BettingDialog from "./game-logic/BettingDialog";
@@ -45,7 +44,7 @@ const Game = () => {
 
   return (
     <Background>
-      <GameHeader openChatModal={openChatModal} />
+      {/* <GameHeader openChatModal={openChatModal} /> */}
       <Table openOnlineUsersModal={openOnlineUsersModal} setBetTime={setBetTime} />
       {game.gameStarted && !game.gameOver && !currentUser.gameProperties.isOut && (
         <GameBar>

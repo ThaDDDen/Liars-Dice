@@ -16,8 +16,6 @@ interface Props {
 const ProfileAvatar = ({ profile }: Props) => {
   const { currentUser, token, setCurrentUser } = useUser();
   const [randomAvatarCode, setRandomAvatarCode] = useState("");
-  // can't use profile like this. circular dependencies. fix
-  // const { profile } = usePlayerModalize();
   const { colors } = useTheme();
   const deviceWidth = Dimensions.get("window").width;
 
@@ -41,7 +39,6 @@ const ProfileAvatar = ({ profile }: Props) => {
           <SvgXml xml={multiavatar(profile!.avatarCode)} width={deviceWidth / 2.6} height={deviceWidth / 2.6} />
         </Container>
       ) : (
-        // <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
         <Container>
           {randomAvatarCode && (
             <IconButton
@@ -71,7 +68,6 @@ const ProfileAvatar = ({ profile }: Props) => {
             />
           )}
         </Container>
-        // </View>
       )}
       <NameContainer backgroundColor={colors.primary} borderColor={colors.background}>
         <Text style={{ fontFamily: "Manrope-SemiBold", fontSize: 15 }}>

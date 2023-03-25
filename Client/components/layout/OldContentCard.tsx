@@ -1,3 +1,5 @@
+// COMPONENT IS CURRENTLY UNUSED
+
 import React, { ReactNode } from "react";
 import { Surface, Text } from "react-native-paper";
 import styled from "styled-components/native";

@@ -126,7 +126,7 @@ const RoundInfo = () => {
       {game.gameOver ? (
         <View>
           <WinnerAvatar style={{ transform: [{ scale: scaleInWinnerAnimation }] }}>
-            <UserAvatar avatarCode={game.roundResult.roundWinner.avatarCode} size={200} />
+            <UserAvatar user={game.roundResult.roundWinner} size={200} />
           </WinnerAvatar>
 
           <BannerContainer style={{ transform: [{ scale: scaleInBannerAnimation }] }}>
@@ -205,7 +205,7 @@ const RoundInfo = () => {
               <>
                 <Animated.View style={{ transform: [{ scale: scaleInCurrentBetAnimation }] }}>
                   <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "center" }}>
-                    <UserAvatar avatarCode={game.currentBet.better.avatarCode} size={20} />
+                    <UserAvatar user={game.currentBet.better} size={20} />
                     <CenterText style={{ marginLeft: 5 }} variant="titleMedium">
                       {game.currentBet.better.userName}
                     </CenterText>

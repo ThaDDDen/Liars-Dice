@@ -42,9 +42,9 @@ const Statistics = ({ statistics }: Props) => {
 
   const chartConfig = {
     // height: 200,
-    backgroundGradientFrom: colors.surface,
+    backgroundGradientFrom: colors.primaryContainer,
     backgroundGradientFromOpacity: 1,
-    backgroundGradientTo: colors.surface,
+    backgroundGradientTo: colors.primaryContainer,
     backgroundGradientToOpacity: 1,
 
     fillShadowGradientFrom: colors.primary,

@@ -1,5 +1,7 @@
+import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { Pressable } from "react-native";
 import { useGame } from "../../../contexts/GameContext";
+import { useUser } from "../../../contexts/UserContext";
 import {
   EIGHT_SEAT_TABLE,
   FIVE_SEAT_TABLE,
@@ -11,12 +13,10 @@ import {
 } from "../../../utils/constants";
 import UserAvatar from "../../Lobby/UserAvatar";
 
-interface Props {
-  openOnlineUsersModal: () => void;
-}
-
-const PlaceHolders = ({ openOnlineUsersModal }: Props) => {
+const PlaceHolders = () => {
+  const navigation = useNavigation();
   const { game } = useGame();
+  const { currentUser } = useUser();
 
   return (
     <>
@@ -38,7 +38,7 @@ const PlaceHolders = ({ openOnlineUsersModal }: Props) => {
               ? TWO_SEAT_TABLE[index + game.players.length]
               : EIGHT_SEAT_TABLE[index + game.players.length]
           }
-          onPress={() => openOnlineUsersModal()}
+          onPress={() => currentUser.gameProperties.gameHost && navigation.getParent("rightDrawer")?.dispatch(DrawerActions.toggleDrawer())}
         >
           <UserAvatar size={50} placeholder />
         </Pressable>
