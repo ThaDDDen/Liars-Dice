@@ -80,7 +80,13 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible, betTime,
   }, [diceAmount]);
 
   useEffect(() => {
-    if (game.currentBetter && betTime === 0 && game.currentBetter.userName === currentUser.userName) handleBet();
+    if (game.currentBetter && betTime === 0 && game.currentBetter.userName === currentUser.userName) {
+      if (game.currentBet.diceAmount === diceLeft && game.currentBet.diceValue === 6) {
+        handleCall();
+      } else {
+        handleBet();
+      }
+    }
   }, [betTime]);
 
   return (

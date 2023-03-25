@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { Modalize } from "react-native-modalize";
-import { Surface, Text, Tooltip, useTheme } from "react-native-paper";
+import { Text, Tooltip, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import ContentCard from "../components/layout/ContentCard";
 import ProfileAvatar from "../components/profile/ProfileAvatar";
@@ -126,12 +126,12 @@ const ProfileModalizeProvider = ({ children }: Props) => {
             {loadedProfile !== initialProfileState && (
               <ModalContent>
                 <ProfileAvatar profile={loadedProfile} />
-                <ModalBackground backgroundColor={colors.primaryContainer}>
-                  <TopButtons>
+                <ModalBackground backgroundColor={colors.surface}>
+                  <TopButtons backgroundColor={colors.primaryContainer}>
                     {game === initialGameState ? (
                       <View style={{ flex: 1 }}>
                         <Tooltip enterTouchDelay={0} title="You need to create a game in order to invite players">
-                          <LeftButton backgroundColor={colors.surface}>
+                          <LeftButton backgroundColor={colors.primaryContainer}>
                             <LeftButtonText textColor={"grey"}>INVITE</LeftButtonText>
                           </LeftButton>
                         </Tooltip>
@@ -139,7 +139,7 @@ const ProfileModalizeProvider = ({ children }: Props) => {
                     ) : (
                       <LeftButton
                         disabled={currentUser.gameProperties.gameHost ? false : true}
-                        backgroundColor={colors.surface}
+                        backgroundColor={colors.primaryContainer}
                         onPress={() => handleLeftButtonPress()}
                       >
                         <LeftButtonText textColor={currentUser.gameProperties.gameHost ? colors.onPrimary : colors.surfaceDisabled}>
@@ -184,7 +184,8 @@ const ModalBackground = styled.View<{ backgroundColor: string }>`
   border-top-right-radius: 24px;
 `;
 
-const TopButtons = styled(Surface)`
+const TopButtons = styled.View<{ backgroundColor: string }>`
+  background-color: ${({ backgroundColor }) => backgroundColor};
   border-radius: 15px;
   margin: -40px 10px 5px 10px;
   flex-direction: row;

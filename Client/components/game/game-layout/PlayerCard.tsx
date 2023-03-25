@@ -1,15 +1,13 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React from "react";
 import { Text } from "react-native";
 import { Surface } from "react-native-paper";
 import styled from "styled-components/native";
 import { useGame } from "../../../contexts/GameContext";
-import { useUser } from "../../../contexts/UserContext";
 import { User } from "../../../types/types";
 import UserAvatar from "../../Lobby/UserAvatar";
 import ValueDice from "../game-assets/ValueDice";
 import CountDownCircle from "./CountDownCircle";
-import PlayerCardMenu from "./PlayerCardMenu";
 
 interface Props {
   player: User;
@@ -18,21 +16,16 @@ interface Props {
 }
 
 const PlayerCard = ({ player, disabled, setBetTime }: Props) => {
-  const [menuVisible, setMenuVisible] = useState(false);
-  const { currentUser } = useUser();
   const { game } = useGame();
 
   const IS_PLAYERS_TURN = game.currentBetter && game.roundStarted && game.currentBetter.userName === player.userName;
-  const PLAYER_IS_NOT_CURRENT_USER = currentUser.userName !== player.userName;
 
   return (
     <Container>
       {IS_PLAYERS_TURN && <CountDownCircle isPlaying={IS_PLAYERS_TURN} setBetTime={setBetTime} />}
-      {PLAYER_IS_NOT_CURRENT_USER ? (
-        <PlayerCardMenu player={player} menuVisible={menuVisible} setMenuVisible={setMenuVisible} disabled={disabled} />
-      ) : (
-        <UserAvatar size={50} user={player} disabled={disabled} />
-      )}
+
+      <UserAvatar size={50} user={player} disabled={disabled} />
+
       <NameContainer>
         <PlayerName numberOfLines={1}>{player.userName}</PlayerName>
       </NameContainer>

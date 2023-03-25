@@ -1,18 +1,22 @@
 import React, { useRef } from "react";
-import { ScrollView, View } from "react-native";
+import { Pressable, ScrollView, View } from "react-native";
 import { Modalize } from "react-native-modalize";
-import { Badge, IconButton, Surface, Text, useTheme } from "react-native-paper";
+import { Badge, IconButton, Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
+import { useProfileModalize } from "../../contexts/ProfileModalizeContext";
 import { useUser } from "../../contexts/UserContext";
+import { User } from "../../types/types";
 import Background from "../layout/Background";
 import ChatMessage from "./ChatMessage";
 import MessageForm from "./MessageForm";
 import OnlineUserCard from "./OnlineUserCard";
 const LobbyChat = () => {
   const { lobbyMessages } = useUser();
+  const { setFetchUser } = useProfileModalize();
   const { colors } = useTheme();
   const { connectedUsers } = useConnection();
+  const { currentUser } = useUser();
 
   const scrollViewRef = useRef<ScrollView | null>(null);
   const usersOnlineModalize = useRef<Modalize>(null);
@@ -21,33 +25,58 @@ const LobbyChat = () => {
     usersOnlineModalize.current?.open();
   };
 
+  const handlePressMessage = (player: User) => {
+    if (player.id !== currentUser.id) setFetchUser(player);
+  };
+
   return (
     <Background>
-      <ChatContainer>
-        <Header>
-          <HeaderTitle variant="headlineSmall">Lobby</HeaderTitle>
+      <View
+        style={{
+          paddingBottom: 25,
+          flex: 1,
+          backgroundColor: "#161545",
+          margin: -10,
+          marginTop: 50,
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
+        }}
+      >
+        <ChatContainer>
+          <Header>
+            <HeaderTitle variant="headlineSmall">Lobby</HeaderTitle>
 
-          <IconButton icon="account-multiple" size={30} onPress={() => openModal()} style={{ margin: 0 }} />
-          <OnlineUsers visible={true} size={15}>
-            {connectedUsers.length}
-          </OnlineUsers>
-        </Header>
-        <Surface style={{ flex: 1, borderRadius: 10 }}>
+            <IconButton icon="account-multiple" size={30} onPress={() => openModal()} style={{ margin: 0 }} />
+            <OnlineUsers visible={true} size={15}>
+              {connectedUsers.length}
+            </OnlineUsers>
+          </Header>
+          {/* <Surface style={{ flex: 1, borderRadius: 10 }}> */}
           <ChatWindow ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}>
-            {lobbyMessages.map((userMessage, index) => (
-              <View key={index}>
-                <ChatMessage
-                  lastSender={index != 0 ? lobbyMessages[index - 1].user.userName == lobbyMessages[index].user.userName : false}
-                  userMessage={userMessage}
-                  latestMessage={lobbyMessages.length === index + 1}
-                />
-              </View>
-            ))}
+            {lobbyMessages.map((userMessage, index) =>
+              userMessage.user.userName !== "LobbyBot" ? (
+                <Pressable onPress={() => handlePressMessage(userMessage.user)} key={index}>
+                  <ChatMessage
+                    lastSender={index != 0 ? lobbyMessages[index - 1].user.userName == lobbyMessages[index].user.userName : false}
+                    userMessage={userMessage}
+                    latestMessage={lobbyMessages.length === index + 1}
+                  />
+                </Pressable>
+              ) : (
+                <View key={index}>
+                  <ChatMessage
+                    lastSender={index != 0 ? lobbyMessages[index - 1].user.userName == lobbyMessages[index].user.userName : false}
+                    userMessage={userMessage}
+                    latestMessage={lobbyMessages.length === index + 1}
+                  />
+                </View>
+              )
+            )}
           </ChatWindow>
-        </Surface>
-      </ChatContainer>
-      <MessageForm chatName="Lobby" />
-
+          {/* </Surface> */}
+        </ChatContainer>
+        <MessageForm chatName="Lobby" />
+      </View>
       <Modalize ref={usersOnlineModalize} rootStyle={{}} modalStyle={{ backgroundColor: colors.surface, padding: 5 }} adjustToContentHeight>
         <OnlinePlayersText variant="titleMedium">Players online:</OnlinePlayersText>
         {connectedUsers.map((user, index) => (

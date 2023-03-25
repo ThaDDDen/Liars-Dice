@@ -1,3 +1,5 @@
+// COMPONENT IS CURRENTLY UNUSED
+
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { View } from "react-native";

@@ -13,7 +13,7 @@ const DicePicker = ({ diceAmount, setDiceAmount }: Props) => {
   return (
     <DiceSettings>
       <IconButton
-        style={{ borderRadius: 5, backgroundColor: colors.surfaceVariant }}
+        style={{ borderRadius: 5, backgroundColor: colors.surface }}
         icon="minus"
         size={20}
         onPress={() => diceAmount !== 1 && setDiceAmount((prev) => prev - 1)}
@@ -26,7 +26,7 @@ const DicePicker = ({ diceAmount, setDiceAmount }: Props) => {
         </>
       </DiceContainer>
       <IconButton
-        style={{ borderRadius: 5, backgroundColor: colors.surfaceVariant }}
+        style={{ borderRadius: 5, backgroundColor: colors.surface }}
         icon="plus"
         size={20}
         onPress={() => diceAmount !== 6 && setDiceAmount((prev) => prev + 1)}

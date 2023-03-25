@@ -1,11 +1,18 @@
-import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import React, { useState } from "react";
 import { Dimensions, ImageBackground } from "react-native";
 import styled from "styled-components/native";
 import table from "../../../assets/images/table.png";
+import { useConnection } from "../../../contexts/ConnectionContext";
 import { useGame } from "../../../contexts/GameContext";
+import { useSnackBar } from "../../../contexts/SnackContext";
+import { useUser } from "../../../contexts/UserContext";
+import { INVOKE_START_GAME } from "../../../utils/constants";
+import Button from "../../layout/Button";
 import RoundInfo from "../game-logic/RoundInfo";
 import PlaceHolders from "./PlaceHolders";
 import Players from "./Players";
+import ReduceTableDialog from "./ReduceTableDialog";
 
 interface Props {
   openOnlineUsersModal: () => void;
@@ -14,8 +21,25 @@ interface Props {
 
 const Table = ({ openOnlineUsersModal, setBetTime }: Props) => {
   const { game } = useGame();
+  const { currentUser } = useUser();
+  const { setResponseMessage } = useSnackBar();
+  const { connection } = useConnection();
+  const [tableNotFullDialogVisible, setTableNotFullDialogVisible] = useState(false);
+  const navigation = useNavigation();
 
   const tableHeight = game.playerCount > 6 ? 0.6 : game.playerCount > 4 ? 0.4 : 0.35;
+
+  const startGame = () => {
+    if (game.players.length === 1) {
+      setResponseMessage({ status: "Error", message: "You can't play with yourself!" });
+      return;
+    }
+    if (game.playerCount !== game.players.length) {
+      setTableNotFullDialogVisible(true);
+    } else {
+      connection.invoke(INVOKE_START_GAME, currentUser);
+    }
+  };
 
   return (
     <TableContainer>
@@ -27,9 +51,11 @@ const Table = ({ openOnlineUsersModal, setBetTime }: Props) => {
       />
       <TableOverlay width={Dimensions.get("window").width * 0.7} height={Dimensions.get("window").height * tableHeight}>
         <Players setBetTime={setBetTime} />
-        <PlaceHolders openOnlineUsersModal={openOnlineUsersModal} />
+        <PlaceHolders />
         <RoundInfo />
+        {!game.gameStarted && currentUser.gameProperties.gameHost && <Button title={"START GAME"} mode="contained" onPress={startGame} />}
       </TableOverlay>
+      <ReduceTableDialog dialogVisible={tableNotFullDialogVisible} setDialogVisible={setTableNotFullDialogVisible} />
     </TableContainer>
   );
 };
