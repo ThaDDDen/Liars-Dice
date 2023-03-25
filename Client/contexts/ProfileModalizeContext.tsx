@@ -33,7 +33,7 @@ const ProfileModalizeProvider = ({ children }: Props) => {
   const { colors } = useTheme();
   const { currentUser } = useUser();
   const { game } = useGame();
-  const { connection } = useConnection();
+  const { connection, connectedUsers } = useConnection();
   const [fetchingProfile, setFetchingProfile] = useState(false);
   const [fetchUser, setFetchUser] = useState<User>(initialUserState);
 
@@ -107,6 +107,8 @@ const ProfileModalizeProvider = ({ children }: Props) => {
     }
   };
 
+  const userIsOffline = connectedUsers.find((user) => user.userName === loadedProfile.userName);
+
   return (
     <ProfileModalizeContext.Provider value={{ loadedProfile, setLoadedProfile, setFetchUser }}>
       <>
@@ -131,6 +133,14 @@ const ProfileModalizeProvider = ({ children }: Props) => {
                     {game === initialGameState ? (
                       <View style={{ flex: 1 }}>
                         <Tooltip enterTouchDelay={0} title="You need to create a game in order to invite players">
+                          <LeftButton backgroundColor={colors.primaryContainer}>
+                            <LeftButtonText textColor={"grey"}>INVITE</LeftButtonText>
+                          </LeftButton>
+                        </Tooltip>
+                      </View>
+                    ) : !userIsOffline ? (
+                      <View style={{ flex: 1 }}>
+                        <Tooltip enterTouchDelay={0} title="You cannot invite an offline user">
                           <LeftButton backgroundColor={colors.primaryContainer}>
                             <LeftButtonText textColor={"grey"}>INVITE</LeftButtonText>
                           </LeftButton>

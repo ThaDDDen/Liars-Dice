@@ -4,6 +4,7 @@ import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import Background from "../components/layout/Background";
+import Button from "../components/layout/Button";
 import ContentCard from "../components/layout/ContentCard";
 import ProfileAvatar from "../components/profile/ProfileAvatar";
 import Statistics from "../components/profile/Statistics";
@@ -71,6 +72,7 @@ const ProfileScreen = ({ navigation }: NavigationProps) => {
             <Statistics statistics={currentUser.statistics} />
           </ContentCard>
           <ThemePicker />
+          <Button title={"Log out"} mode={"text"} onPress={handleLogout} />
         </View>
       </Container>
     </Background>
