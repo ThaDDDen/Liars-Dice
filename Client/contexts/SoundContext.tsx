@@ -1,5 +1,6 @@
 import { Audio } from "expo-av";
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import React from "react";
 import AllSounds, { SoundObject } from "../utils/sounds";
 
 interface SoundContextValue {
@@ -19,6 +20,7 @@ interface Props {
 }
 
 function SoundProvider({ children }: Props) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [allSounds, setAllSounds] = useState<SoundObject[]>(AllSounds);
   const [music, setMusic] = useState<Audio.Sound>();
 
@@ -31,12 +33,12 @@ function SoundProvider({ children }: Props) {
   }, [music]);
 
   const playWinnerSound = async () => {
-    const { sound, status } = await Audio.Sound.createAsync(allSounds[0].sound);
+    const { sound } = await Audio.Sound.createAsync(allSounds[0].sound);
     setMusic(sound);
     await sound.playAsync();
   };
   const playRollDice = async () => {
-    const { sound, status } = await Audio.Sound.createAsync(allSounds[1].sound);
+    const { sound } = await Audio.Sound.createAsync(allSounds[1].sound);
     setMusic(sound);
     await sound.playAsync();
   };

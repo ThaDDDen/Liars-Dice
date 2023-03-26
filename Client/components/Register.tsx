@@ -24,8 +24,8 @@ const registerSchema = yup.object().shape({
   passwordConfirmation: yup.string().oneOf([yup.ref("password"), null], "passwords do not match"),
 });
 
-const Register = ({ navigation, route }: HomeNavProps) => {
-  const { setCurrentUser, setToken } = useUser();
+const Register = ({ navigation }: HomeNavProps) => {
+  const { setToken } = useUser();
   const { setResponseMessage } = useSnackBar();
 
   const emailRef = useRef<TextInput>(null);
@@ -41,10 +41,10 @@ const Register = ({ navigation, route }: HomeNavProps) => {
           validationSchema={registerSchema}
           initialValues={{ email: "", username: "", password: "", passwordConfirmation: "" }}
           onSubmit={async (values) => {
-            var registerResponse = await postRegisterModel({ email: values.email, username: values.username, password: values.password });
+            const registerResponse = await postRegisterModel({ email: values.email, username: values.username, password: values.password });
 
             if (registerResponse.status === "Success") {
-              var loginResponse = await postLogInModel({ username: values.username, password: values.password });
+              const loginResponse = await postLogInModel({ username: values.username, password: values.password });
               setToken(loginResponse.token);
             } else {
               setResponseMessage(registerResponse as ResponseMessage);

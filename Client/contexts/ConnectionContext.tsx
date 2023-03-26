@@ -1,5 +1,5 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
-import { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { Game, GameInvitation, ResponseMessage, User, UserMessage } from "../types/types";
 import {
   BASE_URL,
@@ -71,7 +71,7 @@ function ConnectionProvider({ children }: Props) {
   useEffect(() => {
     if (acceptedRequests.length !== 0) {
       connection.invoke(INVOKE_ACCEPT_JOIN_REQUEST, acceptedRequests[0].user, acceptedRequests[0].gameName);
-      var acceptedArrayCopy = acceptedRequests;
+      const acceptedArrayCopy = acceptedRequests;
       acceptedArrayCopy.splice(0, 1);
       setAcceptedRequests(acceptedArrayCopy);
     }

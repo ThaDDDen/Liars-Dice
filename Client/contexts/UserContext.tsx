@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import React, { createContext, ReactNode, useContext, useState } from "react";
 import useAsyncStorage from "../hooks/useAsyncStorage";
 import { User, UserMessage } from "../types/types";
 import { INITIAL_GAME_PROPERTIES, INITIAL_STATISTICS_PROPERTIES } from "../utils/constants";

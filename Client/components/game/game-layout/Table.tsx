@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Dimensions, ImageBackground } from "react-native";
 import styled from "styled-components/native";
@@ -15,17 +14,15 @@ import Players from "./Players";
 import ReduceTableDialog from "./ReduceTableDialog";
 
 interface Props {
-  openOnlineUsersModal: () => void;
   setBetTime: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const Table = ({ openOnlineUsersModal, setBetTime }: Props) => {
+const Table = ({ setBetTime }: Props) => {
   const { game } = useGame();
   const { currentUser } = useUser();
   const { setResponseMessage } = useSnackBar();
   const { connection } = useConnection();
   const [tableNotFullDialogVisible, setTableNotFullDialogVisible] = useState(false);
-  const navigation = useNavigation();
 
   const tableHeight = game.playerCount > 6 ? 0.6 : game.playerCount > 4 ? 0.4 : 0.35;
 

@@ -1,5 +1,5 @@
 import { Theme as NavigationTheme } from "@react-navigation/native";
-import { createContext, ReactNode, useContext } from "react";
+import React, { createContext, ReactNode, useContext } from "react";
 import { MD3Theme as PaperTheme } from "react-native-paper";
 import useAsyncStorage from "../hooks/useAsyncStorage";
 

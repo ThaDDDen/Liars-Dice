@@ -33,7 +33,7 @@ const DrawerOrderSorter = ({ setPlayers }: Props) => {
           if (playerList != game.players) setPlayers(playerList);
         }}
         delayLongPress={0}
-        renderItem={(player, index) => {
+        renderItem={(player) => {
           return (
             <PlayerContainer>
               <UserAvatar size={30} user={player} />
