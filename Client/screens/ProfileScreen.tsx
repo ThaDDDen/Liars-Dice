@@ -3,22 +3,15 @@ import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 import Background from "../components/layout/Background";
-import Button from "../components/layout/Button";
 import ContentCard from "../components/layout/ContentCard";
 import ProfileAvatar from "../components/profile/ProfileAvatar";
 import Statistics from "../components/profile/Statistics";
-import { useConnection } from "../contexts/ConnectionContext";
 import { useUser } from "../contexts/UserContext";
 
 const ProfileScreen = () => {
-  const { logout, currentUser } = useUser();
-  const { closeConnection } = useConnection();
-  const { colors } = useTheme();
+  const { currentUser } = useUser();
 
-  const handleLogout = () => {
-    logout();
-    closeConnection();
-  };
+  const { colors } = useTheme();
 
   return (
     <Background>
@@ -64,8 +57,36 @@ const ProfileScreen = () => {
             </View>
           </View>
           {currentUser.statistics.gamesPlayed !== 0 ? (
-            <ContentCard borderColor="#161545" label="rolls">
+            <ContentCard borderColor="#161545" label="statistics">
+              <View
+                style={{
+                  marginLeft: 10,
+                  backgroundColor: colors.primary,
+                  paddingVertical: 2.5,
+                  paddingHorizontal: 8,
+                  borderRadius: 20,
+                  alignSelf: "center",
+                }}
+              >
+                <Text style={{ fontFamily: "Manrope-Bold" }}>All-time rolls</Text>
+              </View>
               <Statistics statistics={currentUser.statistics} />
+              <View
+                style={{
+                  marginVertical: 10,
+                  marginLeft: 10,
+                  backgroundColor: colors.primary,
+                  paddingVertical: 2.5,
+                  paddingHorizontal: 8,
+                  borderRadius: 20,
+                  alignSelf: "center",
+                }}
+              >
+                <Text style={{ fontFamily: "Manrope-Bold" }}>All-time number of straights</Text>
+              </View>
+              <Text variant="headlineLarge" style={{ alignSelf: "center", marginLeft: 18 }}>
+                {currentUser.statistics.straights}
+              </Text>
             </ContentCard>
           ) : (
             <ContentCard styles={{ flex: 1 }} borderColor="#161545" label="statistics">
@@ -76,7 +97,6 @@ const ProfileScreen = () => {
               </View>
             </ContentCard>
           )}
-          <Button title={"Log out"} mode={"text"} onPress={handleLogout} />
         </View>
       </Container>
     </Background>

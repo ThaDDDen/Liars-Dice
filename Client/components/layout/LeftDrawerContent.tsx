@@ -1,5 +1,6 @@
 import { DrawerContentComponentProps } from "@react-navigation/drawer";
 import React, { useEffect, useState } from "react";
+import { View } from "react-native";
 import { List, Portal, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
@@ -20,8 +21,8 @@ import DrawerContentCard from "./DrawerContentCard";
 
 const LeftDrawerContent = (props: DrawerContentComponentProps) => {
   const { game, setGame } = useGame();
-  const { currentUser, setCurrentUser, setGameMessages } = useUser();
-  const { connection } = useConnection();
+  const { currentUser, setCurrentUser, setGameMessages, logout } = useUser();
+  const { connection, closeConnection } = useConnection();
   const [players, setPlayers] = useState<User[]>(game.players);
   const [playerCount, setPlayerCount] = useState(0);
   const [betTime, setBetTime] = useState(game.betTime);
@@ -36,6 +37,11 @@ const LeftDrawerContent = (props: DrawerContentComponentProps) => {
       setBetTime(game.betTime);
     }
   }, [game]);
+
+  const handleLogout = () => {
+    logout();
+    closeConnection();
+  };
 
   const handleLeaveGame = () => {
     setLeaveDialogVisible(false);
@@ -88,14 +94,22 @@ const LeftDrawerContent = (props: DrawerContentComponentProps) => {
                   )}
                 </>
               )}
-              <ThemePicker />
               <LeaveGameContainer>
                 <Button title={"Leave Game"} mode={"contained"} onPress={() => setLeaveDialogVisible(true)} />
               </LeaveGameContainer>
+              <ThemePicker />
+              <Button title={"Log out"} mode={"text"} onPress={handleLogout} />
             </GameSettingsContainer>
           </List.Section>
         ) : (
-          <ThemePicker />
+          <>
+            <View style={{ height: "100%" }}>
+              <View style={{ marginTop: "auto" }}>
+                <ThemePicker />
+                <Button title={"Log out"} mode={"text"} onPress={handleLogout} />
+              </View>
+            </View>
+          </>
         )}
       </>
       <Portal>
@@ -128,7 +142,6 @@ const GameSettingsContainer = styled.View`
 `;
 
 const LeaveGameContainer = styled.View`
-  position: absolute;
-  bottom: 0;
   align-self: center;
+  margin-bottom: auto;
 `;
