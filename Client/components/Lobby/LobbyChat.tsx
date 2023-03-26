@@ -51,7 +51,6 @@ const LobbyChat = () => {
               {connectedUsers.length}
             </OnlineUsers>
           </Header>
-          {/* <Surface style={{ flex: 1, borderRadius: 10 }}> */}
           <ChatWindow ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}>
             {lobbyMessages.map((userMessage, index) =>
               userMessage.user.userName !== "LobbyBot" ? (
@@ -73,7 +72,6 @@ const LobbyChat = () => {
               )
             )}
           </ChatWindow>
-          {/* </Surface> */}
         </ChatContainer>
         <MessageForm chatName="Lobby" />
       </View>

@@ -16,7 +16,7 @@ import UserHand from "./game-layout/UserHand";
 import BettingDialog from "./game-logic/BettingDialog";
 
 const Game = () => {
-  const { game, setGame } = useGame();
+  const { game } = useGame();
   const { currentUser } = useUser();
   const { connection, connectedUsers } = useConnection();
   const { colors } = useTheme();
@@ -32,20 +32,9 @@ const Game = () => {
     if (game.currentBetter && game.roundStarted) setBettingDialogVisible(currentUser.userName === game.currentBetter.userName);
   }, [game]);
 
-  //------- OPEN MODAL FUNCTIONS -------
-
-  const openChatModal = () => {
-    chatModalize.current?.open();
-  };
-
-  const openOnlineUsersModal = () => {
-    usersOnlineModalize.current?.open();
-  };
-
   return (
     <Background>
-      {/* <GameHeader openChatModal={openChatModal} /> */}
-      <Table openOnlineUsersModal={openOnlineUsersModal} setBetTime={setBetTime} />
+      <Table setBetTime={setBetTime} />
       {game.gameStarted && !game.gameOver && !currentUser.gameProperties.isOut && (
         <GameBar>
           {!currentUser.gameProperties.hasRolled && (

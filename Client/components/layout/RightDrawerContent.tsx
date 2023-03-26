@@ -1,4 +1,3 @@
-import { DrawerContentComponentProps } from "@react-navigation/drawer";
 import React, { useState } from "react";
 import { View } from "react-native";
 import { TextInput, useTheme } from "react-native-paper";
@@ -7,7 +6,7 @@ import DrawerContentCard from "./DrawerContentCard";
 import Friends from "./Friends";
 import OnlineUserList from "./OnlineUserList";
 
-const RightDrawerContent = (props: DrawerContentComponentProps) => {
+const RightDrawerContent = () => {
   const { colors } = useTheme();
   const [searchText, setSearchText] = useState("");
 

@@ -220,7 +220,7 @@ const RoundInfo = () => {
               </>
             )}
             {game.currentBetter && game.roundStarted && (
-              <Text style={{ textAlign: "center", marginTop: 10 }}>It's {game.currentBetter.userName}'s turn!</Text>
+              <Text style={{ textAlign: "center", marginTop: 10 }}>It&apos;s {game.currentBetter.userName}&apos;s turn!</Text>
             )}
           </RoundInfoContainer>
         </>

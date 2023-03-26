@@ -34,6 +34,7 @@ const ProfileModalizeProvider = ({ children }: Props) => {
   const { currentUser } = useUser();
   const { game } = useGame();
   const { connection, connectedUsers } = useConnection();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [fetchingProfile, setFetchingProfile] = useState(false);
   const [fetchUser, setFetchUser] = useState<User>(initialUserState);
 

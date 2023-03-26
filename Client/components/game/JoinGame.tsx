@@ -1,7 +1,7 @@
 import { Formik } from "formik";
 import React from "react";
 import { View } from "react-native";
-import { Surface, Text, useTheme } from "react-native-paper";
+import { Surface, Text } from "react-native-paper";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { useSnackBar } from "../../contexts/SnackContext";
@@ -25,7 +25,7 @@ const JoinGame = () => {
             setResponseMessage({ status: "Success", message: `A request to join "${values.GameName}" has been sent to the game host.` });
           }}
         >
-          {({ handleChange, handleSubmit, values, errors }) => {
+          {({ handleChange, handleSubmit, values }) => {
             return (
               <>
                 <InputSurface>

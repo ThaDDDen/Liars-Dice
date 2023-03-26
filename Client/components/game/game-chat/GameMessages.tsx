@@ -1,3 +1,4 @@
+import React from "react";
 import { View } from "react-native";
 import { useUser } from "../../../contexts/UserContext";
 import ChatMessage from "../../Lobby/ChatMessage";

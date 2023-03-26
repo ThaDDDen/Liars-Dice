@@ -7,11 +7,11 @@ import Button from "./layout/Button";
 import Logo from "./layout/Logo";
 
 const Home = ({ navigation }: HomeNavProps) => {
-  const { token, setToken, setCurrentUser, currentUser } = useUser();
+  const { token, setCurrentUser } = useUser();
 
   const getAuth = async (token: string) => {
     if (token) {
-      var response = await fetch("http://192.168.0.4:5141/api/auth/isAuthenticated", {
+      const response = await fetch("http://192.168.0.4:5141/api/auth/isAuthenticated", {
         method: "GET",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });

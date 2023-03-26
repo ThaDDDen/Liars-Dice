@@ -40,10 +40,7 @@ const Background = ({ children }: Props) => {
                   <Ionicons name="chatbubble-outline" size={35} color="white" />
                 </Pressable>
               )}
-              <Pressable
-                onPress={() => navigation.getParent("rightDrawer")?.dispatch(DrawerActions.toggleDrawer())}
-                // onPress={() => navigation.getParent()?.dispatch(DrawerActions.toggleDrawer())}
-              >
+              <Pressable onPress={() => navigation.getParent("rightDrawer")?.dispatch(DrawerActions.toggleDrawer())}>
                 <AntDesign name="menu-unfold" size={35} color="white" />
                 <OnlineUsers backgroundColor={colors.secondary} visible={true} size={20}>
                   {connectedUsers.length}
