@@ -20,13 +20,13 @@ const ProfileAvatar = ({ profile }: Props) => {
   const deviceWidth = Dimensions.get("window").width;
 
   const generateRandomAvatarCode = () => {
-    var randomNumber = Math.random() * (474747474747 - 100000000000) + 100000000000;
+    const randomNumber = Math.random() * (474747474747 - 100000000000) + 100000000000;
     setRandomAvatarCode(Math.floor(randomNumber).toString());
   };
 
   const saveAvatar = async () => {
     if (await putSaveAvatar(randomAvatarCode, token)) {
-      var userCopy = currentUser;
+      const userCopy = currentUser;
       userCopy.avatarCode = randomAvatarCode;
       setCurrentUser(userCopy);
       setRandomAvatarCode("");
@@ -36,7 +36,7 @@ const ProfileAvatar = ({ profile }: Props) => {
     <View>
       {profile && profile !== initialProfileState ? (
         <Container>
-          <SvgXml xml={multiavatar(profile!.avatarCode)} width={deviceWidth / 2.6} height={deviceWidth / 2.6} />
+          <SvgXml xml={multiavatar(profile.avatarCode)} width={deviceWidth / 2.6} height={deviceWidth / 2.6} />
         </Container>
       ) : (
         <Container>

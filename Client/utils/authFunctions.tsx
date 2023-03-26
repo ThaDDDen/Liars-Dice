@@ -1,25 +1,25 @@
 import { LogInModel, RegisterModel } from "../types/types";
 
 export const postLogInModel = async (logInModel: LogInModel) => {
-  var response = await fetch(`http://192.168.0.4:5141/api/auth/login`, {
+  const response = await fetch(`http://192.168.0.4:5141/api/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(logInModel),
   });
 
-  var deserializedResponse = await HandleLogInResponse(response);
+  const deserializedResponse = await HandleLogInResponse(response);
 
   return deserializedResponse;
 };
 
 export const postRegisterModel = async (registerModel: RegisterModel) => {
-  var response = await fetch(`http://192.168.0.4:5141/api/auth/register`, {
+  const response = await fetch(`http://192.168.0.4:5141/api/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(registerModel),
   });
 
-  var deserializedResponse = await HandleRegisterResponse(response);
+  const deserializedResponse = await HandleRegisterResponse(response);
 
   return deserializedResponse;
 };

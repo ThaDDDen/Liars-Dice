@@ -21,7 +21,7 @@ const loginValidationSchema = yup.object<LogInYupObject>({
 });
 
 const LogIn = ({ navigation }: HomeNavProps) => {
-  const { setCurrentUser, setToken } = useUser();
+  const { setToken } = useUser();
   const { setResponseMessage } = useSnackBar();
 
   return (
@@ -32,7 +32,7 @@ const LogIn = ({ navigation }: HomeNavProps) => {
           initialValues={{ username: "", password: "" }}
           validationSchema={loginValidationSchema}
           onSubmit={async (values) => {
-            var response = await postLogInModel({ username: values.username, password: values.password });
+            const response = await postLogInModel({ username: values.username, password: values.password });
             if (response.status === "Success") {
               setToken(response.token);
             } else {
@@ -40,7 +40,7 @@ const LogIn = ({ navigation }: HomeNavProps) => {
             }
           }}
         >
-          {({ handleChange, handleSubmit, values, errors }) => {
+          {({ handleChange, handleSubmit, values }) => {
             return (
               <>
                 <Input placeholder="username" value={values.username} onChangeText={handleChange("username")} />

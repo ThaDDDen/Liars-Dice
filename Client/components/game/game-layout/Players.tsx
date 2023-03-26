@@ -1,3 +1,4 @@
+import React from "react";
 import { Pressable, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { useGame } from "../../../contexts/GameContext";

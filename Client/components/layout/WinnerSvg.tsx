@@ -8,7 +8,7 @@ interface Props {
 
 const WinnerSvg = ({ svgColor }: Props, props: SvgProps) => {
   const shadeRgb = (color: string, percent: number) => {
-    var f = color.split(","),
+    const f = color.split(","),
       t = percent < 0 ? 0 : 255,
       p = percent < 0 ? percent * -1 : percent,
       R = parseInt(f[0].slice(4)),

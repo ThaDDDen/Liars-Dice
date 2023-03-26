@@ -1,7 +1,6 @@
-import { StyleSheet, View } from "react-native";
 import React from "react";
+import { Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
-import { useTheme, Text } from "react-native-paper";
 
 interface Props {
   label: string;

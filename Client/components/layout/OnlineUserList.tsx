@@ -1,7 +1,7 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import OnlineUserCard from "../Lobby/OnlineUserCard";
+import { ScrollView } from "react-native";
 import { useConnection } from "../../contexts/ConnectionContext";
+import OnlineUserCard from "../Lobby/OnlineUserCard";
 
 interface Props {
   searchText?: string;
@@ -15,7 +15,7 @@ const OnlineUserList = ({ searchText }: Props) => {
     : connectedUsers;
   return (
     <ScrollView style={{ maxHeight: 200, width: "100%", paddingTop: 10 }}>
-      {filteredOnlineUsers.map((user, index) => (
+      {filteredOnlineUsers.map((user) => (
         <OnlineUserCard online key={user.id} user={user} />
       ))}
     </ScrollView>
@@ -23,5 +23,3 @@ const OnlineUserList = ({ searchText }: Props) => {
 };
 
 export default OnlineUserList;
-
-const styles = StyleSheet.create({});

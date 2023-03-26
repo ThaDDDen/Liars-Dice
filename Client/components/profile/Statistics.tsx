@@ -56,7 +56,7 @@ const Statistics = ({ statistics }: Props) => {
     propsForLabels: {
       fontSize: 17,
     },
-    color: (opacity = 1) => colors.onBackground,
+    color: () => colors.onBackground,
     strokeWidth: 0, // optional, default 3
     barPercentage: 1,
     decimalPlaces: 0,

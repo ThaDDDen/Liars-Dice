@@ -13,6 +13,7 @@ import DrawerDicePicker from "../game/game-settings/DrawerDicePicker";
 import DrawerOrderSorter from "../game/game-settings/DrawerOrderSorter";
 import DrawerPlayerPicker from "../game/game-settings/DrawerPlayerPicker";
 import DrawerSaveChangesButtons from "../game/game-settings/DrawerSaveChangesButtons";
+import ThemePicker from "../profile/ThemePicker";
 import Button from "./Button";
 import CustomDialog from "./CustomDialog";
 import DrawerContentCard from "./DrawerContentCard";
@@ -65,7 +66,7 @@ const LeftDrawerContent = (props: DrawerContentComponentProps) => {
   return (
     <SafeAreaView>
       <>
-        {game !== initialGameState && (
+        {game !== initialGameState ? (
           <List.Section>
             <GameSettingsContainer>
               {currentUser.gameProperties.gameHost && !game.gameStarted && (
@@ -87,11 +88,14 @@ const LeftDrawerContent = (props: DrawerContentComponentProps) => {
                   )}
                 </>
               )}
+              <ThemePicker />
               <LeaveGameContainer>
                 <Button title={"Leave Game"} mode={"contained"} onPress={() => setLeaveDialogVisible(true)} />
               </LeaveGameContainer>
             </GameSettingsContainer>
           </List.Section>
+        ) : (
+          <ThemePicker />
         )}
       </>
       <Portal>

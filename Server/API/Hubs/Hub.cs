@@ -412,10 +412,9 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
             Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
         }
 
-        SendConnectedUsers();
+        Task task = SendConnectedUsers();
 
-
-        SendMessage(_lobbyBot, "Lobby", $"{user} has left the lobby.");
+        Task task1 = SendMessage(_lobbyBot, "Lobby", $"{user} has left the lobby.");
 
         return base.OnDisconnectedAsync(exception);
     }
