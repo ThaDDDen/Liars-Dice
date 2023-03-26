@@ -31,7 +31,6 @@ const BetPickers = ({ diceAmount, setDiceAmount, diceValue, setDiceValue, game }
       index !== 0 &&
       !(diceAmount === game.currentBet?.diceAmount && index + 1 <= game.currentBet?.diceValue) && (
         <Pressable
-          //   disabled={diceAmount === game.currentBet?.diceAmount && index + 1 <= game.currentBet?.diceValue}
           key={index}
           onPress={() => {
             setDiceValue((index + 1) as 2 | 3 | 4 | 5 | 6);
@@ -61,7 +60,6 @@ const BetPickers = ({ diceAmount, setDiceAmount, diceValue, setDiceValue, game }
       </View>
 
       <View>
-        {/* <PickerTitle>Value</PickerTitle> */}
         <View style={{ flexDirection: "row", maxWidth: 90, justifyContent: "center" }}>{dices}</View>
       </View>
     </PickerContainer>
@@ -76,9 +74,4 @@ const PickerContainer = styled.View`
   margin-bottom: 5px;
   margin-top: 15px;
   justify-content: space-between;
-`;
-
-const PickerTitle = styled(Text)`
-  align-self: center;
-  margin-bottom: 5px;
 `;

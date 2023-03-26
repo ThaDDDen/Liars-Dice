@@ -1,6 +1,7 @@
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import React from "react";
 import Home from "../components/Home";
 import { BottomTabStackParams } from "../navigation/BottomTabStackNavigator";
 import { RootStackParams } from "../navigation/RootStackNavigator";

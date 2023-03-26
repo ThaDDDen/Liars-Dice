@@ -79,14 +79,14 @@ const DialogProvider = ({ children }: Props) => {
 
   const acceptJoinRequest = (user: User) => {
     setAcceptedRequests((prev) => [...prev, { user: user, gameName: game.gameName }]);
-    var requestsArrayCopy = [...playersRequestingToJoin];
+    const requestsArrayCopy = [...playersRequestingToJoin];
     requestsArrayCopy.splice(0, 1);
     setPlayersRequestingToJoin(requestsArrayCopy);
   };
 
   const rejectJoinRequest = () => {
     if (playersRequestingToJoin.length > 1) {
-      var requestsArrayCopy = [...playersRequestingToJoin];
+      const requestsArrayCopy = [...playersRequestingToJoin];
       requestsArrayCopy.splice(0, 1);
       setPlayersRequestingToJoin(requestsArrayCopy);
     } else {
@@ -119,7 +119,7 @@ const DialogProvider = ({ children }: Props) => {
             headerLabel={"INVITATION"}
             content={
               <Text style={{ fontFamily: "Manrope-SemiBold", letterSpacing: 0.25, lineHeight: 23, textAlign: "center" }}>
-                {invitation.gameHost} has invited you to their game "{invitation.gameName}"! Would you like to join?
+                {invitation.gameHost} has invited you to their game &quot;{invitation.gameName}&quot;! Would you like to join?
               </Text>
             }
             leftButtonLabel={"JOIN"}

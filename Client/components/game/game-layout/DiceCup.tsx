@@ -1,3 +1,4 @@
+import React from "react";
 import { Pressable } from "react-native";
 import styled from "styled-components/native";
 import diceCup from "../../../assets/images/dicecup.png";

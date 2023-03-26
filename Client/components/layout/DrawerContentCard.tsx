@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "react-native";
-import { IconButton, useTheme } from "react-native-paper";
+import { useTheme } from "react-native-paper";
 import styled from "styled-components/native";
 
 interface Props {
@@ -41,8 +41,4 @@ const ContainerHeader = styled.View<{ backgroundColor: string; borderColor: stri
   border-width: 3px;
   border-color: ${({ borderColor }) => borderColor};
   margin-right: auto;
-`;
-
-const SettingsButton = styled(IconButton)`
-  margin: 0 10px;
 `;

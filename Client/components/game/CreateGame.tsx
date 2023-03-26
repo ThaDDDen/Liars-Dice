@@ -44,7 +44,7 @@ const CreateGame = () => {
             }
           }}
         >
-          {({ handleChange, handleSubmit, values, errors }) => {
+          {({ handleChange, handleSubmit, values }) => {
             return (
               <ContentBackground backgroundColor={colors.surface}>
                 <ContentHeader backgroundColor={colors.primaryContainer}>

@@ -1,4 +1,5 @@
 import { DrawerActions, useNavigation } from "@react-navigation/native";
+import React from "react";
 import { Pressable } from "react-native";
 import { useGame } from "../../../contexts/GameContext";
 import { useUser } from "../../../contexts/UserContext";

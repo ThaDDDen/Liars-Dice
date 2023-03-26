@@ -1,6 +1,6 @@
-// import { MaterialIcons } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from "react";
 import { useTheme } from "react-native-paper";
 import LeftDrawerContent from "../components/layout/LeftDrawerContent";
 import RightDrawerContent from "../components/layout/RightDrawerContent";
@@ -58,7 +58,7 @@ const RootNavigation = () => {
         drawerType: "back",
       }}
       initialRouteName="BottomTabStack"
-      drawerContent={(props) => <RightDrawerContent {...props} />}
+      drawerContent={() => <RightDrawerContent />}
     >
       <RightDrawer.Screen name="LeftSideDrawer" component={LeftDrawerScreen} options={{ headerShown: false }} />
     </RightDrawer.Navigator>
