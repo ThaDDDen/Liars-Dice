@@ -1,5 +1,7 @@
 import React from "react";
+import { StyleProp, ViewStyle } from "react-native";
 import { Text, useTheme } from "react-native-paper";
+import { StyleProps } from "react-native-reanimated";
 import styled from "styled-components/native";
 
 interface Props {
@@ -7,12 +9,13 @@ interface Props {
   children: React.ReactNode;
   borderColor: string;
   compact?: boolean;
+  styles?: StyleProp<ViewStyle>;
 }
 
-const ContentCard = ({ label, children, compact, borderColor }: Props) => {
+const ContentCard = ({ label, children, compact, borderColor, styles }: Props) => {
   const { colors } = useTheme();
   return (
-    <Container backgroundColor={colors.primaryContainer} compact={compact ? compact : false}>
+    <Container style={styles} backgroundColor={colors.primaryContainer} compact={compact ? compact : false}>
       <LabelBox compact={compact ? compact : false} background={colors.secondary} borderColor={borderColor}>
         <Text style={{ fontFamily: "Manrope-Bold" }} variant={compact ? "labelSmall" : "labelMedium"}>
           {label?.toUpperCase()}

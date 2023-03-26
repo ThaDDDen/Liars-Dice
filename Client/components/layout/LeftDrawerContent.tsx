@@ -1,6 +1,6 @@
 import { DrawerContentComponentProps } from "@react-navigation/drawer";
 import React, { useEffect, useState } from "react";
-import { List, Portal, Text } from "react-native-paper";
+import { List, Portal, Text, useTheme } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
@@ -13,6 +13,7 @@ import DrawerDicePicker from "../game/game-settings/DrawerDicePicker";
 import DrawerOrderSorter from "../game/game-settings/DrawerOrderSorter";
 import DrawerPlayerPicker from "../game/game-settings/DrawerPlayerPicker";
 import DrawerSaveChangesButtons from "../game/game-settings/DrawerSaveChangesButtons";
+import ThemePicker from "../profile/ThemePicker";
 import Button from "./Button";
 import CustomDialog from "./CustomDialog";
 import DrawerContentCard from "./DrawerContentCard";
@@ -21,11 +22,14 @@ const LeftDrawerContent = (props: DrawerContentComponentProps) => {
   const { game, setGame } = useGame();
   const { currentUser, setCurrentUser, setGameMessages } = useUser();
   const { connection } = useConnection();
+  const { colors } = useTheme();
   const [players, setPlayers] = useState<User[]>(game.players);
   const [playerCount, setPlayerCount] = useState(0);
   const [betTime, setBetTime] = useState(game.betTime);
   const [diceCount, setDiceCount] = useState(0);
   const [leaveDialogVisible, setLeaveDialogVisible] = useState(false);
+
+  const [value, setValue] = React.useState("");
 
   useEffect(() => {
     if (game !== initialGameState) {
@@ -65,7 +69,7 @@ const LeftDrawerContent = (props: DrawerContentComponentProps) => {
   return (
     <SafeAreaView>
       <>
-        {game !== initialGameState && (
+        {game !== initialGameState ? (
           <List.Section>
             <GameSettingsContainer>
               {currentUser.gameProperties.gameHost && !game.gameStarted && (
@@ -87,11 +91,14 @@ const LeftDrawerContent = (props: DrawerContentComponentProps) => {
                   )}
                 </>
               )}
+              <ThemePicker />
               <LeaveGameContainer>
                 <Button title={"Leave Game"} mode={"contained"} onPress={() => setLeaveDialogVisible(true)} />
               </LeaveGameContainer>
             </GameSettingsContainer>
           </List.Section>
+        ) : (
+          <ThemePicker />
         )}
       </>
       <Portal>

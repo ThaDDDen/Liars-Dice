@@ -8,7 +8,6 @@ import Button from "../components/layout/Button";
 import ContentCard from "../components/layout/ContentCard";
 import ProfileAvatar from "../components/profile/ProfileAvatar";
 import Statistics from "../components/profile/Statistics";
-import ThemePicker from "../components/profile/ThemePicker";
 import { useConnection } from "../contexts/ConnectionContext";
 import { useUser } from "../contexts/UserContext";
 import { RootStackParams } from "../navigation/RootStackNavigator";
@@ -68,10 +67,19 @@ const ProfileScreen = ({ navigation }: NavigationProps) => {
               <Text style={{ fontFamily: "Manrope-SemiBold", fontSize: 16 }}>GAMES WON</Text>
             </View>
           </View>
-          <ContentCard borderColor="#161545" label="rolls">
-            <Statistics statistics={currentUser.statistics} />
-          </ContentCard>
-          <ThemePicker />
+          {currentUser.statistics.gamesPlayed !== 0 ? (
+            <ContentCard borderColor="#161545" label="rolls">
+              <Statistics statistics={currentUser.statistics} />
+            </ContentCard>
+          ) : (
+            <ContentCard styles={{ flex: 1 }} borderColor="#161545" label="statistics">
+              <View style={{ padding: 10, alignSelf: "center", flex: 1, justifyContent: "center" }}>
+                <Text style={{ textDecorationStyle: "dashed", fontFamily: "Manrope-Bold", fontStyle: "italic" }}>
+                  Statistics will show up once you've played a game!
+                </Text>
+              </View>
+            </ContentCard>
+          )}
           <Button title={"Log out"} mode={"text"} onPress={handleLogout} />
         </View>
       </Container>
