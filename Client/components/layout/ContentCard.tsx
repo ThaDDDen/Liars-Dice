@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleProp, ViewStyle } from "react-native";
 import { Text, useTheme } from "react-native-paper";
-import { StyleProps } from "react-native-reanimated";
 import styled from "styled-components/native";
 
 interface Props {

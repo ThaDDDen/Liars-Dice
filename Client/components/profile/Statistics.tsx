@@ -47,7 +47,7 @@ const Statistics = ({ statistics }: Props) => {
     backgroundGradientTo: colors.primaryContainer,
     backgroundGradientToOpacity: 1,
 
-    fillShadowGradientFrom: colors.primary,
+    fillShadowGradientFrom: colors.secondary,
     fillShadowGradientFromOpacity: 1,
     fillShadowGradientFromOffset: 1,
     fillShadowGradientToOpacity: 1,
