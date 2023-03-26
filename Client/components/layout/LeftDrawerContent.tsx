@@ -1,7 +1,7 @@
 import { DrawerContentComponentProps } from "@react-navigation/drawer";
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
-import { List, Portal, Text, useTheme } from "react-native-paper";
+import { List, Portal, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
@@ -23,14 +23,11 @@ const LeftDrawerContent = (props: DrawerContentComponentProps) => {
   const { game, setGame } = useGame();
   const { currentUser, setCurrentUser, setGameMessages, logout } = useUser();
   const { connection, closeConnection } = useConnection();
-  const { colors } = useTheme();
   const [players, setPlayers] = useState<User[]>(game.players);
   const [playerCount, setPlayerCount] = useState(0);
   const [betTime, setBetTime] = useState(game.betTime);
   const [diceCount, setDiceCount] = useState(0);
   const [leaveDialogVisible, setLeaveDialogVisible] = useState(false);
-
-  const [value, setValue] = React.useState("");
 
   useEffect(() => {
     if (game !== initialGameState) {

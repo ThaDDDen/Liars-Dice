@@ -1,3 +1,4 @@
+import React from "react";
 import { View } from "react-native";
 import { CountdownCircleTimer } from "react-native-countdown-circle-timer";
 import { useGame } from "../../../contexts/GameContext";

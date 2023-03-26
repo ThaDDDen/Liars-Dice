@@ -1,4 +1,3 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
@@ -8,11 +7,8 @@ import ContentCard from "../components/layout/ContentCard";
 import ProfileAvatar from "../components/profile/ProfileAvatar";
 import Statistics from "../components/profile/Statistics";
 import { useUser } from "../contexts/UserContext";
-import { RootStackParams } from "../navigation/RootStackNavigator";
 
-type NavigationProps = NativeStackScreenProps<RootStackParams>;
-
-const ProfileScreen = ({ navigation }: NavigationProps) => {
+const ProfileScreen = () => {
   const { currentUser } = useUser();
 
   const { colors } = useTheme();
@@ -96,7 +92,7 @@ const ProfileScreen = ({ navigation }: NavigationProps) => {
             <ContentCard styles={{ flex: 1 }} borderColor="#161545" label="statistics">
               <View style={{ padding: 10, alignSelf: "center", flex: 1, justifyContent: "center" }}>
                 <Text style={{ textDecorationStyle: "dashed", fontFamily: "Manrope-Bold", fontStyle: "italic" }}>
-                  Statistics will show up once you've played a game!
+                  Statistics will show up once you&apos;ve played a game!
                 </Text>
               </View>
             </ContentCard>
@@ -111,18 +107,4 @@ export default ProfileScreen;
 
 const Container = styled.View`
   flex: 1;
-`;
-
-const LabelBox = styled.View<{ background: string; borderColor: string; compact: boolean }>`
-  background-color: ${({ background }) => background};
-  justify-content: center;
-  padding: ${({ compact }) => (compact ? "2.5px 7.5px" : "10px 10px 5px 10px")};
-  flex-direction: row;
-  position: absolute;
-  border-radius: 50px;
-  border-width: ${({ compact }) => (compact ? "3px" : "3px")};
-  border-style: solid;
-  border-color: ${({ borderColor }) => borderColor};
-  top: -45px;
-  align-self: center;
 `;

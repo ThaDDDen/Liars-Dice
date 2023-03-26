@@ -9,19 +9,9 @@ interface Props {
   rightButtonLabel: string;
   rightButtonAction: () => void;
   disableRightButton?: boolean;
-  disableLeftButton?: boolean;
-  small?: boolean;
 }
 
-const DoubleButtons = ({
-  leftButtonLabel,
-  leftButtonAction,
-  rightButtonLabel,
-  rightButtonAction,
-  disableLeftButton,
-  disableRightButton,
-  small,
-}: Props) => {
+const DoubleButtons = ({ leftButtonLabel, leftButtonAction, rightButtonLabel, rightButtonAction, disableRightButton }: Props) => {
   const { colors } = useTheme();
 
   return (

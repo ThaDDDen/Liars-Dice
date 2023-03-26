@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from "react";
 import { initialGameState, useGame } from "../contexts/GameContext";
 import CreateGameScreen from "../screens/CreateGameScreen";
 import GameHomeScreen from "../screens/GameHomeScreen";

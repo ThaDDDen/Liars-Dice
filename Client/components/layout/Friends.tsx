@@ -1,9 +1,9 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { ScrollView, Text, View } from "react-native";
+import { Badge } from "react-native-paper";
+import { useConnection } from "../../contexts/ConnectionContext";
 import { useUser } from "../../contexts/UserContext";
 import OnlineUserCard from "../Lobby/OnlineUserCard";
-import { useConnection } from "../../contexts/ConnectionContext";
-import { Badge } from "react-native-paper";
 
 interface Props {
   searchText?: string;
@@ -28,10 +28,8 @@ const Friends = ({ searchText }: Props) => {
       ))}
     </ScrollView>
   ) : (
-    <Text>You don't have any friends yet.</Text>
+    <Text>You don&apos;t have any friends yet.</Text>
   );
 };
 
 export default Friends;
-
-const styles = StyleSheet.create({});

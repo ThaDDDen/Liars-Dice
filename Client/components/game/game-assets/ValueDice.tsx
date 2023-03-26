@@ -1,5 +1,6 @@
 import { ImageSourcePropType } from "react-native";
 import styled from "styled-components/native";
+import React from "react";
 import dice1 from "../../../assets/images/white_dice/white_dice_1.png";
 import dice2 from "../../../assets/images/white_dice/white_dice_2.png";
 import dice3 from "../../../assets/images/white_dice/white_dice_3.png";
