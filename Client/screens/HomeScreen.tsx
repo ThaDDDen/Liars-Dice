@@ -3,6 +3,7 @@ import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Pressable } from "react-native";
 import { Text } from "react-native-paper";
+import React from "react";
 import Home from "../components/Home";
 import OnBoarding from "../components/onboarding/OnBoarding";
 import useAsyncStorage from "../hooks/useAsyncStorage";

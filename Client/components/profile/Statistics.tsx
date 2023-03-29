@@ -47,7 +47,7 @@ const Statistics = ({ statistics }: Props) => {
     backgroundGradientTo: colors.primaryContainer,
     backgroundGradientToOpacity: 1,
 
-    fillShadowGradientFrom: colors.primary,
+    fillShadowGradientFrom: colors.secondary,
     fillShadowGradientFromOpacity: 1,
     fillShadowGradientFromOffset: 1,
     fillShadowGradientToOpacity: 1,
@@ -56,7 +56,7 @@ const Statistics = ({ statistics }: Props) => {
     propsForLabels: {
       fontSize: 17,
     },
-    color: (opacity = 1) => colors.onBackground,
+    color: () => colors.onBackground,
     strokeWidth: 0, // optional, default 3
     barPercentage: 1,
     decimalPlaces: 0,

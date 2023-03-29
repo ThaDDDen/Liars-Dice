@@ -1,3 +1,4 @@
+import React from "react";
 import { Portal, Text } from "react-native-paper";
 import { useConnection } from "../../../contexts/ConnectionContext";
 import { useGame } from "../../../contexts/GameContext";

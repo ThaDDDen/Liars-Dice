@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { Dimensions, StyleProp, ViewStyle } from "react-native";
 import { LoadedProfile, Profile, Statistics } from "../types/types";
 

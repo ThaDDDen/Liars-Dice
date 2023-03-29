@@ -95,7 +95,7 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible, betTime,
     <Portal>
       <BetDialog backgroundColor={colors.surface} visible={bettingDialogVisible}>
         <Header borderColor={colors.surface} backgroundColor={colors.primary}>
-          <Text style={{ fontFamily: "Manrope-Bold", fontSize: 16 }}>IT'S YOUR TURN</Text>
+          <Text style={{ fontFamily: "Manrope-Bold", fontSize: 16 }}>IT&apos;S YOUR TURN</Text>
         </Header>
 
         <CurrentBetContainer backgroundColor={colors.primaryContainer}>
@@ -114,11 +114,11 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible, betTime,
 
         <PillBox label="TIME" value={betTime} />
 
-        <ContentContainer backgroundColor={colors.primaryContainer}>
+        <ContentContainer onLayout={onLayout} backgroundColor={colors.primaryContainer}>
           <ContainerHeader backgroundColor={colors.secondary} borderColor={colors.primaryContainer}>
             <Text style={{ fontFamily: "Manrope-Bold", fontSize: 14 }}>YOUR HAND</Text>
           </ContainerHeader>
-          <UserHand size={handWidth / 6} dice={currentUser.gameProperties.dice} />
+          <UserHand size={handWidth / 6.5} dice={currentUser.gameProperties.dice} />
         </ContentContainer>
 
         {maxBet !== game.currentBet?.diceAmount * game.currentBet?.diceValue && (

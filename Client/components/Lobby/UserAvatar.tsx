@@ -1,4 +1,5 @@
 import multiavatar from "@multiavatar/multiavatar";
+import React from "react";
 import { View } from "react-native";
 import { Avatar, useTheme } from "react-native-paper";
 import { SvgXml } from "react-native-svg";

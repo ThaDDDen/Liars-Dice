@@ -314,7 +314,9 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
         _gameService.SetBet(game.GameName, gameBet);
 
+
         await Clients.Group(gameBet.GameName).SendAsync("ReceiveGame", game);
+        await SendMessage(_gameBot, gameBet.GameName, $"{gameBet.Better.UserName} bet {gameBet.DiceAmount} x {gameBet.DiceValue}!");
     }
 
     public async Task Call(HubUser caller)
@@ -324,6 +326,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         _gameService.Call(game.GameName, caller);
 
         await Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
+        await SendMessage(_gameBot, game.GameName, $"{caller.UserName} calls!\n{game.RoundResult.GameBet.Better.UserName} bet {game.RoundResult.GameBet.DiceAmount} x {game.RoundResult.GameBet.DiceValue} \nThere were {game.RoundResult.CallResult} x {game.RoundResult.GameBet.DiceValue}\n{game.RoundResult.RoundWinner.UserName} wins and will start the next round! ");
     }
 
     public async Task SendFriendRequest(string userId, string friendId)
@@ -412,10 +415,9 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
             Clients.Group(game.GameName).SendAsync("ReceiveGame", game);
         }
 
-        SendConnectedUsers();
+        Task task = SendConnectedUsers();
 
-
-        SendMessage(_lobbyBot, "Lobby", $"{user} has left the lobby.");
+        Task task1 = SendMessage(_lobbyBot, "Lobby", $"{user} has left the lobby.");
 
         return base.OnDisconnectedAsync(exception);
     }

@@ -26,7 +26,7 @@ export default GameChat;
 
 const ChatWindow = styled.ScrollView<{ bg: string }>`
   background-color: ${({ bg }) => bg};
-  height: 200px;
+  height: 400px;
   border-radius: 10px;
   padding: 10px;
 `;
@@ -35,4 +35,5 @@ const ChatContainer = styled.View`
   width: 100%;
   flex: 1;
   padding: 10px;
+  padding-bottom: 25px;
 `;
