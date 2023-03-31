@@ -4,10 +4,12 @@ import { Dimensions, Pressable, View } from "react-native";
 import { IconButton, Text, useTheme } from "react-native-paper";
 import { SvgXml } from "react-native-svg";
 import styled from "styled-components/native";
+import { useGame } from "../../contexts/GameContext";
 import { useUser } from "../../contexts/UserContext";
 import { Profile } from "../../types/types";
 import { putSaveAvatar } from "../../utils/authFunctions";
 import { initialProfileState } from "../../utils/constants";
+import ValueDice from "../game/game-assets/ValueDice";
 
 interface Props {
   profile?: Profile;
@@ -16,6 +18,7 @@ interface Props {
 const ProfileAvatar = ({ profile }: Props) => {
   const { currentUser, token, setCurrentUser } = useUser();
   const [randomAvatarCode, setRandomAvatarCode] = useState("");
+  const { game } = useGame();
   const { colors } = useTheme();
   const deviceWidth = Dimensions.get("window").width;
 
@@ -32,11 +35,18 @@ const ProfileAvatar = ({ profile }: Props) => {
       setRandomAvatarCode("");
     }
   };
+
   return (
     <View>
       {profile && profile !== initialProfileState ? (
         <Container>
           <SvgXml xml={multiavatar(profile.avatarCode)} width={deviceWidth / 2.6} height={deviceWidth / 2.6} />
+
+          <View style={{ position: "absolute", top: 0, transform: [{ translateX: -10 }] }}>
+            {game.players.find((p) => p.userName === profile.userName) && (
+              <ValueDice value={game.players.find((p) => p.userName === profile.userName)?.gameProperties.dice.length} size={45} />
+            )}
+          </View>
         </Container>
       ) : (
         <Container>
@@ -70,7 +80,7 @@ const ProfileAvatar = ({ profile }: Props) => {
         </Container>
       )}
       <NameContainer backgroundColor={colors.primary} borderColor={colors.background}>
-        <Text style={{ fontFamily: "Manrope-SemiBold", fontSize: 15 }}>
+        <Text style={{ fontFamily: "Manrope-SemiBold", fontSize: 15, color: colors.onPrimary }}>
           {profile !== initialProfileState && profile !== undefined ? profile.userName : currentUser.userName}
         </Text>
       </NameContainer>
