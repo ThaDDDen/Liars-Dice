@@ -35,7 +35,7 @@ const LobbyChat = () => {
         style={{
           paddingBottom: 25,
           flex: 1,
-          backgroundColor: "#161545",
+          backgroundColor: colors.primaryContainer,
           margin: -10,
           marginTop: 50,
           borderTopLeftRadius: 24,

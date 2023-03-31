@@ -57,7 +57,7 @@ const ProfileScreen = () => {
             </View>
           </View>
           {currentUser.statistics.gamesPlayed !== 0 ? (
-            <ContentCard borderColor="#161545" label="statistics">
+            <ContentCard borderColor={colors.primaryContainer} label="statistics">
               <View
                 style={{
                   marginLeft: 10,
@@ -68,7 +68,7 @@ const ProfileScreen = () => {
                   alignSelf: "center",
                 }}
               >
-                <Text style={{ fontFamily: "Manrope-Bold" }}>All-time rolls</Text>
+                <Text style={{ fontFamily: "Manrope-Bold", color: colors.onPrimary }}>All-time rolls</Text>
               </View>
               <Statistics statistics={currentUser.statistics} />
               <View
@@ -82,7 +82,7 @@ const ProfileScreen = () => {
                   alignSelf: "center",
                 }}
               >
-                <Text style={{ fontFamily: "Manrope-Bold" }}>All-time number of straights</Text>
+                <Text style={{ fontFamily: "Manrope-Bold", color: colors.onPrimary }}>All-time number of straights</Text>
               </View>
               <Text variant="headlineLarge" style={{ alignSelf: "center", marginLeft: 18 }}>
                 {currentUser.statistics.straights}
