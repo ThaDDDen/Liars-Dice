@@ -13,7 +13,7 @@ import Button from "../layout/Button";
 const JoinGame = () => {
   const { currentUser } = useUser();
   const { connection } = useConnection();
-  const { setResponseMessage } = useSnackBar();
+  const { setSnackMessage } = useSnackBar();
 
   return (
     <Background>
@@ -22,7 +22,7 @@ const JoinGame = () => {
           initialValues={{ GameName: "" }}
           onSubmit={(values) => {
             connection.invoke(INVOKE_REQUEST_TO_JOIN_GAME, currentUser, values.GameName);
-            setResponseMessage({ status: "Success", message: `A request to join "${values.GameName}" has been sent to the game host.` });
+            setSnackMessage({ status: "Success", message: `A request to join "${values.GameName}" has been sent to the game host.` });
           }}
         >
           {({ handleChange, handleSubmit, values }) => {

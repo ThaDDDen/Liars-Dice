@@ -7,7 +7,7 @@ import * as yup from "yup";
 import { useSnackBar } from "../contexts/SnackContext";
 import { useUser } from "../contexts/UserContext";
 import { HomeNavProps } from "../screens/HomeScreen";
-import { ResponseMessage } from "../types/types";
+import { SnackMessage } from "../types/types";
 import { postLogInModel, postRegisterModel } from "../utils/authFunctions";
 import Background from "./layout/Background";
 import Button from "./layout/Button";
@@ -26,7 +26,7 @@ const registerSchema = yup.object().shape({
 
 const Register = ({ navigation }: HomeNavProps) => {
   const { setToken } = useUser();
-  const { setResponseMessage } = useSnackBar();
+  const { setSnackMessage } = useSnackBar();
 
   const emailRef = useRef<TextInput>(null);
   const usernameRef = useRef<TextInput>(null);
@@ -47,7 +47,7 @@ const Register = ({ navigation }: HomeNavProps) => {
               const loginResponse = await postLogInModel({ username: values.username, password: values.password });
               setToken(loginResponse.token);
             } else {
-              setResponseMessage(registerResponse as ResponseMessage);
+              setSnackMessage(registerResponse as SnackMessage);
             }
           }}
         >

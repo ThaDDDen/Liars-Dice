@@ -1,56 +1,58 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { Snackbar, Text, useTheme } from "react-native-paper";
 
-import { ResponseMessage } from "../types/types";
+import { SnackMessage } from "../types/types";
 
 interface Props {
   children: ReactNode;
 }
 
 interface SnackContext {
-  setResponseMessage: React.Dispatch<React.SetStateAction<ResponseMessage>>;
-  responseMessage: ResponseMessage;
+  setSnackMessage: React.Dispatch<React.SetStateAction<SnackMessage>>;
+  snackMessage: SnackMessage;
   clearResponseMessage: () => void;
 }
 
 const SnackContext = createContext<SnackContext>({
-  setResponseMessage: () => console.warn("no provider found"),
-  responseMessage: {} as ResponseMessage,
+  setSnackMessage: () => console.warn("no provider found"),
+  snackMessage: {} as SnackMessage,
   clearResponseMessage: () => console.warn("No provider found."),
 });
 
-const inistialResponseState: ResponseMessage = {
+const inistialResponseState: SnackMessage = {
   status: "",
   message: "",
 };
 
 const SnackProvider = ({ children }: Props) => {
-  const [responseMessage, setResponseMessage] = useState<ResponseMessage>(inistialResponseState);
+  const [snackMessage, setSnackMessage] = useState<SnackMessage>(inistialResponseState);
   const [snackVisible, setSnackVisible] = useState(false);
   const { colors } = useTheme();
 
   const clearResponseMessage = () => {
-    setResponseMessage(inistialResponseState);
+    setSnackMessage(inistialResponseState);
   };
 
   useEffect(() => {
-    if (responseMessage != inistialResponseState) setSnackVisible(true);
-  }, [responseMessage]);
+    if (snackMessage != inistialResponseState) setSnackVisible(true);
+  }, [snackMessage]);
 
   return (
-    <SnackContext.Provider value={{ responseMessage, setResponseMessage, clearResponseMessage }}>
+    <SnackContext.Provider value={{ snackMessage, setSnackMessage, clearResponseMessage }}>
       {children}
-      {responseMessage && (
+      {snackMessage && (
         <Snackbar
+          wrapperStyle={{ bottom: "15%" }}
+          duration={3000}
           style={
-            responseMessage.status === "Error"
+            snackMessage.status === "Error"
               ? { backgroundColor: colors.errorContainer }
-              : responseMessage.status === "Success" && { backgroundColor: "green" }
+              : snackMessage.status === "Success" && { backgroundColor: "#0ba339" }
           }
           visible={snackVisible}
           onDismiss={() => setSnackVisible(false)}
         >
-          <Text>{responseMessage.message}</Text>
+          <Text>{snackMessage.message}</Text>
         </Snackbar>
       )}
     </SnackContext.Provider>
