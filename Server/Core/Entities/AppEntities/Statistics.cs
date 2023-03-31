@@ -8,7 +8,9 @@ public class Statistics : BaseEntity
     public int Threes { get; set; } = 0;
     public int Fours { get; set; } = 0;
     public int Fives { get; set; } = 0;
-    public int Sixes { get; set; } = 0;
+    public int Sixes { get; set; } = 0;    
+    public int RoundsWon { get; set; } = 0;
+    public int Calls { get; set; }
     public int Straights { get; set; } = 0;
     public int GamesPlayed { get; set; } = 0;
     public int GamesWon { get; set; } = 0;
