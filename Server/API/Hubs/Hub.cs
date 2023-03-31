@@ -95,7 +95,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
     {
         if (_gameRepository.GetGameByName(gameSettings.GameName) != null)
         {
-            await Clients.Caller.SendAsync("ReceiveError", new ResponseModel
+            await Clients.Caller.SendAsync("ReceiveSnack", new SnackMessage
             {
                 Status = "Error",
                 Message = $"There is already a game called \"{gameSettings.GameName}\". Please try something else!"
@@ -146,7 +146,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
         if (game == null)
         {
-            await Clients.Caller.SendAsync("ReceiveError", new ResponseModel()
+            await Clients.Caller.SendAsync("ReceiveSnack", new SnackMessage()
             {
                 Status = "Error",
                 Message = $"There is no game named \"{gameName}\"! Try again!"
@@ -156,7 +156,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
         if (game.GameStarted)
         {
-            await Clients.Caller.SendAsync("ReceiveError", new ResponseModel()
+            await Clients.Caller.SendAsync("ReceiveSnack", new SnackMessage()
             {
                 Status = "Error",
                 Message = $"The game has already started."
@@ -188,7 +188,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
         if (game == null)
         {
-            await Clients.Caller.SendAsync("ReceiveError", new ResponseModel()
+            await Clients.Caller.SendAsync("ReceiveSnack", new SnackMessage()
             {
                 Status = "Error",
                 Message = $"There is no game named \"{gameName}\"! Try again!"
@@ -228,7 +228,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
         await SendMessage(_gameBot, game.GameName, $"{player.UserName} has been kicked from the game!");
         await Clients.Client(player.ConnectionId).SendAsync("Kicked");
-        await Clients.Client(player.ConnectionId).SendAsync("ReceiveError", new ResponseModel()
+        await Clients.Client(player.ConnectionId).SendAsync("ReceiveSnack", new SnackMessage()
         {
             Status = "Error",
             Message = "You have been kicked out of the game 😫"
@@ -239,7 +239,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
         if (game.RoundStarted)
         {
-            await Clients.Group(game.GameName).SendAsync("ReceiveError", new ResponseModel()
+            await Clients.Group(game.GameName).SendAsync("ReceiveSnack", new SnackMessage()
             {
                 Status = "Error",
                 Message = $"{player.UserName} got kicked! The round will be restarted!"
@@ -256,12 +256,24 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, game.GameName);
         _gameService.RemovePlayerFromGame(game.GameName, user.UserName);
 
+        if(game.GameStarted && game.Players.Count == 1) 
+        {
+            await Clients.Group(game.GameName).SendAsync("ReceiveSnack", new SnackMessage()
+            {
+                Status = "Error",
+                Message = $"{user.UserName} dissconnected. The game has been terminated!"
+            });
+            await Clients.Group(game.GameName).SendAsync("ReceiveGameEnded");
+            _gameRepository.RemoveGame(game);
+            return;
+        }
+
         await SendMessage(_gameBot, game.GameName, user.GameProperties.GameHost ? $"{user.UserName} has left the game! A new game host has randomly been assigned!" : $"{user.UserName} has left the game!");
 
 
         if (game.RoundStarted)
         {
-            await Clients.Group(game.GameName).SendAsync("ReceiveError", new ResponseModel()
+            await Clients.Group(game.GameName).SendAsync("ReceiveSnack", new SnackMessage()
             {
                 Status = "Error",
                 Message = $"{user.UserName} dissconnected. 😣 The round will be restarted!"
@@ -285,7 +297,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
     {
         if (_gameRepository.UserIsPlaying(playerToInvite))
         {
-            await Clients.Caller.SendAsync("ReceiveError", new ResponseModel()
+            await Clients.Caller.SendAsync("ReceiveSnack", new SnackMessage()
             {
                 Status = "Error",
                 Message = $"{playerToInvite} is already playing a game."
@@ -346,14 +358,14 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
         if (ok)
         {
-            await Clients.Caller.SendAsync("ReceiveError", new ResponseModel()
+            await Clients.Caller.SendAsync("ReceiveSnack", new SnackMessage()
             {
                 Status = "Success",
                 Message = $"You are now friends with {friendName} 💚"
             });
             await Clients.Client(user.ConnectionId).SendAsync("ReceiveFriends", await _appDataService.GetFriendsAsync(user.Id));
 
-            await Clients.Client(friend.ConnectionId).SendAsync("ReceiveError", new ResponseModel()
+            await Clients.Client(friend.ConnectionId).SendAsync("ReceiveSnack", new SnackMessage()
             {
                 Status = "Success",
                 Message = $"{userName} has accepted your friend request! 💚"
@@ -366,7 +378,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
     {
         await _appDataService.RemoveFriendAsync(userId, friendId);
         await Clients.Caller.SendAsync("ReceiveFriends", await _appDataService.GetFriendsAsync(userId));
-        await Clients.Caller.SendAsync("ReceiveError", new ResponseModel()
+        await Clients.Caller.SendAsync("ReceiveSnack", new SnackMessage()
         {
             Status = "Success",
             Message = $"{(await _userManager.FindByIdAsync(friendId)).UserName} has been removed from you list of friends! 💔"
@@ -404,7 +416,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
 
             if (game.RoundStarted)
             {
-                Clients.Group(game.GameName).SendAsync("ReceiveError", new ResponseModel()
+                Clients.Group(game.GameName).SendAsync("ReceiveSnack", new SnackMessage()
                 {
                     Status = "Error",
                     Message = $"{user} dissconnected. 😣 The round will be restarted!"
