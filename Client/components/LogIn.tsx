@@ -22,7 +22,7 @@ const loginValidationSchema = yup.object<LogInYupObject>({
 
 const LogIn = ({ navigation }: HomeNavProps) => {
   const { setToken } = useUser();
-  const { setResponseMessage } = useSnackBar();
+  const { setSnackMessage } = useSnackBar();
 
   return (
     <Background>
@@ -36,7 +36,7 @@ const LogIn = ({ navigation }: HomeNavProps) => {
             if (response.status === "Success") {
               setToken(response.token);
             } else {
-              setResponseMessage(response);
+              setSnackMessage(response);
             }
           }}
         >

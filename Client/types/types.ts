@@ -56,6 +56,8 @@ export type Statistics = {
   fours: number;
   fives: number;
   sixes: number;
+  roundsWon: number;
+  calls: number;
   straights: number;
   gamesPlayed: number;
   gamesWon: number;
@@ -67,7 +69,7 @@ export type UserMessage = {
   time: string;
 };
 
-export type ResponseMessage = {
+export type SnackMessage = {
   status: string;
   message: string;
 };

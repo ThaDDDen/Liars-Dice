@@ -20,7 +20,7 @@ const CreateGame = () => {
   const [diceAmount, setDiceAmount] = useState(6);
   const [playerCount, setPlayerCount] = useState(5);
   const [betTime, setBetTime] = useState<number>(30);
-  const { setResponseMessage } = useSnackBar();
+  const { setSnackMessage } = useSnackBar();
   const { connection } = useConnection();
   const { currentUser } = useUser();
   const { colors } = useTheme();
@@ -40,7 +40,7 @@ const CreateGame = () => {
                 currentUser
               );
             } else {
-              setResponseMessage({ status: "Error", message: "The game name must be between 3-10 characters long." });
+              setSnackMessage({ status: "Error", message: "The game name must be between 3-10 characters long." });
             }
           }}
         >

@@ -20,14 +20,14 @@ interface Props {
 const GameHeader = ({ openChatModal }: Props) => {
   const { game } = useGame();
   const { currentUser } = useUser();
-  const { setResponseMessage } = useSnackBar();
+  const { setSnackMessage } = useSnackBar();
   const { connection } = useConnection();
   const [tableNotFullDialogVisible, setTableNotFullDialogVisible] = useState(false);
   const navigation = useNavigation();
 
   const startGame = () => {
     if (game.players.length === 1) {
-      setResponseMessage({ status: "Error", message: "You can't play with yourself!" });
+      setSnackMessage({ status: "Error", message: "You can't play with yourself!" });
       return;
     }
     if (game.playerCount !== game.players.length) {

@@ -1,6 +1,6 @@
 import { HubConnection, HubConnectionBuilder, LogLevel } from "@microsoft/signalr";
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { Game, GameInvitation, ResponseMessage, User, UserMessage } from "../types/types";
+import { Game, GameInvitation, SnackMessage, User, UserMessage } from "../types/types";
 import {
   BASE_URL,
   INITIAL_GAME_PROPERTIES,
@@ -10,7 +10,6 @@ import {
   INVOKE_JOIN_LOBBY,
   RECEIVE_ALREADY_CONNECTED,
   RECEIVE_CONNECTED_USERS,
-  RECEIVE_ERROR,
   RECEIVE_FRIENDS,
   RECEIVE_FRIEND_REQUEST,
   RECEIVE_GAME,
@@ -18,6 +17,7 @@ import {
   RECEIVE_JOIN_REQUEST,
   RECEIVE_KICKED,
   RECEIVE_MESSAGE,
+  RECEIVE_SNACK,
   RECEIVE_USER,
 } from "../utils/constants";
 import { initialInvitationState, useDialog } from "./DialogContext";
@@ -59,7 +59,7 @@ function ConnectionProvider({ children }: Props) {
     setAcceptedFriendRequests,
   } = useDialog();
   const { currentUser, setLobbyMessages, setGameMessages, setCurrentUser } = useUser();
-  const { setResponseMessage } = useSnackBar();
+  const { setSnackMessage } = useSnackBar();
   const { setGame } = useGame();
 
   useEffect(() => {
@@ -111,8 +111,8 @@ function ConnectionProvider({ children }: Props) {
         console.log(user + ": " + message);
       });
 
-      connection.on(RECEIVE_ERROR, (responseMessage: ResponseMessage) => {
-        setResponseMessage(responseMessage);
+      connection.on(RECEIVE_SNACK, (responseMessage: SnackMessage) => {
+        setSnackMessage(responseMessage);
       });
 
       connection.on(RECEIVE_KICKED, () => {
@@ -144,6 +144,10 @@ function ConnectionProvider({ children }: Props) {
 
       connection.on(RECEIVE_FRIENDS, (friends: User[]) => {
         setCurrentUser((prev) => ({ ...prev, friends: friends }));
+      });
+
+      connection.on("ReceiveGameEnded", () => {
+        setGame(initialGameState);
       });
 
       await connection.start();
