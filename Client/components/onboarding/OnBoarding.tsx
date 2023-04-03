@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { Pressable, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
+import { useUser } from "../../contexts/UserContext";
 import Slide from "./Slide";
 import Slider from "./Slider";
 
 interface Props {
-  setFirstVisit: React.Dispatch<React.SetStateAction<boolean>>;
   navigate: () => void;
 }
-const OnBoarding = ({ setFirstVisit, navigate }: Props) => {
+const OnBoarding = ({ navigate }: Props) => {
   const { colors } = useTheme();
+  const { setFirstVisit } = useUser();
   const slides = [
     {
       color: colors.primary,

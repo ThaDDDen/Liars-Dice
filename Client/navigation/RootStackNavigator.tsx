@@ -7,6 +7,7 @@ import RightDrawerContent from "../components/layout/RightDrawerContent";
 import { initialUserState, useUser } from "../contexts/UserContext";
 import HomeScreen from "../screens/HomeScreen";
 import LogInScreen from "../screens/LogInScreen";
+import OnBoardingScreen from "../screens/OnBoardingScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import BottomTabStack from "./BottomTabStackNavigator";
 
@@ -16,6 +17,7 @@ export type RootStackParams = {
   Register: undefined;
   BottomTabStack: undefined;
   LeftSideDrawer: undefined;
+  OnBoarding: undefined;
 };
 
 export const RootStack = createNativeStackNavigator<RootStackParams>();
@@ -36,12 +38,13 @@ const LeftDrawerScreen = () => {
 };
 
 const RootNavigation = () => {
-  const { currentUser } = useUser();
+  const { currentUser, firstVisit } = useUser();
   const { colors } = useTheme();
 
   if (currentUser === initialUserState) {
     return (
-      <RootStack.Navigator initialRouteName="Home">
+      <RootStack.Navigator initialRouteName={firstVisit ? "OnBoarding" : "Home"}>
+        {firstVisit && <RootStack.Screen name="OnBoarding" component={OnBoardingScreen} options={{ headerShown: false }} />}
         <RootStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         <RootStack.Screen name="LogIn" component={LogInScreen} options={{ headerShown: false }} />
         <RootStack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
