@@ -14,6 +14,8 @@ interface UserContext {
   setGameMessages: React.Dispatch<React.SetStateAction<UserMessage[]>>;
   lobbyMessages: UserMessage[];
   setLobbyMessages: React.Dispatch<React.SetStateAction<UserMessage[]>>;
+  setFirstVisit: React.Dispatch<React.SetStateAction<boolean>>;
+  firstVisit: boolean;
 }
 
 const UserContext = createContext<UserContext>({
@@ -26,6 +28,8 @@ const UserContext = createContext<UserContext>({
   setGameMessages: () => console.warn("No provider found."),
   lobbyMessages: [],
   setLobbyMessages: () => console.warn("No provider found."),
+  setFirstVisit: () => console.warn("No provider found."),
+  firstVisit: {} as boolean,
 });
 
 interface Props {
@@ -48,6 +52,7 @@ function UserProvider({ children }: Props) {
   const [gameMessages, setGameMessages] = useState<UserMessage[]>([]);
   const [token, setToken] = useAsyncStorage("user", "");
   const { setGame } = useGame();
+  const [firstVisit, setFirstVisit] = useAsyncStorage("firstVisit", true);
 
   const logout = () => {
     setCurrentUser(initialUserState);
@@ -58,7 +63,19 @@ function UserProvider({ children }: Props) {
 
   return (
     <UserContext.Provider
-      value={{ currentUser, setCurrentUser, logout, lobbyMessages, setLobbyMessages, gameMessages, setGameMessages, token, setToken }}
+      value={{
+        currentUser,
+        setCurrentUser,
+        logout,
+        lobbyMessages,
+        setLobbyMessages,
+        gameMessages,
+        setGameMessages,
+        token,
+        setToken,
+        setFirstVisit,
+        firstVisit,
+      }}
     >
       {children}
     </UserContext.Provider>
