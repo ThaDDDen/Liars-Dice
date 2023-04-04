@@ -20,7 +20,7 @@ const OnBoarding = () => {
       color: colors.secondary,
       title: "Friends",
       description: "Adding friends is easy and allows you to play and chat  with them anytime!",
-      picture: require("../../assets/images/TwoDice.png"),
+      picture: require("../../assets/images/Friends.png"),
     },
     {
       color: colors.surface,
