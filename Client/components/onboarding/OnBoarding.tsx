@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Pressable, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { useUser } from "../../contexts/UserContext";
+import Button from "../layout/Button";
 import Slide from "./Slide";
 import Slider from "./Slider";
 
@@ -41,9 +42,9 @@ const OnBoarding = () => {
     },
     {
       color: colors.secondary,
-      title: "Get started",
-      description: "Thanks for completing the onboarding, lets create an account and start your experience",
-      picture: require("../../assets/images/Statistics.png"),
+      title: "Lets play",
+      description: "You are now ready to enjoy Liars Dice with your friends, have fun!",
+      picture: require("../../assets/images/TwoDice.png"),
     },
   ];
 
@@ -61,15 +62,13 @@ const OnBoarding = () => {
         </View>
         <Slide slide={slides[index]!} />
         {index === 5 && (
-          <View style={{ zIndex: 1001, position: "absolute", bottom: 0 }}>
-            <Pressable
-              onPress={() => {
-                setFirstVisit(false);
-              }}
-            >
-              <Text variant="displaySmall">Create account</Text>
-            </Pressable>
-          </View>
+          <Button
+            title="Get started"
+            onPress={() => setFirstVisit(false)}
+            buttonColor={colors.surface}
+            mode="contained"
+            styles={{ zIndex: 1000, position: "absolute", bottom: 30, alignSelf: "center" }}
+          />
         )}
       </>
     </Slider>
