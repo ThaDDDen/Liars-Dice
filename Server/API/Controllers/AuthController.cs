@@ -37,9 +37,9 @@ public class AuthController : ControllerBase
         var userExists = await _userManager.FindByNameAsync(model.Username);
         var emailExists = await _userManager.FindByEmailAsync(model.Email);
         if (userExists != null)
-            return StatusCode(StatusCodes.Status500InternalServerError, new ResponseModel { Status = "Error", Message = "User already exists!" });
+            return StatusCode(StatusCodes.Status500InternalServerError, new SnackMessage { Status = "Error", Message = "User already exists!" });
         if (emailExists != null)
-            return StatusCode(StatusCodes.Status500InternalServerError, new ResponseModel { Status = "Error", Message = "The Email provided is already in use!" });
+            return StatusCode(StatusCodes.Status500InternalServerError, new SnackMessage { Status = "Error", Message = "The Email provided is already in use!" });
 
         AppUser user = new()
         {
@@ -49,11 +49,11 @@ public class AuthController : ControllerBase
         };
         var result = await _userManager.CreateAsync(user, model.Password);
         if (!result.Succeeded)
-            return StatusCode(StatusCodes.Status500InternalServerError, new ResponseModel { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+            return StatusCode(StatusCodes.Status500InternalServerError, new SnackMessage { Status = "Error", Message = "User creation failed! Please check user details and try again." });
 
         await _appDataService.PostStatistics(user.Id);
 
-        return Ok(new ResponseModel { Status = "Success", Message = "User created successfully!" });
+        return Ok(new SnackMessage { Status = "Success", Message = "User created successfully!" });
     }
 
     [HttpPost]
@@ -87,7 +87,7 @@ public class AuthController : ControllerBase
                 avatarCode = user.AvatarCode
             });
         }
-        return Unauthorized(new ResponseModel { Status = "Error", Message = "Couldn't log you in. Please check username and password and try again." });
+        return Unauthorized(new SnackMessage { Status = "Error", Message = "Couldn't log you in. Please check username and password and try again." });
     }
 
     [HttpPut]
@@ -102,10 +102,10 @@ public class AuthController : ControllerBase
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
-                return Ok(new ResponseModel { Status = "Success", Message = "Avatar updated successfully!" });
+                return Ok(new SnackMessage { Status = "Success", Message = "Avatar updated successfully!" });
             }
         }
-        return StatusCode(StatusCodes.Status500InternalServerError, new ResponseModel { Status = "Error", Message = "Avatar update failed! Please try again." });
+        return StatusCode(StatusCodes.Status500InternalServerError, new SnackMessage { Status = "Error", Message = "Avatar update failed! Please try again." });
     }
 
     [HttpGet]

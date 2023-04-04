@@ -97,6 +97,9 @@ public class GameService : IGameService
         var caller = game.Players.FirstOrDefault(x => x.UserName == gameCaller.UserName);
         var better = game.Players.FirstOrDefault(x => x.UserName == game.PreviousBetter.UserName);
 
+        caller.Statistics.Calls += 1;
+        _appDataService.UpdateStatistics(caller.Statistics);
+
         var result = GetDiceWithBetValue(game);
 
         if (result >= game.CurrentBet.DiceAmount)
@@ -112,6 +115,8 @@ public class GameService : IGameService
 
             roundResult.RoundLoser = caller;
             roundResult.RoundWinner = better;
+            roundResult.RoundWinner.Statistics.RoundsWon += 1;
+            _appDataService.UpdateStatistics(roundResult.RoundWinner.Statistics);
             game.CurrentBetter = better;
         }
         else
@@ -128,6 +133,8 @@ public class GameService : IGameService
 
             roundResult.RoundLoser = better;
             roundResult.RoundWinner = caller;
+            roundResult.RoundWinner.Statistics.RoundsWon += 1;
+            _appDataService.UpdateStatistics(roundResult.RoundWinner.Statistics);
             game.CurrentBetter = caller;
         }
 

@@ -155,6 +155,8 @@ export const INITIAL_STATISTICS_PROPERTIES: Statistics = {
   fours: 0,
   fives: 0,
   sixes: 0,
+  roundsWon: 0,
+  calls: 0,
   straights: 0,
   gamesPlayed: 0,
   gamesWon: 0,
@@ -204,7 +206,7 @@ export const RECEIVE_GAME_INVITATION = "ReceiveGameInvitation";
 
 export const RECEIVE_ALREADY_CONNECTED = "AlreadyConnected";
 
-export const RECEIVE_ERROR = "ReceiveError";
+export const RECEIVE_SNACK = "ReceiveSnack";
 
 export const RECEIVE_CONNECTED_USERS = "ConnectedUsers";
 
