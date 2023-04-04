@@ -16,7 +16,6 @@ export type RootStackParams = {
   Register: undefined;
   BottomTabStack: undefined;
   LeftSideDrawer: undefined;
-  OnBoarding: undefined;
 };
 
 export const RootStack = createNativeStackNavigator<RootStackParams>();
