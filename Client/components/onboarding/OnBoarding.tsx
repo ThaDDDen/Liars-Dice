@@ -5,10 +5,7 @@ import { useUser } from "../../contexts/UserContext";
 import Slide from "./Slide";
 import Slider from "./Slider";
 
-interface Props {
-  navigate: () => void;
-}
-const OnBoarding = ({ navigate }: Props) => {
+const OnBoarding = () => {
   const { colors } = useTheme();
   const { setFirstVisit } = useUser();
   const slides = [
@@ -67,7 +64,6 @@ const OnBoarding = ({ navigate }: Props) => {
           <View style={{ zIndex: 1001, position: "absolute", bottom: 0 }}>
             <Pressable
               onPress={() => {
-                navigate();
                 setFirstVisit(false);
               }}
             >
