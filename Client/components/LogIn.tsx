@@ -33,6 +33,7 @@ const LogIn = ({ navigation }: HomeNavProps) => {
           validationSchema={loginValidationSchema}
           onSubmit={async (values) => {
             const response = await postLogInModel({ username: values.username, password: values.password });
+
             if (response.status === "Success") {
               setToken(response.token);
             } else {

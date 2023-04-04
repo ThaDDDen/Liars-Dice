@@ -38,17 +38,18 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible, betTime,
   const maxBet = 6 * game.players.map((x) => x.gameProperties.dice.length).reduce((x, c) => x + c, 0);
 
   const handleBet = () => {
+    setBettingDialogVisible(false);
+
     setGame((prev) => {
       return { ...prev, ...(prev.currentBetter = initialUserState) };
     });
     setBetTime(game.betTime);
-    setBettingDialogVisible(false);
     connection.invoke(INVOKE_SET_BET, { gameName: game.gameName, better: currentUser, diceAmount: diceAmount, diceValue: diceValue });
   };
 
   const handleCall = () => {
-    connection.invoke(INVOKE_CALL, currentUser);
     setBettingDialogVisible(false);
+    connection.invoke(INVOKE_CALL, currentUser);
   };
 
   useEffect(() => {
@@ -66,7 +67,7 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible, betTime,
     }
     // if someone leaves mid-round
     if (!game.roundStarted) setBettingDialogVisible(false);
-  }, [game]);
+  }, [game.currentBet]);
 
   // ------ SET ALLOWED DICE VALUE PICKER ARRAY ------
   useEffect(() => {
@@ -89,6 +90,7 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible, betTime,
     }
   }, [betTime]);
 
+  console.log("rerender");
   return (
     <Portal>
       <BetDialog backgroundColor={colors.surface} visible={bettingDialogVisible}>
