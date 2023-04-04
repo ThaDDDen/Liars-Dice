@@ -5,6 +5,7 @@ import React from "react";
 import { Pressable } from "react-native";
 import { Text } from "react-native-paper";
 import Home from "../components/Home";
+import OnBoarding from "../components/onboarding/OnBoarding";
 import { useUser } from "../contexts/UserContext";
 import { BottomTabStackParams } from "../navigation/BottomTabStackNavigator";
 import { RootStackParams } from "../navigation/RootStackNavigator";
@@ -12,10 +13,11 @@ import { RootStackParams } from "../navigation/RootStackNavigator";
 export type HomeNavProps = CompositeScreenProps<BottomTabScreenProps<RootStackParams>, NativeStackScreenProps<BottomTabStackParams>>;
 
 const HomeScreen = ({ navigation, route }: HomeNavProps) => {
-  // const [firstVisit, setFirstVisit] = useAsyncStorage("firstVisit", true);
-  const { firstVisit, setFirstVisit } = useUser();
+  const { setFirstVisit, firstVisit } = useUser();
 
-  return (
+  return firstVisit ? (
+    <OnBoarding />
+  ) : (
     <>
       <Home navigation={navigation} route={route} />
       <Pressable onPress={() => setFirstVisit(true)}>
