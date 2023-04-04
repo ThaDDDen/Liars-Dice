@@ -1,3 +1,4 @@
+import { DrawerNavigationHelpers } from "@react-navigation/drawer/lib/typescript/src/types";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Pressable } from "react-native";
@@ -15,7 +16,7 @@ import {
 import UserAvatar from "../../Lobby/UserAvatar";
 
 const PlaceHolders = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<DrawerNavigationHelpers>();
   const { game } = useGame();
   const { currentUser } = useUser();
 

@@ -11,13 +11,14 @@ import { useConnection } from "../../contexts/ConnectionContext";
 import { initialGameState, useGame } from "../../contexts/GameContext";
 import { initialUserState, useUser } from "../../contexts/UserContext";
 import GameChat from "../game/game-chat/GameChat";
+import { DrawerNavigationHelpers } from "@react-navigation/drawer/lib/typescript/src/types";
 
 interface Props {
   children: ReactNode;
 }
 
 const Background = ({ children }: Props) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<DrawerNavigationHelpers>();
   const { connectedUsers } = useConnection();
   const { colors } = useTheme();
   const { game } = useGame();
