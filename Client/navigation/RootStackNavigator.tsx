@@ -7,7 +7,6 @@ import RightDrawerContent from "../components/layout/RightDrawerContent";
 import { initialUserState, useUser } from "../contexts/UserContext";
 import HomeScreen from "../screens/HomeScreen";
 import LogInScreen from "../screens/LogInScreen";
-import OnBoardingScreen from "../screens/OnBoardingScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import BottomTabStack from "./BottomTabStackNavigator";
 
@@ -38,13 +37,12 @@ const LeftDrawerScreen = () => {
 };
 
 const RootNavigation = () => {
-  const { currentUser, firstVisit } = useUser();
+  const { currentUser } = useUser();
   const { colors } = useTheme();
 
   if (currentUser === initialUserState) {
     return (
-      <RootStack.Navigator initialRouteName={firstVisit ? "OnBoarding" : "Home"}>
-        {firstVisit && <RootStack.Screen name="OnBoarding" component={OnBoardingScreen} options={{ headerShown: false }} />}
+      <RootStack.Navigator initialRouteName={"Home"}>
         <RootStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         <RootStack.Screen name="LogIn" component={LogInScreen} options={{ headerShown: false }} />
         <RootStack.Screen name="Register" component={RegisterScreen} options={{ headerShown: false }} />
@@ -54,7 +52,7 @@ const RootNavigation = () => {
 
   return (
     <RightDrawer.Navigator
-      id="rightDrawer"
+      id={"rightDrawer"}
       screenOptions={{
         drawerStyle: { backgroundColor: colors.surface },
         drawerPosition: "right",
