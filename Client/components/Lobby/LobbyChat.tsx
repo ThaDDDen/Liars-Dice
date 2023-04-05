@@ -1,29 +1,20 @@
 import React, { useRef } from "react";
 import { Pressable, ScrollView, View } from "react-native";
-import { Modalize } from "react-native-modalize";
-import { Badge, IconButton, Text, useTheme } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
-import { useConnection } from "../../contexts/ConnectionContext";
 import { useProfileModalize } from "../../contexts/ProfileModalizeContext";
 import { useUser } from "../../contexts/UserContext";
 import { User } from "../../types/types";
 import Background from "../layout/Background";
 import ChatMessage from "./ChatMessage";
 import MessageForm from "./MessageForm";
-import OnlineUserCard from "./OnlineUserCard";
 const LobbyChat = () => {
   const { lobbyMessages } = useUser();
   const { setFetchUser } = useProfileModalize();
   const { colors } = useTheme();
-  const { connectedUsers } = useConnection();
   const { currentUser } = useUser();
 
   const scrollViewRef = useRef<ScrollView | null>(null);
-  const usersOnlineModalize = useRef<Modalize>(null);
-
-  const openModal = () => {
-    usersOnlineModalize.current?.open();
-  };
 
   const handlePressMessage = (player: User) => {
     if (player.id !== currentUser.id) setFetchUser(player);
@@ -37,19 +28,14 @@ const LobbyChat = () => {
           flex: 1,
           backgroundColor: colors.primaryContainer,
           margin: -10,
-          marginTop: 50,
+          marginTop: 70,
           borderTopLeftRadius: 24,
           borderTopRightRadius: 24,
         }}
       >
         <ChatContainer>
-          <Header>
-            <HeaderTitle variant="headlineSmall">Lobby</HeaderTitle>
-
-            <IconButton icon="account-multiple" size={30} onPress={() => openModal()} style={{ margin: 0 }} />
-            <OnlineUsers visible={true} size={15}>
-              {connectedUsers.length}
-            </OnlineUsers>
+          <Header color={colors.primary}>
+            <Text variant="headlineSmall">LOBBY</Text>
           </Header>
           <ChatWindow ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}>
             {lobbyMessages.map((userMessage, index) =>
@@ -75,12 +61,6 @@ const LobbyChat = () => {
         </ChatContainer>
         <MessageForm chatName="Lobby" />
       </View>
-      <Modalize ref={usersOnlineModalize} rootStyle={{}} modalStyle={{ backgroundColor: colors.surface, padding: 5 }} adjustToContentHeight>
-        <OnlinePlayersText variant="titleMedium">Players online:</OnlinePlayersText>
-        {connectedUsers.map((user, index) => (
-          <OnlineUserCard online key={index} user={user} closeModal={() => usersOnlineModalize.current?.close()} />
-        ))}
-      </Modalize>
     </Background>
   );
 };
@@ -97,21 +77,11 @@ const ChatContainer = styled.View`
   flex: 1;
 `;
 
-const OnlineUsers = styled(Badge)`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-`;
-
-const OnlinePlayersText = styled(Text)`
-  margin: 0 0 10px 5px;
-`;
-
-const Header = styled.View`
-  flex-direction: row;
+const Header = styled.View<{ color: string }>`
   align-items: center;
-`;
-
-const HeaderTitle = styled(Text)`
-  margin-right: auto;
+  background: ${(props) => props.color};
+  margin: 0 auto;
+  padding: 10px;
+  border-radius: 10px;
+  transform: translateY(-25px);
 `;
