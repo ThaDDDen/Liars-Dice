@@ -5,6 +5,7 @@ import styled from "styled-components/native";
 import { useConnection } from "../../../contexts/ConnectionContext";
 import { useGame } from "../../../contexts/GameContext";
 import { initialUserState, useUser } from "../../../contexts/UserContext";
+import { GameBet } from "../../../types/types";
 import { INVOKE_CALL, INVOKE_SET_BET } from "../../../utils/constants";
 import DoubleButtons from "../../layout/DoubleButtons";
 import CurrentBet from "../game-layout/CurrentBet";
@@ -82,6 +83,9 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible, betTime,
 
   useEffect(() => {
     if (game.currentBetter && betTime === 0 && game.currentBetter.userName === currentUser.userName) {
+      if (game.currentBet === null) {
+        game.currentBet = { gameName: game.gameName, better: currentUser, diceAmount: diceAmount, diceValue: diceValue } as GameBet;
+      }
       if (game.currentBet.diceAmount === diceLeft && game.currentBet.diceValue === 6) {
         handleCall();
       } else {
