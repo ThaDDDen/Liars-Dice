@@ -53,4 +53,5 @@ const InputContainer = styled.View`
   border: 1px solid black;
   justify-content: center;
   flex: 1;
+  margin: 0 10px;
 `;
