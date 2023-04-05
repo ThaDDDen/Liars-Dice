@@ -16,7 +16,7 @@ const ContentCard = ({ label, children, compact, borderColor, styles }: Props) =
   return (
     <Container style={styles} backgroundColor={colors.primaryContainer} compact={compact ? compact : false}>
       <LabelBox compact={compact ? compact : false} background={colors.secondary} borderColor={borderColor}>
-        <Text style={{ fontFamily: "Manrope-Bold" }} variant={compact ? "labelSmall" : "labelMedium"}>
+        <Text style={{ fontFamily: "Manrope-Bold" }} variant={"labelSmall"}>
           {label?.toUpperCase()}
         </Text>
       </LabelBox>
