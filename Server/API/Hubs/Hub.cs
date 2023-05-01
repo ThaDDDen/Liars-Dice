@@ -67,7 +67,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
     {
         AppUser user = null;
 
-        if (sender != _lobbyBot || sender != _gameBot)
+        if (sender != _lobbyBot && sender != _gameBot)
         {
             user = await _userManager.FindByNameAsync(sender);
         }
@@ -256,7 +256,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
         await Groups.RemoveFromGroupAsync(Context.ConnectionId, game.GameName);
         _gameService.RemovePlayerFromGame(game.GameName, user.UserName);
 
-        if(game.GameStarted && game.Players.Count == 1) 
+        if (game.GameStarted && game.Players.Count == 1)
         {
             await Clients.Group(game.GameName).SendAsync("ReceiveSnack", new SnackMessage()
             {
@@ -399,7 +399,7 @@ public class Hub : Microsoft.AspNetCore.SignalR.Hub
             AvatarCode = user.AvatarCode,
             Statistics = await _appDataService.GetStatistics(user.Id)
         };
-        
+
         await Clients.Caller.SendAsync("ReceiveProfile", profile);
     }
 
