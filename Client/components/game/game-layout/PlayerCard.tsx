@@ -1,7 +1,9 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import multiavatar from "@multiavatar/multiavatar";
 import React from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { Surface } from "react-native-paper";
+import { SvgXml } from "react-native-svg";
 import styled from "styled-components/native";
 import { useGame } from "../../../contexts/GameContext";
 import { User } from "../../../types/types";
@@ -10,13 +12,29 @@ import ValueDice from "../game-assets/ValueDice";
 import CountDownCircle from "./CountDownCircle";
 
 interface Props {
-  player: User;
+  player?: User;
   disabled?: boolean;
-  setBetTime: React.Dispatch<React.SetStateAction<number>>;
+  setBetTime?: React.Dispatch<React.SetStateAction<number>>;
+  name?: string;
 }
 
-const PlayerCard = ({ player, disabled, setBetTime }: Props) => {
+const PlayerCard = ({ player, disabled, setBetTime, name }: Props) => {
   const { game } = useGame();
+
+  if (!player || !setBetTime)
+    return (
+      <Container>
+        <View>
+          <SvgXml xml={multiavatar(Math.random().toString(36).substring(2, 9))} width={50} height={50} />
+        </View>
+        <NameContainer>
+          <PlayerName numberOfLines={1}>{name}</PlayerName>
+        </NameContainer>
+        <DiceCountContainer>
+          <ValueDice size={25} value={6} />
+        </DiceCountContainer>
+      </Container>
+    );
 
   const IS_PLAYERS_TURN = game.currentBetter && game.roundStarted && game.currentBetter.userName === player.userName;
 

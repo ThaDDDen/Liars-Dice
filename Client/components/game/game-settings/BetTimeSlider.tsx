@@ -6,7 +6,7 @@ import styled from "styled-components/native";
 
 interface Props {
   betTime: number;
-  setBetTime: React.Dispatch<React.SetStateAction<number>>;
+  setBetTime?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const BetTimeSlider = ({ betTime, setBetTime }: Props) => {
@@ -22,9 +22,9 @@ const BetTimeSlider = ({ betTime, setBetTime }: Props) => {
             )}
             step={1}
             value={betTime as number}
-            onValueChange={(value) => setBetTime(Number(value))}
+            onValueChange={(value) => setBetTime && setBetTime(Number(value))}
             minimumValue={5}
-            maximumValue={1000}
+            maximumValue={60}
           />
         </View>
       </View>

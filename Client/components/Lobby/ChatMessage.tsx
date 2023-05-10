@@ -23,7 +23,7 @@ const ChatMessage = ({ userMessage, latestMessage, lastSender }: Props) => {
       <View style={{ marginLeft: 10 }}>
         {!lastSender && (
           <View style={{ flexDirection: "row", alignItems: "baseline" }}>
-            <Text variant="titleMedium" style={{ marginRight: 10 }}>
+            <Text variant="titleMedium" style={{ marginRight: 10, color: colors.onPrimaryContainer }}>
               {userMessage.user.userName}
             </Text>
             <Text variant="titleSmall" style={{ fontSize: 12, fontStyle: "italic", color: colors.outline }}>
@@ -32,7 +32,9 @@ const ChatMessage = ({ userMessage, latestMessage, lastSender }: Props) => {
           </View>
         )}
         <View style={{ marginLeft: lastSender ? 45 : 0 }}>
-          <Text variant="bodyMedium">{userMessage.message}</Text>
+          <Text variant="bodyMedium" style={{ color: colors.onPrimaryContainer }}>
+            {userMessage.message}
+          </Text>
         </View>
       </View>
     </ChatMessageContainer>

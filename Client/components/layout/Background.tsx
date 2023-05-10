@@ -1,4 +1,5 @@
-import { AntDesign, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { DrawerNavigationHelpers } from "@react-navigation/drawer/lib/typescript/src/types";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React, { ReactNode, useRef } from "react";
 import { Pressable, View } from "react-native";
@@ -11,7 +12,7 @@ import { useConnection } from "../../contexts/ConnectionContext";
 import { initialGameState, useGame } from "../../contexts/GameContext";
 import { initialUserState, useUser } from "../../contexts/UserContext";
 import GameChat from "../game/game-chat/GameChat";
-import { DrawerNavigationHelpers } from "@react-navigation/drawer/lib/typescript/src/types";
+import PlayersButton from "./PlayersButton";
 
 interface Props {
   children: ReactNode;
@@ -42,8 +43,8 @@ const Background = ({ children }: Props) => {
                 </Pressable>
               )}
               <Pressable onPress={() => navigation.getParent("rightDrawer")?.dispatch(DrawerActions.toggleDrawer())}>
-                <AntDesign name="menu-unfold" size={35} color="white" />
-                <OnlineUsers backgroundColor={colors.secondary} visible={true} size={20}>
+                <PlayersButton />
+                <OnlineUsers backgroundColor={colors.background} borderColor={colors.primary} visible={true} size={20}>
                   {connectedUsers.length}
                 </OnlineUsers>
               </Pressable>
@@ -73,10 +74,11 @@ const AppBackground = styled.ImageBackground`
   padding: 10px;
   padding-top: 0px;
 `;
-const OnlineUsers = styled(Badge)<{ backgroundColor: string }>`
-  font-size: 14px;
+const OnlineUsers = styled(Badge)<{ backgroundColor: string; borderColor: string }>`
+  font-size: 13px;
   font-family: "Manrope-Bold";
   background-color: ${({ backgroundColor }) => backgroundColor};
+  border: 2px solid ${({ borderColor }) => borderColor};
   position: absolute;
   top: -2px;
   right: -2px;

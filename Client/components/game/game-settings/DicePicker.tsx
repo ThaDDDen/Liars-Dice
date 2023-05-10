@@ -5,7 +5,7 @@ import SmallDice from "../game-layout/SmallDice";
 
 interface Props {
   diceAmount: number;
-  setDiceAmount: React.Dispatch<React.SetStateAction<number>>;
+  setDiceAmount?: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const DicePicker = ({ diceAmount, setDiceAmount }: Props) => {
@@ -16,7 +16,7 @@ const DicePicker = ({ diceAmount, setDiceAmount }: Props) => {
         style={{ borderRadius: 5, backgroundColor: colors.surface }}
         icon="minus"
         size={20}
-        onPress={() => diceAmount !== 1 && setDiceAmount((prev) => prev - 1)}
+        onPress={() => diceAmount !== 1 && setDiceAmount && setDiceAmount((prev) => prev - 1)}
       />
       <DiceContainer>
         <>
@@ -29,7 +29,7 @@ const DicePicker = ({ diceAmount, setDiceAmount }: Props) => {
         style={{ borderRadius: 5, backgroundColor: colors.surface }}
         icon="plus"
         size={20}
-        onPress={() => diceAmount !== 6 && setDiceAmount((prev) => prev + 1)}
+        onPress={() => diceAmount !== 6 && setDiceAmount && setDiceAmount((prev) => prev + 1)}
       />
     </DiceSettings>
   );
