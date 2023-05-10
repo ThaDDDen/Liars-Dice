@@ -3,7 +3,7 @@ import { CompositeScreenProps } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import Home from "../components/Home";
-import OnBoarding from "../components/onboarding/OnBoarding";
+import OnBoarding from "../components/OnBoarding";
 import { useUser } from "../contexts/UserContext";
 import { BottomTabStackParams } from "../navigation/BottomTabStackNavigator";
 import { RootStackParams } from "../navigation/RootStackNavigator";

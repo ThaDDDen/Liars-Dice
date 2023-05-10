@@ -38,12 +38,16 @@ export interface SlideProps {
     color: string;
     title: string;
     description: string;
-    picture: ReturnType<typeof require>;
+    picture?: ReturnType<typeof require>;
+    element?: JSX.Element;
   };
 }
 
-const Slide = ({ slide: { picture, color, title, description } }: SlideProps) => {
+const Slide = ({ slide: { picture, color, title, description, element } }: SlideProps) => {
   const lighterColor = Color(color).lighten(0.8).toString();
+
+  if (element) return element;
+
   return (
     <>
       <Svg style={StyleSheet.absoluteFill}>

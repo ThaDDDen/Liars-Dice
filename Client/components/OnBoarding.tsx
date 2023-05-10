@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Pressable, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
-import { useUser } from "../../contexts/UserContext";
-import Button from "../layout/Button";
-import Slide from "./Slide";
-import Slider from "./Slider";
+import { useUser } from "../contexts/UserContext";
+import Button from "./layout/Button";
+import Slide from "./slider/Slide";
+import Slider from "./slider/Slider";
 
 const OnBoarding = () => {
   const { colors } = useTheme();
@@ -14,37 +14,37 @@ const OnBoarding = () => {
       color: colors.primary,
       title: "Welcome",
       description: "Join the millions who love to play Liars Dice!",
-      picture: require("../../assets/images/logo.png"),
+      picture: require("../assets/images/logo.png"),
     },
     {
       color: colors.secondary,
       title: "Friends",
       description: "Adding friends is easy and allows you to play and chat  with them anytime!",
-      picture: require("../../assets/images/Friends.png"),
+      picture: require("../assets/images/Friends.png"),
     },
     {
       color: colors.surface,
       title: "Personalize",
       description: "Create your own avatar to show off your personality and choose from one of the many color themes!",
-      picture: require("../../assets/images/Avatars.png"),
+      picture: require("../assets/images/Avatars.png"),
     },
     {
       color: colors.background,
       title: "Customize",
       description: "Join or create a game with settings to your own liking.",
-      picture: require("../../assets/images/Customize.png"),
+      picture: require("../assets/images/Customize.png"),
     },
     {
       color: colors.primary,
       title: "Statistics",
       description: "Track your progress with our detailed game statistics!",
-      picture: require("../../assets/images/Statistics.png"),
+      picture: require("../assets/images/Statistics.png"),
     },
     {
       color: colors.secondary,
       title: "Lets play",
       description: "You are now ready to enjoy Liars Dice with your friends, have fun!",
-      picture: require("../../assets/images/TwoDice.png"),
+      picture: require("../assets/images/TwoDice.png"),
     },
   ];
 
@@ -60,7 +60,7 @@ const OnBoarding = () => {
             <Text variant="bodyMedium">SKIP</Text>
           </Pressable>
         </View>
-        <Slide slide={slides[index]!} />
+        <Slide slide={slides[index]} />
         {index === 5 && (
           <Button
             title="Get started"
