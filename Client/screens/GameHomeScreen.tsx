@@ -2,14 +2,19 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { Text, useTheme } from "react-native-paper";
 import styled from "styled-components/native";
+import GameRules from "../components/game/GameRules";
 import Background from "../components/layout/Background";
 import Logo from "../components/layout/Logo";
+import { useUser } from "../contexts/UserContext";
 import { GameStackParams } from "../navigation/GameStackNavigator";
 
 export type GameHomeNavProps = NativeStackScreenProps<GameStackParams>;
 
 const GameHomeScreen = ({ navigation }: GameHomeNavProps) => {
   const { colors } = useTheme();
+  const { promptGameRules } = useUser();
+
+  if (promptGameRules) return <GameRules />;
 
   return (
     <Background>
