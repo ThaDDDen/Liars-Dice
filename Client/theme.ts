@@ -1,11 +1,11 @@
 import { DarkTheme as NavigationDarkTheme, DefaultTheme as NavigationLightTheme, Theme as NavigationTheme } from "@react-navigation/native";
-import { configureFonts, MD3DarkTheme as PaperDarkTheme, MD3LightTheme as PaperLightTheme, MD3Theme as PaperTheme } from "react-native-paper";
+import { MD3DarkTheme as PaperDarkTheme, MD3LightTheme as PaperLightTheme, MD3Theme as PaperTheme, configureFonts } from "react-native-paper";
 // import {MD3Dar}
 
 import { ColorSchemeName, Platform } from "react-native";
 
 // if we want more themes add in ,"theme1" | "theme2" | "theme3">
-export type AppColorSchemeName = Record<keyof ColorSchemeName, "theme1" | "thadtheme">;
+export type AppColorSchemeName = Record<keyof ColorSchemeName, "theme1" | "mocca">;
 
 export type Theme = NavigationTheme & PaperTheme;
 
@@ -34,6 +34,9 @@ const fontConfig = {
   },
   labelLarge: {
     fontFamily: "Manrope-Medium",
+  },
+  bodyMedium: {
+    fontFamily: "Manrope-Regular",
   },
 };
 
@@ -144,12 +147,12 @@ export const Theme1: Theme = {
   colors: {
     ...PaperDarkTheme.colors,
     ...NavigationDarkTheme.colors,
-    primary: "rgb(136, 212, 152)",
-    onPrimary: "rgb(24, 56, 0)",
-    primaryContainer: "rgb(26, 147, 111)", // color of active bottomTab
+    primary: "rgb(184, 111, 2)",
+    onPrimary: "rgb(255, 255, 255)",
+    primaryContainer: "rgb(41, 112, 69)", // color of active bottomTab
     onPrimaryContainer: "rgb(170, 247, 112)",
-    secondary: "rgb(190, 203, 174)", // rgb(190, 203, 174)
-    onSecondary: "rgb(41, 52, 32)",
+    secondary: "rgb(255, 200, 87)", // rgb(190, 203, 174)
+    onSecondary: "rgb(0, 0, 0)",
     secondaryContainer: "rgb(89, 149, 237)", // the color on container of view inside view. ex. LobbyChatWindow, Generate avatar button
     onSecondaryContainer: "rgb(255, 173, 5)", // the color of text on secondarycontainer
     tertiary: "rgb(160, 207, 206)",
@@ -160,9 +163,9 @@ export const Theme1: Theme = {
     onError: "rgb(105, 0, 5)",
     errorContainer: "rgb(147, 0, 10)",
     onErrorContainer: "rgb(255, 180, 171)",
-    background: "rgb(17, 75, 95)",
+    background: "rgb(32, 78, 74)",
     onBackground: "rgb(227, 227, 220)",
-    surface: "rgb(26, 147, 111)",
+    surface: "rgb(46, 147, 60)",
     onSurface: "rgb(227, 227, 220)", // rgb(107, 39, 55) // rgb(227, 227, 220)OLD
     surfaceVariant: "rgb(68, 72, 62)",
     onSurfaceVariant: "rgb(196, 200, 186)",
@@ -187,19 +190,69 @@ export const Theme1: Theme = {
     backdrop: "rgba(45, 50, 40, 0.4)",
   },
 };
+// export const Theme1: Theme = {
+//   ...PaperDarkTheme,
+//   ...NavigationDarkTheme,
+//   fonts: configureFonts({ config: fontConfig }),
+//   colors: {
+//     ...PaperDarkTheme.colors,
+//     ...NavigationDarkTheme.colors,
+//     primary: "rgb(136, 212, 152)",
+//     onPrimary: "rgb(24, 56, 0)",
+//     primaryContainer: "rgb(26, 147, 111)", // color of active bottomTab
+//     onPrimaryContainer: "rgb(170, 247, 112)",
+//     secondary: "rgb(190, 203, 174)", // rgb(190, 203, 174)
+//     onSecondary: "rgb(41, 52, 32)",
+//     secondaryContainer: "rgb(89, 149, 237)", // the color on container of view inside view. ex. LobbyChatWindow, Generate avatar button
+//     onSecondaryContainer: "rgb(255, 173, 5)", // the color of text on secondarycontainer
+//     tertiary: "rgb(160, 207, 206)",
+//     onTertiary: "rgb(0, 55, 54)",
+//     tertiaryContainer: "rgb(30, 78, 77)",
+//     onTertiaryContainer: "rgb(187, 236, 234)",
+//     error: "rgb(255, 180, 171)",
+//     onError: "rgb(105, 0, 5)",
+//     errorContainer: "rgb(147, 0, 10)",
+//     onErrorContainer: "rgb(255, 180, 171)",
+//     background: "rgb(17, 75, 95)",
+//     onBackground: "rgb(227, 227, 220)",
+//     surface: "rgb(26, 147, 111)",
+//     onSurface: "rgb(227, 227, 220)", // rgb(107, 39, 55) // rgb(227, 227, 220)OLD
+//     surfaceVariant: "rgb(68, 72, 62)",
+//     onSurfaceVariant: "rgb(196, 200, 186)",
+//     outline: "rgb(142, 146, 134)",
+//     outlineVariant: "rgb(68, 72, 62)",
+//     shadow: "rgb(0, 0, 0)",
+//     scrim: "rgb(0, 0, 0)",
+//     inverseSurface: "rgb(227, 227, 220)",
+//     inverseOnSurface: "rgb(47, 49, 44)",
+//     inversePrimary: "rgb(51, 107, 0)",
+//     elevation: {
+//       //rgb(26, 147, 111) surface
+//       level0: "transparent",
+//       level1: "rgb(32, 157, 114)", //surface(+6,+10,+3)
+//       level2: "rgb(35, 165, 31)", //level1(+3,+5,+2)
+//       level3: "rgb(39, 171, 34)", //level2(+4, +6, +3)
+//       level4: "rgb(40, 173, 35)", //level3(+1,+2,+1)
+//       level5: "rgb(42, 177, 36)", //level4(+2,+4,+1)
+//     },
+//     surfaceDisabled: "rgba(227, 227, 220, 0.12)",
+//     onSurfaceDisabled: "rgba(227, 227, 220, 0.38)",
+//     backdrop: "rgba(45, 50, 40, 0.4)",
+//   },
+// };
 
-export const ThadTheme: Theme = {
+export const Mocca: Theme = {
   ...PaperDarkTheme,
   ...NavigationDarkTheme,
   fonts: configureFonts({ config: fontConfig }),
   colors: {
     ...PaperDarkTheme.colors,
     ...NavigationDarkTheme.colors,
-    primary: "rgb(71, 129, 137)",
+    primary: "rgb(107, 47, 35)",
     onPrimary: "rgb(255,255,255)",
-    primaryContainer: "rgb(26, 147, 255)", // color of active bottomTab
-    onPrimaryContainer: "rgb(170, 247, 112)",
-    secondary: "rgb(190, 203, 174)", // rgb(190, 203, 174)
+    primaryContainer: "rgb(188, 129, 83)", // color of active bottomTab
+    onPrimaryContainer: "rgb(0, 0, 0)",
+    secondary: "rgb(39, 60, 44)", // rgb(190, 203, 174)
     onSecondary: "rgb(41, 52, 32)",
     secondaryContainer: "rgb(89, 149, 237)", // the color on container of view inside view. ex. LobbyChatWindow, Generate avatar button
     onSecondaryContainer: "rgb(255, 173, 5)", // the color of text on secondarycontainer
@@ -211,13 +264,13 @@ export const ThadTheme: Theme = {
     onError: "rgb(105, 0, 5)",
     errorContainer: "rgb(147, 0, 10)",
     onErrorContainer: "rgb(255, 180, 171)",
-    background: "rgb(17, 37, 48)",
+    background: "rgb(42, 32, 30)",
     onBackground: "rgb(227, 227, 220)",
-    surface: "rgb(183, 91, 140)",
+    surface: "rgb(219, 174, 139)",
     onSurface: "rgb(227, 227, 220)", // rgb(107, 39, 55) // rgb(227, 227, 220)OLD
     surfaceVariant: "rgb(68, 72, 62)",
     onSurfaceVariant: "rgb(196, 200, 186)",
-    outline: "rgb(142, 146, 134)",
+    outline: "rgb(88, 105, 148)",
     outlineVariant: "rgb(68, 72, 62)",
     shadow: "rgb(0, 0, 0)",
     scrim: "rgb(0, 0, 0)",
@@ -246,7 +299,7 @@ export function getTheme(scheme: AppColorSchemeName) {
       return LightTheme;
     case "theme1":
       return Theme1;
-    case "thadtheme":
-      return ThadTheme;
+    case "mocca":
+      return Mocca;
   }
 }
