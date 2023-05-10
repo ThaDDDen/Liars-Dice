@@ -43,7 +43,6 @@ const Background = ({ children }: Props) => {
                 </Pressable>
               )}
               <Pressable onPress={() => navigation.getParent("rightDrawer")?.dispatch(DrawerActions.toggleDrawer())}>
-                {/* <AntDesign name="menu-unfold" size={35} color="white" /> */}
                 <PlayersButton />
                 <OnlineUsers backgroundColor={colors.background} borderColor={colors.primary} visible={true} size={20}>
                   {connectedUsers.length}

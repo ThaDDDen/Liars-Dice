@@ -131,7 +131,7 @@ const BettingDialog = ({ bettingDialogVisible, setBettingDialogVisible, betTime,
               <Text style={{ fontFamily: "Manrope-Bold", fontSize: 14 }}>YOUR BET</Text>
             </ContainerHeader>
 
-            <BetPickers game={game} diceValue={diceValue} setDiceValue={setDiceValue} diceAmount={diceAmount} setDiceAmount={setDiceAmount} />
+            <BetPickers diceValue={diceValue} setDiceValue={setDiceValue} diceAmount={diceAmount} setDiceAmount={setDiceAmount} />
           </ContentContainer>
         )}
         {maxBet === game.currentBet?.diceAmount * game.currentBet?.diceValue ? (

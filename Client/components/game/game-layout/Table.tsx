@@ -59,13 +59,13 @@ const Table = ({ setBetTime }: Props) => {
 
 export default Table;
 
-const TableContainer = styled.View`
+export const TableContainer = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
 `;
 
-const TableBackground = styled(ImageBackground)<{ width: number; height: number }>`
+export const TableBackground = styled(ImageBackground)<{ width: number; height: number }>`
   width: ${({ width }) => width}px;
   height: ${({ height }) => height}px;
   justify-content: center;
@@ -75,7 +75,7 @@ const TableBackground = styled(ImageBackground)<{ width: number; height: number 
   border-color: #513624;
 `;
 
-const TableOverlay = styled.View<{ width: number; height: number }>`
+export const TableOverlay = styled.View<{ width: number; height: number }>`
   position: absolute;
   width: ${({ width }) => width}px;
   height: ${({ height }) => height}px;

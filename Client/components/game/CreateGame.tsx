@@ -73,7 +73,7 @@ const CreateGame = () => {
                 <Button
                   title={"Create Game"}
                   mode={"contained"}
-                  buttonColor={colors.primary}
+                  buttonColor={colors.secondary}
                   onPress={() => handleSubmit()}
                   styles={{ marginHorizontal: 70, marginBottom: 30, marginTop: 10 }}
                 />

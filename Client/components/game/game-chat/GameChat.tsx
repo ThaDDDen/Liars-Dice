@@ -14,7 +14,7 @@ const GameChat = () => {
 
   return (
     <ChatContainer>
-      <ChatWindow ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })} bg={colors.surfaceVariant}>
+      <ChatWindow ref={scrollViewRef} onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })} bg={colors.primaryContainer}>
         <GameMessages />
       </ChatWindow>
       <MessageForm chatName={game.gameName} />
