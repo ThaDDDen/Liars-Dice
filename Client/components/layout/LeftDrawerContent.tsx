@@ -1,7 +1,7 @@
 import { DrawerContentComponentProps } from "@react-navigation/drawer";
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
-import { List, Portal, Text } from "react-native-paper";
+import { Portal, Text } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
@@ -28,6 +28,7 @@ const LeftDrawerContent = (props: DrawerContentComponentProps) => {
   const [betTime, setBetTime] = useState(game.betTime);
   const [diceCount, setDiceCount] = useState(0);
   const [leaveDialogVisible, setLeaveDialogVisible] = useState(false);
+  const [viewGameSettings, setViewGameSettings] = useState(false);
 
   useEffect(() => {
     if (game !== initialGameState) {
@@ -71,10 +72,14 @@ const LeftDrawerContent = (props: DrawerContentComponentProps) => {
   };
   return (
     <SafeAreaView>
-      <>
-        {game !== initialGameState ? (
-          <List.Section>
-            <GameSettingsContainer>
+      <View style={{ width: "100%" }}>
+        <View style={{ flexDirection: "row", justifyContent: "center", marginBottom: 10 }}>
+          <Button compact title={"App settings"} mode="text" onPress={() => setViewGameSettings(false)} />
+          <Button disabled={game === initialGameState} compact title={"Game settings"} mode="text" onPress={() => setViewGameSettings(true)} />
+        </View>
+        {viewGameSettings ? (
+          <View>
+            <SettingsContainer>
               {currentUser.gameProperties.gameHost && !game.gameStarted && (
                 <>
                   <DrawerContentCard title={"dice"} content={<DrawerDicePicker diceCount={diceCount} setDiceCount={setDiceCount} />} />
@@ -97,21 +102,18 @@ const LeftDrawerContent = (props: DrawerContentComponentProps) => {
               <LeaveGameContainer>
                 <Button title={"Leave Game"} mode={"contained"} onPress={() => setLeaveDialogVisible(true)} />
               </LeaveGameContainer>
-              <ThemePicker />
-              <Button title={"Log out"} mode={"text"} onPress={handleLogout} />
-            </GameSettingsContainer>
-          </List.Section>
+            </SettingsContainer>
+          </View>
         ) : (
-          <>
-            <View style={{ height: "100%" }}>
-              <View style={{ marginTop: "auto" }}>
-                <ThemePicker />
-                <Button title={"Log out"} mode={"text"} onPress={handleLogout} />
-              </View>
+          <SettingsContainer>
+            <View>
+              <DrawerContentCard title={"Theme"} content={<ThemePicker />} />
+
+              <Button title={"Log out"} mode={"text"} onPress={handleLogout} />
             </View>
-          </>
+          </SettingsContainer>
         )}
-      </>
+      </View>
       <Portal>
         <CustomDialog
           visible={leaveDialogVisible}
@@ -136,8 +138,8 @@ const LeftDrawerContent = (props: DrawerContentComponentProps) => {
 
 export default LeftDrawerContent;
 
-const GameSettingsContainer = styled.View`
-  padding: 0 5px;
+const SettingsContainer = styled.View`
+  padding: 5px;
   height: 100%;
 `;
 

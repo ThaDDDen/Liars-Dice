@@ -20,6 +20,9 @@ const fontConfig = {
   titleSmall: {
     fontFamily: "Manrope-Medium",
   },
+  titleLarge: {
+    fontFamily: "Manrope-Bold",
+  },
   titleMedium: {
     fontFamily: "Manrope-Medium",
   },
