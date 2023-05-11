@@ -5,7 +5,7 @@ import { MD3DarkTheme as PaperDarkTheme, MD3LightTheme as PaperLightTheme, MD3Th
 import { ColorSchemeName, Platform } from "react-native";
 
 // if we want more themes add in ,"theme1" | "theme2" | "theme3">
-export type AppColorSchemeName = Record<keyof ColorSchemeName, "theme1" | "mocca">;
+export type AppColorSchemeName = Record<keyof ColorSchemeName, "moss" | "mocca">;
 
 export type Theme = NavigationTheme & PaperTheme;
 
@@ -43,7 +43,7 @@ const fontConfig = {
   },
 };
 
-export const LightTheme: Theme = {
+export const Flashbang: Theme = {
   ...PaperLightTheme,
   ...NavigationLightTheme,
   fonts: configureFonts({ config: fontConfig }),
@@ -93,7 +93,7 @@ export const LightTheme: Theme = {
   },
 };
 
-export const DarkTheme: Theme = {
+export const Twilight: Theme = {
   ...PaperDarkTheme,
   ...NavigationDarkTheme,
   fonts: configureFonts({ config: fontConfig }),
@@ -143,7 +143,7 @@ export const DarkTheme: Theme = {
   },
 };
 
-export const Theme1: Theme = {
+export const Moss: Theme = {
   ...PaperDarkTheme,
   ...NavigationDarkTheme,
   fonts: configureFonts({ config: fontConfig }),
@@ -296,12 +296,12 @@ export const Mocca: Theme = {
 
 export function getTheme(scheme: AppColorSchemeName) {
   switch (scheme) {
-    case "dark":
-      return DarkTheme;
-    case "light":
-      return LightTheme;
-    case "theme1":
-      return Theme1;
+    case "twilight":
+      return Twilight;
+    case "flashbang":
+      return Flashbang;
+    case "moss":
+      return Moss;
     case "mocca":
       return Mocca;
   }

@@ -14,7 +14,7 @@ const ThemePicker = () => {
   }, [selectedTheme]);
 
   //add the new theme name in this array
-  const themes = ["light", "dark", "theme1", "mocca"];
+  const themes = ["flashbang", "twilight", "moss", "mocca"];
   return (
     <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
       <IconButton

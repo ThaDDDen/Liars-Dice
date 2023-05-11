@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import LobbyChat from "../components/Lobby/LobbyChat";
 import { useConnection } from "../contexts/ConnectionContext";
-import { useUser } from "../contexts/UserContext";
+import { initialUserState, useUser } from "../contexts/UserContext";
 
 const LobbyScreen = () => {
   const { joinLobby } = useConnection();
-  const { token } = useUser();
+  const { token, currentUser } = useUser();
 
   useEffect(() => {
-    if (token) joinLobby(token);
+    if (token && currentUser !== initialUserState) joinLobby(token);
   }, [token]);
 
   return (

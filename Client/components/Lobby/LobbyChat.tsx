@@ -81,7 +81,7 @@ const Header = styled.View<{ color: string }>`
   align-items: center;
   background: ${(props) => props.color};
   margin: 0 auto;
-  padding: 10px;
-  border-radius: 10px;
+  padding: 10px 20px;
+  border-radius: 30px;
   transform: translateY(-25px);
 `;

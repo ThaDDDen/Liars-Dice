@@ -1,4 +1,5 @@
 import { DrawerContentComponentProps } from "@react-navigation/drawer";
+import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { Portal, Text } from "react-native-paper";
@@ -7,6 +8,7 @@ import styled from "styled-components/native";
 import { useConnection } from "../../contexts/ConnectionContext";
 import { initialGameState, useGame } from "../../contexts/GameContext";
 import { useUser } from "../../contexts/UserContext";
+import { GameScreenNavProp } from "../../navigation/BottomTabStackNavigator";
 import { User } from "../../types/types";
 import { INITIAL_GAME_PROPERTIES, INVOKE_LEAVE_GAME } from "../../utils/constants";
 import BetTimeSlider from "../game/game-settings/BetTimeSlider";
@@ -21,7 +23,7 @@ import DrawerContentCard from "./DrawerContentCard";
 
 const LeftDrawerContent = (props: DrawerContentComponentProps) => {
   const { game, setGame } = useGame();
-  const { currentUser, setCurrentUser, setGameMessages, logout } = useUser();
+  const { currentUser, setCurrentUser, setGameMessages, logout, setFirstVisit, setPromptGameRules } = useUser();
   const { connection, closeConnection } = useConnection();
   const [players, setPlayers] = useState<User[]>(game.players);
   const [playerCount, setPlayerCount] = useState(0);
@@ -29,6 +31,7 @@ const LeftDrawerContent = (props: DrawerContentComponentProps) => {
   const [diceCount, setDiceCount] = useState(0);
   const [leaveDialogVisible, setLeaveDialogVisible] = useState(false);
   const [viewGameSettings, setViewGameSettings] = useState(false);
+  const navigation = useNavigation<GameScreenNavProp>();
 
   useEffect(() => {
     if (game !== initialGameState) {
@@ -108,6 +111,22 @@ const LeftDrawerContent = (props: DrawerContentComponentProps) => {
           <SettingsContainer>
             <View>
               <DrawerContentCard title={"Theme"} content={<ThemePicker />} />
+              <DrawerContentCard
+                title={"Help"}
+                content={
+                  <View>
+                    <Button title={"view onboarding"} mode={"text"} onPress={() => setFirstVisit(true)} />
+                    <Button
+                      title={"view gamerules"}
+                      mode={"text"}
+                      onPress={() => {
+                        setPromptGameRules(true);
+                        navigation.navigate("Game", { screen: "GameScreen" });
+                      }}
+                    />
+                  </View>
+                }
+              />
 
               <Button title={"Log out"} mode={"text"} onPress={handleLogout} />
             </View>
