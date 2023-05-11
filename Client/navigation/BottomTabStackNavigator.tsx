@@ -9,6 +9,7 @@ import styled from "styled-components/native";
 import lobby from "../assets/images/lobby_chat.png";
 import dice from "../assets/images/white_dice/white_dice_tabstack.png";
 import UserAvatar from "../components/Lobby/UserAvatar";
+import OnBoarding from "../components/OnBoarding";
 import { useGame } from "../contexts/GameContext";
 import { useUser } from "../contexts/UserContext";
 import LobbyScreen from "../screens/LobbyScreen";
@@ -23,10 +24,10 @@ export type BottomTabStackParams = {
 
 const TabStack = createBottomTabNavigator<BottomTabStackParams>();
 
-type GameScreenNavProp = NativeStackNavigationProp<BottomTabStackParams>;
+export type GameScreenNavProp = NativeStackNavigationProp<BottomTabStackParams>;
 
 const BottomTabStack = () => {
-  const { currentUser } = useUser();
+  const { currentUser, firstVisit } = useUser();
   const { colors } = useTheme();
   const { game } = useGame();
   const navigation = useNavigation<GameScreenNavProp>();
@@ -46,8 +47,10 @@ const BottomTabStack = () => {
       }
     }
   }, [game.currentBetter]);
+
+  if (firstVisit) return <OnBoarding />;
+
   return (
-    // TODO Check posibility to use more colorful images instead of Icons in the bottomtab <MaterialCommunityIcons name="chat-outline" size={size} color={color} />
     <TabStack.Navigator
       initialRouteName="Lobby"
       screenOptions={{

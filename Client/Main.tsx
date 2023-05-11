@@ -21,7 +21,7 @@ const Main = () => {
   const [statusBarColor, setStatusBarColor] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
-    if (colorScheme === "dark" || colorScheme === "mocca" || colorScheme === "theme1") {
+    if (colorScheme === "twilight" || colorScheme === "mocca" || colorScheme === "moss") {
       setStatusBarColor("light");
     } else {
       setStatusBarColor("dark");

@@ -13,8 +13,9 @@ interface Props {
   compact?: boolean;
   icon?: IconSource;
   buttonColor?: string;
+  disabled?: boolean;
 }
-const Button = ({ title, mode, onPress, toLower, styles, compact, icon, buttonColor }: Props) => {
+const Button = ({ title, mode, onPress, toLower, styles, compact, icon, buttonColor, disabled }: Props) => {
   return (
     <PaperButton
       compact={compact}
@@ -25,6 +26,7 @@ const Button = ({ title, mode, onPress, toLower, styles, compact, icon, buttonCo
       buttonColor={buttonColor ? buttonColor : undefined}
       icon={icon}
       labelStyle={{ fontFamily: "Manrope-Bold" }}
+      disabled={disabled}
     >
       {title}
     </PaperButton>

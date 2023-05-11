@@ -5,6 +5,7 @@ import styled from "styled-components/native";
 import table from "../../../assets/images/table.png";
 import { THREE_SEAT_TABLE } from "../../../utils/constants";
 import ValueDice from "../game-assets/ValueDice";
+import ChatBubble from "../game-layout/ChatBubble";
 import PlayerCard from "../game-layout/PlayerCard";
 import { TableBackground, TableOverlay } from "../game-layout/Table";
 
@@ -32,7 +33,6 @@ const HowToPlay = () => {
             <View key={index} style={THREE_SEAT_TABLE[index]}>
               {index === 0 && (
                 <ChatBubble color={colors.secondary}>
-                  <ChatBubbleArrow color={colors.secondary} />
                   <Text style={{ fontFamily: "Manrope-Bold", fontSize: 15 }}>
                     6 x <ValueDice value={5} size={15} />
                   </Text>
@@ -55,28 +55,4 @@ const Container = styled.View<{ backgroundColor: string }>`
   align-items: center;
   justify-content: center;
   padding: 30px;
-`;
-
-const ChatBubble = styled.View<{ color: string }>`
-  position: absolute;
-  z-index: 5000;
-  width: 65px;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  background-color: ${({ color }) => color};
-  padding: 5px;
-  border-radius: 20px;
-  top: -40px;
-  left: 15px;
-  justify-content: center;
-`;
-
-const ChatBubbleArrow = styled.View<{ color: string }>`
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  background-color: ${({ color }) => color};
-  transform: rotate(60deg);
-  bottom: -2px;
-  left: 15px;
 `;

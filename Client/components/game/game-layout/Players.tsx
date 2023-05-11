@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, View } from "react-native";
+import { Pressable } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { useGame } from "../../../contexts/GameContext";
 import { useProfileModalize } from "../../../contexts/ProfileModalizeContext";
@@ -17,6 +17,7 @@ import {
 } from "../../../utils/constants";
 import ValueDice from "../game-assets/ValueDice";
 import PlayerCard from "./PlayerCard";
+import ChatBubble from "./ChatBubble";
 
 interface Props {
   setBetTime: React.Dispatch<React.SetStateAction<number>>;
@@ -55,66 +56,16 @@ const Players = ({ setBetTime }: Props) => {
           }
         >
           {game.currentBet && game.currentBet.better.userName === player.userName && (
-            <View
-              style={{
-                position: "absolute",
-                zIndex: 5000,
-                width: 65,
-                flexDirection: "row",
-                flexWrap: "nowrap",
-                backgroundColor: colors.primary,
-                padding: 5,
-                borderRadius: 20,
-                top: -40,
-                left: 15,
-                justifyContent: "center",
-              }}
-            >
-              <View
-                style={{
-                  width: 20,
-                  height: 20,
-                  backgroundColor: colors.primary,
-                  position: "absolute",
-                  transform: [{ rotate: "60deg" }],
-                  bottom: -2,
-                  left: 15,
-                }}
-              ></View>
+            <ChatBubble color={colors.primary}>
               <Text style={{ fontFamily: "Manrope-Bold", fontSize: 15 }}>
                 {game.currentBet.diceAmount} x <ValueDice value={game.currentBet.diceValue} size={15} />
               </Text>
-            </View>
+            </ChatBubble>
           )}
           {!game.roundStarted && game.roundResult.round !== 0 && game.roundResult.caller === player.userName && (
-            <View
-              style={{
-                position: "absolute",
-                zIndex: 5000,
-                width: 65,
-                flexDirection: "row",
-                flexWrap: "nowrap",
-                backgroundColor: colors.primary,
-                padding: 5,
-                borderRadius: 20,
-                top: -40,
-                left: 15,
-                justifyContent: "center",
-              }}
-            >
-              <View
-                style={{
-                  width: 20,
-                  height: 20,
-                  backgroundColor: colors.primary,
-                  position: "absolute",
-                  transform: [{ rotate: "60deg" }],
-                  bottom: -2,
-                  left: 15,
-                }}
-              ></View>
+            <ChatBubble color={colors.primary}>
               <Text style={{ fontFamily: "Manrope-Bold", fontSize: 15 }}>CALL!</Text>
-            </View>
+            </ChatBubble>
           )}
           <PlayerCard setBetTime={setBetTime} disabled={player.gameProperties.isOut} player={player} />
         </Pressable>

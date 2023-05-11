@@ -3,8 +3,7 @@ import React from "react";
 import { Pressable, Text, View } from "react-native";
 import { useTheme } from "react-native-paper";
 import styled from "styled-components/native";
-import { useGame } from "../../../contexts/GameContext";
-import { GameBet } from "../../../types/types";
+import { Game, GameBet } from "../../../types/types";
 import ValueDice from "../game-assets/ValueDice";
 
 interface Props {
@@ -12,29 +11,32 @@ interface Props {
   setDiceValue?: React.Dispatch<React.SetStateAction<2 | 3 | 4 | 5 | 6>>;
   diceAmount: number;
   setDiceAmount?: React.Dispatch<React.SetStateAction<number>>;
+  game?: Game;
 }
 
-const BetPickers = ({ diceAmount, setDiceAmount, diceValue, setDiceValue }: Props) => {
+const BetPickers = ({ diceAmount, setDiceAmount, diceValue, setDiceValue, game }: Props) => {
   const { colors } = useTheme();
-  const { game } = useGame();
-  const diceLeft = game.diceCount * game.playerCount - game.round + 1;
-  const nextSmallestBet: GameBet | null = game.currentBet
-    ? {
+  const diceLeft = game ? game.diceCount * game.playerCount - game.round + 1 : 12;
+  const nextSmallestBet: GameBet | null = game
+    ? game.currentBet && {
         ...game.currentBet,
         diceAmount: game.currentBet.diceValue !== 6 ? game.currentBet.diceAmount : game.currentBet.diceAmount + 1,
         diceValue: game.currentBet.diceValue !== 6 ? game.currentBet.diceValue + 1 : 2,
       }
     : null;
 
-  const dices = Array.from(
-    { length: 6 },
-    (value, index) =>
-      index !== 0 &&
+  const dices = Array.from({ length: 6 }, (value, index) =>
+    index !== 0 && game ? (
       !(diceAmount === game.currentBet?.diceAmount && index + 1 <= game.currentBet?.diceValue) && (
         <Pressable key={index} onPress={() => setDiceValue && setDiceValue((index + 1) as 2 | 3 | 4 | 5 | 6)}>
           <ValueDice value={index + 1} size={40} selected={index + 1 === diceValue} />
         </Pressable>
       )
+    ) : (
+      <Pressable key={index} onPress={() => setDiceValue && setDiceValue((index + 1) as 2 | 3 | 4 | 5 | 6)}>
+        <ValueDice value={index + 1} size={40} selected={index + 1 === diceValue} />
+      </Pressable>
+    )
   );
 
   return (

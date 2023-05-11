@@ -76,7 +76,7 @@ public class GameService : IGameService
     public void RollDice(string gameName, HubUser user)
     {
         var game = _gameRepository.GetGameByName(gameName);
-        user.GameProperties.Dice = game.Players.FirstOrDefault(x => x.UserName == user.UserName).GameProperties.Dice.Select(y => y = _random.Next(1, 7)).ToList();
+        user.GameProperties.Dice = game.Players.FirstOrDefault(x => x.UserName == user.UserName).GameProperties.Dice.Select(y => y = _random.Next(1, 7)).Order().ToList();
         user.GameProperties.HasRolled = true;
         SetDiceStatistics(user);
         CheckRolls(game);
