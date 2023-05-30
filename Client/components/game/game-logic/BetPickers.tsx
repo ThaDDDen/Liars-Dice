@@ -25,19 +25,26 @@ const BetPickers = ({ diceAmount, setDiceAmount, diceValue, setDiceValue, game }
       }
     : null;
 
-  const dices = Array.from({ length: 6 }, (value, index) =>
-    index !== 0 && game ? (
-      !(diceAmount === game.currentBet?.diceAmount && index + 1 <= game.currentBet?.diceValue) && (
-        <Pressable key={index} onPress={() => setDiceValue && setDiceValue((index + 1) as 2 | 3 | 4 | 5 | 6)}>
-          <ValueDice value={index + 1} size={40} selected={index + 1 === diceValue} />
-        </Pressable>
+  const dices = game
+    ? Array.from(
+        { length: 6 },
+        (value, index) =>
+          index !== 0 &&
+          !(diceAmount === game.currentBet?.diceAmount && index + 1 <= game.currentBet?.diceValue) && (
+            <Pressable key={index} onPress={() => setDiceValue && setDiceValue((index + 1) as 2 | 3 | 4 | 5 | 6)}>
+              <ValueDice value={index + 1} size={40} selected={index + 1 === diceValue} />
+            </Pressable>
+          )
       )
-    ) : (
-      <Pressable key={index} onPress={() => setDiceValue && setDiceValue((index + 1) as 2 | 3 | 4 | 5 | 6)}>
-        <ValueDice value={index + 1} size={40} selected={index + 1 === diceValue} />
-      </Pressable>
-    )
-  );
+    : Array.from(
+        { length: 6 },
+        (value, index) =>
+          index !== 0 && (
+            <Pressable key={index} onPress={() => setDiceValue && setDiceValue((index + 1) as 2 | 3 | 4 | 5 | 6)}>
+              <ValueDice value={index + 1} size={40} selected={index + 1 === diceValue} />
+            </Pressable>
+          )
+      );
 
   return (
     <PickerContainer>
